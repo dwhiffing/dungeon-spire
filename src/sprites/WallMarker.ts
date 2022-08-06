@@ -1,5 +1,7 @@
+import { IGameScene } from '~/scenes/Game'
+
 export class WallMarker extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y) {
+  constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 'tilemap')
     this.scene = scene
     this.setFrame(7)

@@ -1,35 +1,26 @@
 import easystarjs from 'easystarjs'
-
-const ENTRANCE_INDEX = 32
-const EXIT_INDEX = 17
-const WALL_INDEX = 16
-const GUN_INDEX = 18
-
-export const indexToFrame = (frame) => {
-  if (frame === -1) return 7
-  if (frame === 1) return WALL_INDEX
-  if (frame === 2) return GUN_INDEX
-  // if (frame === 2) return ENTRANCE_INDEX
-  // if (frame === 2) return EXIT_INDEX
-}
+import { ENTRANCE_INDEX, EXIT_INDEX, GUN_INDEX, WALL_INDEX } from '../constants'
+import { IGameScene } from '~/scenes/Game'
 
 export default class LevelService {
-  scene: any
-  pathGraphics: any
-  data: any
-  path: any[]
-  map: any
+  scene: IGameScene
+  pathGraphics: Phaser.GameObjects.Graphics
+  path: { x: number; y: number }[]
+  map: Phaser.Tilemaps.Tilemap
+  data: number[][]
+  width: number
+  height: number
+  groundLayer?: Phaser.Tilemaps.TilemapLayer
   star: any
-  width: any
-  height: any
-  groundLayer: any
 
-  constructor(scene) {
+  constructor(scene: IGameScene) {
     this.scene = scene
     this.pathGraphics = this.scene.add.graphics()
     this.pathGraphics.lineStyle(1, 0xffffff)
 
-    this.createMap()
+    this.map = this.createMap()
+    this.width = this.map.widthInPixels
+    this.height = this.map.heightInPixels
     this.data = this.getMapData()
     this.path = []
     this.star = new easystarjs.js()
@@ -41,7 +32,7 @@ export default class LevelService {
     this.update()
   }
 
-  placeTiles = (tiles, onComplete) => {
+  placeTiles = (tiles: number[][], onComplete: () => void) => {
     // abort if placement overlaps with existing tiles
     if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
 
@@ -55,7 +46,7 @@ export default class LevelService {
     })
   }
 
-  placeTile = (i, x, y) => {
+  placeTile = (i: number, x: number, y: number) => {
     const tile = this.map.getTileAt(x, y)
     if (tile?.index === i) i = -1
     // if placing entrance/exit, remove existing instance
@@ -69,34 +60,42 @@ export default class LevelService {
     this.update()
   }
 
-  findEntrance = () =>
-    this.map.getTilesWithin(0, 0, 8, 8).find((t) => t.index === ENTRANCE_INDEX)
+  findEntrance = () => {
+    const tile = this.map
+      .getTilesWithin(0, 0, 8, 8)
+      .find((t) => t.index === ENTRANCE_INDEX)
+    return { x: tile!.x, y: tile!.y }
+  }
 
-  findExit = () =>
-    this.map.getTilesWithin(0, 0, 8, 8).find((t) => t.index === EXIT_INDEX)
+  findExit = () => {
+    const tile = this.map
+      .getTilesWithin(0, 0, 8, 8)
+      .find((t) => t.index === EXIT_INDEX)
+    return { x: tile!.x, y: tile!.y }
+  }
 
   createMap = () => {
-    this.map = this.scene.make.tilemap(MAP_CONFIG)
-    this.width = this.map.widthInPixels
-    this.height = this.map.heightInPixels
+    const map = this.scene.make.tilemap(MAP_CONFIG)
+
     this.scene.physics.world.bounds.width = this.width
     this.scene.physics.world.bounds.height = this.height
     this.scene.cameras.main.setBounds(0, 0, this.width, this.height)
-    const groundTiles = this.map.addTilesetImage('tilemap')
-    this.groundLayer = this.map.createBlankLayer('World', groundTiles)
+    const groundTiles = map.addTilesetImage('tilemap')
+    this.groundLayer = map.createBlankLayer('World', groundTiles)
+    return map
   }
 
   getMapData = () =>
     this.map.layers[0].data.map((row) => row.map((tile) => tile.index))
 
-  updateGrid = (data) => {
+  updateGrid = (data: number[][]) => {
     if (data) this.data = data
     this.star.setGrid(this.data)
   }
 
   findPath = (start = this.findEntrance(), end = this.findExit()) =>
     new Promise((resolve) => {
-      if (!start || !end) resolve(null)
+      if (!start || !end) return resolve(null)
       this.star.findPath(start.x, start.y, end.x, end.y, resolve)
       this.star.calculate()
     })
@@ -117,3 +116,9 @@ export default class LevelService {
 }
 
 const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }
+
+export const indexToFrame = (frame: number) => {
+  if (frame === 1) return WALL_INDEX
+  if (frame === 2) return GUN_INDEX
+  return 7
+}

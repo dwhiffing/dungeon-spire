@@ -1,6 +1,9 @@
+import { IGameScene } from '~/scenes/Game'
+
 export class Bullet extends Phaser.Physics.Arcade.Sprite {
-  call: any
-  constructor(scene, x, y) {
+  call?: Phaser.Time.TimerEvent
+
+  constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 'tilemap')
     this.scene = scene
     this.name = 'enemy'
@@ -11,7 +14,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setOffset(0, 0)
   }
 
-  shoot(x, y, x2, y2) {
+  shoot(x: number, y: number, x2: number, y2: number) {
     this.setOrigin(0, 0)
     this.body.reset(x, y)
     this.setActive(true)

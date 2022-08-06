@@ -1,12 +1,13 @@
+import { IGameScene } from '~/scenes/Game'
 import { Bullet } from '../sprites/Bullet'
 import { Gun } from '../sprites/Gun'
 
 export default class GunService {
-  scene: any
-  bulletGroup: any
-  gunGroup: any
+  scene: IGameScene
+  bulletGroup: Phaser.GameObjects.Group
+  gunGroup: Phaser.GameObjects.Group
 
-  constructor(scene) {
+  constructor(scene: IGameScene) {
     this.scene = scene
     this.bulletGroup = this.scene.add.group()
     this.gunGroup = this.scene.add.group()
@@ -17,7 +18,10 @@ export default class GunService {
       visible: false,
       classType: Bullet,
     })
-    this.bulletGroup.children.entries.forEach((c) => c.body.reset(-9, -9))
+    this.bulletGroup.children.entries.forEach((c) => {
+      const body = c.body as Phaser.Physics.Arcade.Body
+      body.reset(-9, -9)
+    })
   }
 
   createGun(x, y) {

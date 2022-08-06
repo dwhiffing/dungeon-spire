@@ -1,17 +1,21 @@
+import { GUNS, SHAPES } from '../constants'
+import { IGameScene } from '~/scenes/Game'
+import { Card } from '~/sprites/Card'
 import { WallMarker } from '../sprites/WallMarker'
 import { indexToFrame } from './level'
 
 export default class MarkerService {
-  scene: any
-  card: any
-  group: any
-  shape: any
-  rotationIndex: any
+  scene: IGameScene
+  group: Phaser.GameObjects.Container
+  card: Card | null
+  shape: number[][] | null
+  rotationIndex: number
 
-  constructor(scene) {
+  constructor(scene: IGameScene) {
     this.scene = scene
     this.group = this.scene.add.container()
     this.shape = null
+    this.card = null
     this.rotationIndex = 0
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 3; x++) {
@@ -36,7 +40,7 @@ export default class MarkerService {
     this.updateMarkers()
   }
 
-  getShape = (card) => {
+  getShape = (card: Card) => {
     this.card = card
     this.shape =
       card.labelText.text === 'TILE' ? SHAPES[card.key] : GUNS[card.key]
@@ -44,13 +48,12 @@ export default class MarkerService {
     this.updateMarkers()
   }
 
-  getTileData = (x, y) => {
-    return this.shape[this.rotationIndex]
-      .map((f, i) =>
-        f === -1 ? null : [f, x + (i % 3) - 1, y + Math.floor(i / 3) - 1],
-      )
-      .filter(Boolean)
-  }
+  getTileData = (x: number, y: number) =>
+    this.shape![this.rotationIndex].map((f, i) => [
+      f,
+      x + (i % 3) - 1,
+      y + Math.floor(i / 3) - 1,
+    ]).filter(([f]) => f > -1)
 
   rotate = () => {
     if (!this.shape) return
@@ -61,27 +64,10 @@ export default class MarkerService {
 
   updateMarkers = () => {
     const shape = this.shape || [[-1, -1, -1, -1, -1, -1, -1, -1, -1]]
-    this.group.list.forEach((wallMarker, i) => {
-      let frame = shape[this.rotationIndex][i]
+    const markers = this.group.list as WallMarker[]
+    markers.forEach((wallMarker, i) => {
+      let frame = shape[this.rotationIndex][i] || 1
       wallMarker.setFrame(indexToFrame(frame))
     })
   }
-}
-
-export const SHAPES = {
-  LINE: [
-    [-1, 1, -1, -1, 1, -1, -1, 1, -1],
-    [-1, -1, -1, 1, 1, 1, -1, -1, -1],
-  ],
-  DOT: [[-1, -1, -1, -1, 1, -1, -1, -1, -1]],
-  CORNER: [
-    [-1, 1, -1, 1, 1, -1, -1, -1, -1],
-    [-1, 1, -1, -1, 1, 1, -1, -1, -1],
-    [-1, -1, -1, -1, 1, 1, -1, 1, -1],
-    [-1, -1, -1, 1, 1, -1, -1, 1, -1],
-  ],
-}
-
-export const GUNS = {
-  GUN: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
 }

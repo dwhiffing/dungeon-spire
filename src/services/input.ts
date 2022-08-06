@@ -1,14 +1,17 @@
+import { IGameScene } from '~/scenes/Game'
+
 export default class InputService {
-  scene: any
-  direction: any
-  events: any
-  cursors: any
-  spaceKey: any
-  zKey: any
-  xKey: any
-  cKey: any
-  mKey: any
-  constructor(scene) {
+  scene: IGameScene
+  direction: Record<string, boolean>
+  events: Record<string, any>
+  cursors?: Phaser.Types.Input.Keyboard.CursorKeys
+  spaceKey?: Phaser.Input.Keyboard.Key
+  zKey?: Phaser.Input.Keyboard.Key
+  xKey?: Phaser.Input.Keyboard.Key
+  cKey?: Phaser.Input.Keyboard.Key
+  mKey?: Phaser.Input.Keyboard.Key
+
+  constructor(scene: IGameScene) {
     this.scene = scene
     this.direction = {}
     const noop = () => {}
@@ -74,7 +77,7 @@ export default class InputService {
     this.makeButton(width - X * 2, H, 218, 'shoot')
   }
 
-  makeButton = (x, y, key, type) => {
+  makeButton = (x: number, y: number, key: number, type: string) => {
     const noop = () => {}
     return (
       this.scene.add
@@ -91,15 +94,15 @@ export default class InputService {
   }
 
   cleanup = () => {
-    this.cursors.up.removeListener('down')
-    this.cursors.left.removeListener('down')
-    this.cursors.right.removeListener('down')
-    this.cursors.down.removeListener('down')
-    this.zKey.removeListener('down')
-    this.spaceKey.removeListener('down')
-    this.cursors.down.removeListener('up')
-    this.cursors.up.removeListener('up')
-    this.cursors.left.removeListener('up')
-    this.cursors.right.removeListener('up')
+    this.cursors?.up.removeListener('down')
+    this.cursors?.left.removeListener('down')
+    this.cursors?.right.removeListener('down')
+    this.cursors?.down.removeListener('down')
+    this.zKey?.removeListener('down')
+    this.spaceKey?.removeListener('down')
+    this.cursors?.down.removeListener('up')
+    this.cursors?.up.removeListener('up')
+    this.cursors?.left.removeListener('up')
+    this.cursors?.right.removeListener('up')
   }
 }

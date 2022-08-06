@@ -1,14 +1,13 @@
-import { SHAPES } from '../services/marker'
+import { IGameScene } from '~/scenes/Game'
+import { CARD_HEIGHT, CARD_WIDTH, SHAPES } from '../constants'
 
-const CARD_WIDTH = 18
-const CARD_HEIGHT = 25
 export class Card extends Phaser.GameObjects.Rectangle {
-  graphics: any
-  key: any
-  index: any
-  labelText: any
+  graphics: Phaser.GameObjects.Graphics
+  key: string
+  index: number
+  labelText: Phaser.GameObjects.BitmapText
 
-  constructor(scene, i) {
+  constructor(scene: IGameScene, i: number) {
     super(
       scene,
       3 + i * (CARD_WIDTH + 3),
@@ -20,6 +19,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
 
     this.scene.add.existing(this)
     this.index = i
+    this.key = ''
     this.setStrokeStyle(1, 0x555555).setInteractive().setOrigin(0)
     this.scene = scene
     this.labelText = this.scene.add.bitmapText(

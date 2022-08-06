@@ -1,7 +1,9 @@
-export class Enemy extends Phaser.Physics.Arcade.Sprite {
-  timeline: any
+import { IGameScene } from '~/scenes/Game'
 
-  constructor(scene, x, y) {
+export class Enemy extends Phaser.Physics.Arcade.Sprite {
+  timeline?: Phaser.Tweens.Timeline
+
+  constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 'tilemap')
     this.scene = scene
     this.name = 'enemy'
@@ -30,7 +32,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.time.delayedCall(100, () => {
       this.timeline = this.scene.tweens.createTimeline()
       path.slice(1).forEach((tile) => {
-        this.timeline.add({
+        this.timeline?.add({
           targets: [this],
           x: tile.x * 8,
           y: tile.y * 8,

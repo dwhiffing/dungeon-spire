@@ -1,14 +1,15 @@
 import { shuffle } from 'lodash'
+import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
-import { SHAPES } from './marker'
+import { SHAPES } from '../constants'
 
 export default class HudService {
-  scene: any
-  deck: any
-  cards: any
-  backdrop: any
+  scene: IGameScene
+  deck: { key: string; label: string }[]
+  cards: Card[]
+  backdrop: Phaser.GameObjects.Rectangle
 
-  constructor(scene) {
+  constructor(scene: IGameScene) {
     this.scene = scene
     const shapeKeys = Object.keys(SHAPES)
     const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))

@@ -10,12 +10,12 @@ export default class extends Phaser.Scene {
     super({ key: 'Game' })
   }
 
-  level: any
-  enemies: any
-  marker: any
-  guns: any
-  hud: any
-  inputService: any
+  level?: LevelService
+  enemies?: EnemyService
+  marker?: MarkerService
+  guns?: GunService
+  hud?: HudService
+  inputService?: InputService
 
   init() {}
 
@@ -29,7 +29,7 @@ export default class extends Phaser.Scene {
     this.hud = new HudService(this)
     this.inputService = new InputService(this)
     this.events.on('card-click', (card) => {
-      this.time.delayedCall(100, () => this.marker.getShape(card))
+      this.time.delayedCall(100, () => this.marker?.getShape(card))
     })
 
     this.physics.add.overlap(
@@ -48,27 +48,39 @@ export default class extends Phaser.Scene {
   update() {}
 
   spawn() {
-    this.enemies.spawn(this.level.findEntrance())
+    this.enemies?.spawn(this.level?.findEntrance())
   }
 
   placeTile = (event) => {
-    if (!this.marker.shape) return
+    if (!this.marker?.shape) return
 
     const x = Math.floor(event.downX / 8)
     const y = Math.floor(event.downY / 8)
-    this.level.placeTiles(this.marker.getTileData(x, y), () => {
-      if (this.marker.card.key === 'GUN') {
-        this.guns.createGun(x * 8, y * 8)
+    this.level?.placeTiles(this.marker?.getTileData(x, y), () => {
+      if (this.marker?.card?.key === 'GUN') {
+        this.guns?.createGun(x * 8, y * 8)
       }
-      this.enemies.repath(this.level.findExit())
-      this.marker.clearShape()
+      this.enemies?.repath(this.level?.findExit())
+      this.marker?.clearShape()
 
       // next turn
-      this.hud.drawCards()
+      this.hud?.drawCards()
     })
   }
 
   rotateTile = () => {
-    this.marker.rotate()
+    this.marker?.rotate()
   }
+}
+
+export interface IGameScene extends Phaser.Scene {
+  level?: LevelService
+  enemies?: EnemyService
+  marker?: MarkerService
+  guns?: GunService
+  hud?: HudService
+  inputService?: InputService
+  rotateTile: () => void
+  spawn: () => void
+  placeTile: (event: any) => void
 }
