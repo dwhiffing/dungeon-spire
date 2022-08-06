@@ -1,0 +1,5 @@
+export { default as BootScene } from './Boot'
+export { default as MenuScene } from './Menu'
+export { default as CreditsScene } from './Credits'
+export { default as GameScene } from './Game'
+export { default as WinScene } from './Win'

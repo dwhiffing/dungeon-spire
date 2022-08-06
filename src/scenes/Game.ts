@@ -1,0 +1,74 @@
+import LevelService from '../services/level'
+import EnemyService from '../services/enemy'
+import MarkerService from '../services/marker'
+import GunService from '../services/gun'
+import InputService from '../services/input'
+import HudService from '../services/hud'
+
+export default class extends Phaser.Scene {
+  constructor() {
+    super({ key: 'Game' })
+  }
+
+  level: any
+  enemies: any
+  marker: any
+  guns: any
+  hud: any
+  inputService: any
+
+  init() {}
+
+  create() {
+    this.cameras.main.setBackgroundColor(0x113300)
+    // this.physics.world.fixedDelta = true
+    this.level = new LevelService(this)
+    this.enemies = new EnemyService(this)
+    this.marker = new MarkerService(this)
+    this.guns = new GunService(this)
+    this.hud = new HudService(this)
+    this.inputService = new InputService(this)
+    this.events.on('card-click', (card) => {
+      this.time.delayedCall(100, () => this.marker.getShape(card))
+    })
+
+    this.physics.add.overlap(
+      this.enemies.group,
+      this.guns.bulletGroup,
+      this.hit,
+    )
+  }
+
+  hit = (enemy, bullet) => {
+    if (!enemy.active || !bullet.active) return
+    enemy.kill()
+    bullet.kill()
+  }
+
+  update() {}
+
+  spawn() {
+    this.enemies.spawn(this.level.findEntrance())
+  }
+
+  placeTile = (event) => {
+    if (!this.marker.shape) return
+
+    const x = Math.floor(event.downX / 8)
+    const y = Math.floor(event.downY / 8)
+    this.level.placeTiles(this.marker.getTileData(x, y), () => {
+      if (this.marker.card.key === 'GUN') {
+        this.guns.createGun(x * 8, y * 8)
+      }
+      this.enemies.repath(this.level.findExit())
+      this.marker.clearShape()
+
+      // next turn
+      this.hud.drawCards()
+    })
+  }
+
+  rotateTile = () => {
+    this.marker.rotate()
+  }
+}
