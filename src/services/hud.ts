@@ -8,6 +8,7 @@ export default class HudService {
   scene: IGameScene
   playerHealthBar: HealthBar
   energyText: Phaser.GameObjects.BitmapText
+  titleText: Phaser.GameObjects.BitmapText
   drawCount: number
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
@@ -27,7 +28,7 @@ export default class HudService {
       .setDepth(9)
       .on('pointerup', () => {
         this.showCards()
-        this.backdrop.setAlpha(0.4)
+        this.backdrop.setAlpha(0.7)
       })
       .on('pointerdown', (e) => {
         this.hideCards()
@@ -37,7 +38,9 @@ export default class HudService {
       const cards = this.cards.filter((c) => c.alpha === 1)
       cards.forEach((c) => c.unfocus())
       if (e.y < 36) return
-      const index = Math.floor(((e.x - 3) / 58) * cards.length)
+      let width = 58
+      if (cards.length < 3) width = 35
+      const index = Math.floor(((e.x - 3) / width) * cards.length)
       cards[index]?.focus()
     })
 
@@ -52,15 +55,21 @@ export default class HudService {
       })
 
     this.hand = []
-    this.drawCount = 5
+    this.drawCount = 3
     this.discard = []
     this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
     this.cards = new Array(32).fill('').map((_, i) => new Card(this.scene, i))
-    this.scene.events.on('card-click', this.hideCards)
+    this.scene.events.on('card-click', this.cardClick)
     this.scene.events.on('changedata-energyCount', this.setEnergy)
     this.scene.events.on('changedata-healthCount', this.setHealth)
+    this.scene.events.on('changedata-mode', this.setMode)
 
     this.playerHealthBar = this.createPlayerHealth()
+    this.titleText = this.scene.add
+      .bitmapText(32, 1, 'pixel-dan', '')
+      .setOrigin(0.5, 0)
+      .setCenterAlign()
+      .setDepth(11)
     this.energyText = this.scene.add
       .bitmapText(1, 1, 'pixel-dan', '0')
       .setOrigin(0)
@@ -78,22 +87,46 @@ export default class HudService {
   }
 
   drawCards = (drawCount = this.drawCount) => {
+    if (this.scene.data.get('mode') === 'remove') {
+      drawCount = this.deck.length + this.discard.length
+    }
     if (this.deck.length < drawCount) {
       drawCount = drawCount - this.deck.length
       this.hand = [...this.deck]
       this.deck = shuffle(this.discard)
+      this.discard = []
     }
     this.hand = [...this.hand, ...this.deck.splice(0, drawCount)]
     this.showCards()
   }
 
   showCards = () => {
-    this.backdrop.setAlpha(0.4)
+    this.backdrop.setAlpha(0.7)
     this.playButton.setAlpha(1)
+    this.titleText.setAlpha(1)
     this.energyText.setAlpha(1)
     this.hand.forEach((c, i) =>
       this.cards[i].show(this.hand[i], this.hand.length),
     )
+  }
+
+  removeCard = (card?) => {
+    this.hand = this.hand.filter((_c, i) => i !== card.index)
+    this.deck = [...this.hand]
+    this.hand = []
+  }
+
+  cardClick = (card?) => {
+    if (this.scene.data.get('mode') === 'remove') {
+      this.scene.data.set('mode', 'play')
+      this.removeCard(card)
+      this.drawCards()
+      this.hideCards()
+      this.showCards()
+    } else {
+      this.scene.events.emit('card-play', card)
+      this.hideCards(card)
+    }
   }
 
   hideCards = (card?) => {
@@ -103,6 +136,7 @@ export default class HudService {
     }
     this.playButton.setAlpha(0)
     this.energyText.setAlpha(0)
+    this.titleText.setAlpha(0)
     this.backdrop.setAlpha(0)
     this.cards.forEach((c) => c.hide())
   }
@@ -119,5 +153,15 @@ export default class HudService {
 
   setHealth = (_, value) => {
     this.playerHealthBar.update(value)
+  }
+
+  setMode = (_, value) => {
+    if (value === 'remove') {
+      this.titleText.text = 'REMOVE\nA CARD'
+    } else if (value === 'play') {
+      this.titleText.text = 'PLAY\nCARD'
+    } else {
+      this.titleText.text = ''
+    }
   }
 }

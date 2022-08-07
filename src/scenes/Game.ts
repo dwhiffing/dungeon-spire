@@ -28,6 +28,7 @@ export default class extends Phaser.Scene {
     this.data.set('energyCount', 0)
     this.data.set('levelIndex', 0)
     this.data.set('healthCount', 0)
+    this.data.set('mode', '')
 
     this.cameras.main.setBackgroundColor(0x113300)
     // this.physics.world.fixedDelta = true
@@ -38,7 +39,7 @@ export default class extends Phaser.Scene {
     this.guns = new GunService(this)
     this.hud = new HudService(this)
     this.inputService = new InputService(this)
-    this.events.on('card-click', this.cardClick)
+    this.events.on('card-play', this.cardClick)
     this.events.on('enemy-killed', this.checkEnemies)
     this.events.on('enemy-won', this.enemyWon)
 
@@ -47,6 +48,7 @@ export default class extends Phaser.Scene {
       this.guns.bulletGroup,
       this.hit,
     )
+    this.data.set('mode', 'play')
     this.nextLevel()
   }
 
@@ -60,12 +62,13 @@ export default class extends Phaser.Scene {
   }
 
   gameover = () => {
-    this.events.off('card-click', this.cardClick)
+    this.events.off('card-play', this.cardClick)
     this.events.off('enemy-killed', this.checkEnemies)
     this.events.off('enemy-won', this.enemyWon)
     this.events.off('card-click', this.hud?.hideCards)
     this.events.off('changedata-energyCount', this.hud?.setEnergy)
     this.events.off('changedata-healthCount', this.hud?.setHealth)
+    this.events.off('changedata-mode', this.hud?.setMode)
     this.scene.start('Win', { level: this.data.get('levelIndex') })
   }
 
@@ -91,8 +94,11 @@ export default class extends Phaser.Scene {
 
     this.data.set('energyCount', 2)
     if (numIncoming > 0) {
+      this.data.set('mode', 'play')
       this.hud?.drawCards()
     } else {
+      const index = this.data.get('levelIndex')
+      this.data.set('mode', index % 2 === 0 ? 'play' : 'remove')
       this.nextLevel()
     }
   }
@@ -100,6 +106,7 @@ export default class extends Phaser.Scene {
   update() {}
 
   nextWave = () => {
+    this.data.set('mode', 'fight')
     this.hud?.discardHand()
     this.enemies?.spawn(this.levelData!.waves[0])
   }

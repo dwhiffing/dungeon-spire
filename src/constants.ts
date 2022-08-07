@@ -65,7 +65,7 @@ export interface Wave {
 
 const shapeKeys = Object.keys(SHAPES)
 const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))
-export const SHAPE_CARDS = [...shapeCards, ...shapeCards]
+export const SHAPE_CARDS = [...shapeCards]
 export const GUN_CARDS = [
   { key: 'GUN', label: 'GUN' },
   { key: 'GUN', label: 'GUN' },
