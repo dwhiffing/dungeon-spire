@@ -20,7 +20,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
     this.scene.add.existing(this)
     this.index = index
     this.key = ''
-    this.setStrokeStyle(1, 0x555555).setInteractive().setOrigin(0)
+    this.setStrokeStyle(1, 0x555555).setInteractive().setOrigin(0).setAlpha(0)
 
     this.graphics = this.scene.add.graphics().setDepth(10)
     this.labelText = this.scene.add

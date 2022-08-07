@@ -1,9 +1,10 @@
-import { ENEMIES } from '../constants'
+import { ENEMIES, Path } from '../constants'
 import { IGameScene } from '~/scenes/Game'
 
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline
   health: number
+  damageAmount: number
   healthBar: HealthBar
 
   constructor(scene: IGameScene, x: number, y: number) {
@@ -12,6 +13,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this)
     this.setSize(4, 4)
     this.health = 0
+    this.damageAmount = 0
     this.healthBar = new HealthBar(scene)
     this.body.reset(-9, 10)
   }
@@ -22,22 +24,35 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.health <= 0) this.kill()
   }
 
-  spawn(x, y, type) {
+  spawn(x: number, y: number, type: string, path: Path) {
     this.setActive(true).setVisible(true).setOrigin(0, 0)
     this.body.reset(x, y)
-    this.health = ENEMIES[type].health
+    const data = ENEMIES[type]
+    this.health = data.health
+    this.damageAmount = data.damage
     this.healthBar.update(this.health, this.health)
     this.healthBar.container.setPosition(this.x, this.y)
+    if (path) this.followPath(path)
   }
 
-  kill = () => {
+  _kill = () => {
     this.setActive(false).setVisible(false)
     this.timeline?.stop()
     this.body.reset(-9, -9)
     this.healthBar.container.setAlpha(0)
   }
 
-  followPath = (path) => {
+  kill = () => {
+    this._kill()
+    this.scene.events.emit('enemy-killed')
+  }
+
+  win = () => {
+    this._kill()
+    this.scene.events.emit('enemy-won', this)
+  }
+
+  followPath = (path: Path) => {
     if (!path) return
 
     this.timeline?.stop()
@@ -54,7 +69,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         })
       })
 
-      this.timeline.on('complete', this.kill)
+      this.timeline.on('complete', this.win)
       this.timeline.play()
     })
   }

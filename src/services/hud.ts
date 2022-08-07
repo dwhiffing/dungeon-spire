@@ -23,7 +23,6 @@ export default class HudService {
     this.deck = [...shapeCards, ...gunCards]
     this.deck = shuffle(this.deck)
     this.cards = new Array(3).fill('').map((_, i) => new Card(this.scene, i))
-    this.drawCards()
     this.scene.events.on('card-click', this.hideCards)
   }
 

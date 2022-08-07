@@ -27,7 +27,8 @@
 			"phaser"
 		],
 		"lib": [
-			"es2017"
+			"es2017",
+			"dom"
 		]
 	},
 	"include": [

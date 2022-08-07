@@ -1,11 +1,19 @@
 import easystarjs from 'easystarjs'
-import { ENTRANCE_INDEX, EXIT_INDEX, GUN_INDEX, WALL_INDEX } from '../constants'
+import {
+  ENTRANCE_INDEX,
+  EXIT_INDEX,
+  GUN_INDEX,
+  LevelData,
+  LEVELS,
+  Path,
+  WALL_INDEX,
+} from '../constants'
 import { IGameScene } from '~/scenes/Game'
 
 export default class LevelService {
   scene: IGameScene
   pathGraphics: Phaser.GameObjects.Graphics
-  path: { x: number; y: number }[]
+  path: Path
   map: Phaser.Tilemaps.Tilemap
   data: number[][]
   groundLayer?: Phaser.Tilemaps.TilemapLayer
@@ -21,10 +29,13 @@ export default class LevelService {
     this.path = []
     this.star = new easystarjs.js()
     this.star.setAcceptableTiles([-1, EXIT_INDEX, ENTRANCE_INDEX])
+  }
 
-    this.map.putTileAt(WALL_INDEX, 3, 2)
-    this.map.putTileAt(EXIT_INDEX, 2, 2)
-    this.map.putTileAt(ENTRANCE_INDEX, 4, 2)
+  startLevel = (levelData: LevelData) => {
+    this.clearMap()
+    levelData.tiles.forEach((tile) =>
+      this.map.putTileAt(tile.frame, tile.x, tile.y),
+    )
     this.update()
   }
 
@@ -82,7 +93,10 @@ export default class LevelService {
     })
   }
 
-  findPath = (start = this.findEntrance(), end = this.findExit()) =>
+  findPath = (
+    start = this.findEntrance(),
+    end = this.findExit(),
+  ): Promise<Path | null> =>
     new Promise((resolve) => {
       if (!start || !end) return resolve(null)
       this.star.findPath(start.x, start.y, end.x, end.y, resolve)
@@ -110,6 +124,8 @@ export default class LevelService {
 
   getMapData = () =>
     this.map.layers[0].data.map((row) => row.map((tile) => tile.index))
+
+  clearMap = () => this.map.fill(-1, 0, 0, 64, 64)
 }
 
 const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }

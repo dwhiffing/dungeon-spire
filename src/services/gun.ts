@@ -18,14 +18,22 @@ export default class GunService {
       visible: false,
       classType: Bullet,
     })
-    this.bulletGroup.children.entries.forEach((c) => {
-      const body = c.body as Phaser.Physics.Arcade.Body
-      body.reset(-9, -9)
+    this.gunGroup.createMultiple({
+      frameQuantity: 5,
+      key: 'gun',
+      active: false,
+      visible: false,
+      classType: Gun,
     })
   }
 
   createGun(x, y) {
-    const gun = new Gun(this.scene, x, y)
-    this.gunGroup.add(gun)
+    const gun: Gun = this.gunGroup.getFirstDead(false)
+    gun?.spawn(x, y)
+  }
+
+  clear() {
+    const guns = this.gunGroup.children.entries as Gun[]
+    guns.forEach((child) => child.kill())
   }
 }

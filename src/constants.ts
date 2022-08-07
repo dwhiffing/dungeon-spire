@@ -31,6 +31,33 @@ export const GUN_STATS = {
 
 export const ENEMIES = {
   ONE: {
-    health: 4,
+    damage: 3,
+    health: 10,
   },
+}
+
+export const LEVEL_TYPES = {
+  ONE: {
+    waves: [{ size: 3, delay: 2000, type: 'ONE' }],
+    tiles: [
+      { frame: WALL_INDEX, x: 3, y: 2 },
+      { frame: EXIT_INDEX, x: 2, y: 2 },
+      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+    ],
+  },
+}
+
+export const LEVELS = [LEVEL_TYPES.ONE]
+
+export type Path = { x: number; y: number }[]
+
+export interface LevelData {
+  waves: Wave[]
+  tiles: { frame: number; x: number; y: number }[]
+}
+
+export interface Wave {
+  size: number
+  delay: number
+  type: string
 }

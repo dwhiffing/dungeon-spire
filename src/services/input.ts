@@ -30,7 +30,7 @@ export default class InputService {
       xPressed: () => {},
       cPressed: () => {},
       mPressed: () => (this.scene.sound.mute = !this.scene.sound.mute),
-      spacePressed: () => this.scene.spawn(),
+      spacePressed: () => {},
     }
 
     // @ts-ignore

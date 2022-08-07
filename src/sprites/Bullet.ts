@@ -13,6 +13,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setFrame(40).setSize(1, 1).setOffset(0, 0).setOrigin(0, 0)
     this.damageAmount = 0
     this.health = 1
+    this.body.reset(-9, -9)
   }
 
   damage(amount: number) {
