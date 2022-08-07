@@ -12,14 +12,14 @@ export default class GunService {
     this.bulletGroup = this.scene.add.group()
     this.gunGroup = this.scene.add.group()
     this.bulletGroup.createMultiple({
-      frameQuantity: 5,
+      frameQuantity: 50,
       key: 'bullet',
       active: false,
       visible: false,
       classType: Bullet,
     })
     this.gunGroup.createMultiple({
-      frameQuantity: 5,
+      frameQuantity: 10,
       key: 'gun',
       active: false,
       visible: false,

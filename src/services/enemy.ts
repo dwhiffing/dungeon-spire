@@ -25,13 +25,22 @@ export default class EnemyService {
 
   async spawn(wave: Wave) {
     const start = this.scene.level?.findEntrance()
-    this.remainingSpawnCount = wave.size
     if (!start) return
-    for (let i = 0; i < wave.size; i++) {
-      const enemy = this.group.getFirstDead(false)
-      enemy?.spawn(start.x * 8, start.y * 8, 'ONE', this.level.path)
-      this.remainingSpawnCount--
-      await new Promise((r) => setTimeout(r, wave.delay))
+
+    let toSpawn = this.getSurvivingEnemies()
+    if (toSpawn.length === 0) {
+      toSpawn = this.group.getMatching('active', false).slice(0, wave.size)
+    }
+
+    this.remainingSpawnCount = toSpawn.length
+    for (let i = 0; i < toSpawn.length; i++) {
+      this.scene.time.addEvent({
+        delay: wave.delay * i,
+        callback: () => {
+          toSpawn[i]?.spawn(start.x * 8, start.y * 8, 'ONE', this.level.path)
+          this.remainingSpawnCount--
+        },
+      })
     }
   }
 
@@ -47,4 +56,7 @@ export default class EnemyService {
       })
     })
   }
+
+  getSurvivingEnemies = () =>
+    (this.group.children.entries as Enemy[]).filter((c) => c.health > 0)
 }

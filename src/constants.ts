@@ -33,6 +33,7 @@ export const ENEMIES = {
   ONE: {
     damage: 3,
     health: 10,
+    speed: 2000,
   },
 }
 

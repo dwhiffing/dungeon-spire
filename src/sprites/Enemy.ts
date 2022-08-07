@@ -4,6 +4,8 @@ import { IGameScene } from '~/scenes/Game'
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline
   health: number
+  maxHealth: number
+  speed: number
   damageAmount: number
   healthBar: HealthBar
 
@@ -13,6 +15,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this)
     this.setSize(4, 4)
     this.health = 0
+    this.maxHealth = 0
+    this.speed = 0
     this.damageAmount = 0
     this.healthBar = new HealthBar(scene)
     this.body.reset(-9, 10)
@@ -27,10 +31,14 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   spawn(x: number, y: number, type: string, path: Path) {
     this.setActive(true).setVisible(true).setOrigin(0, 0)
     this.body.reset(x, y)
-    const data = ENEMIES[type]
-    this.health = data.health
-    this.damageAmount = data.damage
-    this.healthBar.update(this.health, this.health)
+    if (this.health === 0) {
+      const data = ENEMIES[type]
+      this.health = data.health
+      this.maxHealth = data.health
+      this.speed = data.speed
+      this.damageAmount = data.damage
+    }
+    this.healthBar.update(this.health, this.maxHealth)
     this.healthBar.container.setPosition(this.x, this.y)
     if (path) this.followPath(path)
   }
@@ -44,6 +52,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   kill = () => {
     this._kill()
+    this.health = 0
     this.scene.events.emit('enemy-killed')
   }
 
@@ -58,14 +67,13 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.timeline?.stop()
     this.scene.time.delayedCall(100, () => {
       this.timeline = this.scene.tweens.createTimeline()
-      const duration = 2000
       this.healthBar.container.setPosition(this.x, this.y)
       path.slice(1).forEach(({ x, y }) => {
         this.timeline?.add({
           targets: [this, this.healthBar.container],
           x: x * 8,
           y: y * 8,
-          duration,
+          duration: this.speed,
         })
       })
 

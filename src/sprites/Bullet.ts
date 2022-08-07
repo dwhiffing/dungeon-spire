@@ -27,7 +27,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.body.reset(x, y)
     this.setActive(true).setVisible(true)
     this.scene.physics.moveTo(this, x2, y2)
-    this.call = this.scene.time.delayedCall(1000, this.kill)
+    this.call = this.scene.time.delayedCall(10000, this.kill)
   }
 
   kill = () => {

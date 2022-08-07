@@ -12,13 +12,11 @@ export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
     this.levelIndex = 0
-    this.waveIndex = 0
-    this.lifeCount = 3
+    this.lifeCount = 50
     this.energyCount = 2
   }
 
   levelIndex: number
-  waveIndex: number
   levelData?: LevelData
   energyCount: number
   lifeCount: number
@@ -43,23 +41,13 @@ export default class extends Phaser.Scene {
     this.events.on('card-click', (card) => {
       this.time.delayedCall(100, () => this.marker?.getShape(card))
     })
-    this.events.on('enemy-killed', () => {
-      if (!this.enemies) return
-      const numLiving = this.enemies.group.countActive()
-      const enemiesLeft = this.enemies?.remainingSpawnCount + numLiving
-      if (enemiesLeft === 0) {
-        this.energyCount = 2
-        if (this.waveIndex < this.levelData!.waves.length - 1) {
-          this.hud?.drawCards()
-        } else {
-          this.nextLevel()
-        }
-      }
-    })
+    this.events.on('enemy-killed', this.checkEnemies)
     this.events.on('enemy-won', (enemy: Enemy) => {
       this.lifeCount -= enemy.damageAmount
       if (this.lifeCount < 1) {
         this.scene.start('Win')
+      } else {
+        this.checkEnemies()
       }
     })
 
@@ -79,20 +67,27 @@ export default class extends Phaser.Scene {
     bullet.damage(1)
   }
 
-  update() {}
+  checkEnemies = () => {
+    if (!this.enemies) return
 
-  nextWave() {
-    this.waveIndex++
-    const wave = this.levelData?.waves[this.waveIndex - 1]
-    if (wave) {
-      this.enemies?.spawn(wave)
+    const numActive = this.enemies.group.countActive()
+    const numIncoming = this.enemies.getSurvivingEnemies().length
+    const activeCount = this.enemies.remainingSpawnCount + numActive
+    if (activeCount > 0) return
+
+    this.energyCount = 2
+    if (numIncoming > 0) {
+      this.hud?.drawCards()
     } else {
       this.nextLevel()
     }
   }
 
+  update() {}
+
+  nextWave = () => this.enemies?.spawn(this.levelData!.waves[0])
+
   nextLevel() {
-    this.waveIndex = 0
     this.levelIndex++
     this.levelData = LEVELS[(this.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
