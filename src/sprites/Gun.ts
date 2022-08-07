@@ -10,21 +10,18 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'tilemap')
     this.guns = scene.guns!
     this.enemies = scene.enemies!
-    this.setFrame(7)
+    this.setFrame(7).setOrigin(0)
     this.scene.add.existing(this)
     this.scene.time.addEvent({
       callback: () => this.shoot(x, y),
       repeat: -1,
       delay: 500,
     })
-    this.setOrigin(0)
   }
 
   shoot(x, y) {
-    let bullet = this.guns.bulletGroup.getFirstDead(false)
-    if (bullet) {
-      const enemy = this.enemies.group.getFirstAlive()
-      if (enemy) bullet.shoot(x + 4, y + 4, enemy.x + 4, enemy.y + 4)
-    }
+    const bullet = this.guns.bulletGroup.getFirstDead(false)
+    const enemy = this.enemies.group.getFirstAlive()
+    if (enemy) bullet?.shoot(x + 4, y + 4, enemy.x + 4, enemy.y + 4)
   }
 }

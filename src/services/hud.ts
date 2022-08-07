@@ -29,13 +29,8 @@ export default class HudService {
 
   drawCards = () => {
     let cards = shuffle(this.deck).slice(0, 3)
-    this.cards.forEach((_card, i) => _card.renderCardData(cards[i]))
-    this.showCards()
-  }
-
-  showCards = () => {
     this.backdrop.setAlpha(0.4)
-    this.cards.forEach((c) => c.show())
+    this.cards.forEach((c, i) => c.show(cards[i]))
   }
 
   hideCards = () => {
