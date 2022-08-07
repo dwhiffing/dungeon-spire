@@ -1,7 +1,7 @@
 export const ENTRANCE_INDEX = 32
-export const EXIT_INDEX = 17
+export const EXIT_INDEX = 33
 export const WALL_INDEX = 16
-export const GUN_INDEX = 18
+export const GUN_INDEX = 17
 
 export const CARD_WIDTH = 18
 export const CARD_HEIGHT = 25

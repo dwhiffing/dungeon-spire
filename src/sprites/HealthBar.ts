@@ -15,7 +15,7 @@ export class HealthBar {
     width: number = 4,
     height: number = 1,
     xOffset: number = 2,
-    yOffset: number = -2,
+    yOffset: number = -1,
   ) {
     this.scene = scene
     this.width = width

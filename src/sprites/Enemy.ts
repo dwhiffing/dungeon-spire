@@ -20,7 +20,16 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.speed = 0
     this.damageAmount = 0
     this.healthBar = new HealthBar(scene)
+    this.healthBar.container.setDepth(8)
     this.body.reset(-9, 10)
+    this.anims.create({
+      key: 'walk',
+      repeat: -1,
+      frameRate: 4,
+      frames: this.anims.generateFrameNumbers('tilemap', { start: 0, end: 1 }),
+    })
+    this.flipX = true
+    this.play('walk')
   }
 
   damage(amount: number) {
@@ -75,6 +84,9 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
           x: x * 8,
           y: y * 8,
           duration: this.speed,
+          onStart: () => {
+            this.flipX = this.x > x * 8
+          },
         })
       })
 

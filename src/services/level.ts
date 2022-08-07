@@ -22,7 +22,6 @@ export default class LevelService {
   constructor(scene: IGameScene) {
     this.scene = scene
     this.pathGraphics = this.scene.add.graphics()
-    this.pathGraphics.lineStyle(1, 0xffffff)
 
     this.map = this.createMap()
     this.data = this.getMapData()
@@ -55,7 +54,7 @@ export default class LevelService {
     this.updateGrid(this.getMapData())
     this.findPath().then((path) => {
       this.pathGraphics.clear()
-      this.pathGraphics.lineStyle(1, 0xaaaa00)
+      this.pathGraphics.lineStyle(1, 0x5500aa)
       if (!path) return
       // @ts-ignore
       this.path = path
