@@ -93,13 +93,12 @@ export default class extends Phaser.Scene {
     if (activeCount > 0) return
 
     this.data.set('energyCount', 2)
-    if (numIncoming > 0) {
-      this.data.set('mode', 'play')
-      this.hud?.drawCards()
-    } else {
+    if (numIncoming === 0) {
       const index = this.data.get('levelIndex')
       this.data.set('mode', index % 2 === 1 ? 'add' : 'remove')
       this.nextLevel()
+    } else {
+      this.data.set('mode', 'play')
     }
   }
 
@@ -107,7 +106,6 @@ export default class extends Phaser.Scene {
 
   nextWave = () => {
     this.data.set('mode', 'fight')
-    this.hud?.discardHand()
     this.enemies?.spawn(this.levelData!.waves[0])
   }
 
@@ -117,8 +115,6 @@ export default class extends Phaser.Scene {
     this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
     this.level?.startLevel(this.levelData)
-    this.hud?.discardHand()
-    this.hud?.drawCards()
   }
 
   placeTile = (event) => {
