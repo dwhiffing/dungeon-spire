@@ -18,14 +18,11 @@ export default class EnemyService {
       visible: false,
       classType: Enemy,
     })
-    this.group.children.entries.forEach((c) => {
-      const body = c.body as Phaser.Physics.Arcade.Body
-      body.reset(-9, 10)
-    })
   }
 
   spawn(entrance?: { x: number; y: number }) {
     if (!entrance) return
+
     let enemy = this.group.getFirstDead(false)
     if (enemy) {
       enemy.spawn(entrance.x * 8, entrance.y * 8, 'ONE')
@@ -43,5 +40,4 @@ export default class EnemyService {
       this.level.findPath({ x, y }, exit).then((path) => child.followPath(path))
     })
   }
-  update() {}
 }

@@ -28,6 +28,4 @@ export default class GunService {
     const gun = new Gun(this.scene, x, y)
     this.gunGroup.add(gun)
   }
-
-  update() {}
 }

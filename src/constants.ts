@@ -23,6 +23,12 @@ export const GUNS = {
   GUN: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
 }
 
+export const GUN_STATS = {
+  ONE: {
+    damage: 1,
+  },
+}
+
 export const ENEMIES = {
   ONE: {
     health: 4,

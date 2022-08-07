@@ -8,8 +8,6 @@ export default class LevelService {
   path: { x: number; y: number }[]
   map: Phaser.Tilemaps.Tilemap
   data: number[][]
-  width: number
-  height: number
   groundLayer?: Phaser.Tilemaps.TilemapLayer
   star: any
 
@@ -19,8 +17,6 @@ export default class LevelService {
     this.pathGraphics.lineStyle(1, 0xffffff)
 
     this.map = this.createMap()
-    this.width = this.map.widthInPixels
-    this.height = this.map.heightInPixels
     this.data = this.getMapData()
     this.path = []
     this.star = new easystarjs.js()
@@ -32,17 +28,29 @@ export default class LevelService {
     this.update()
   }
 
-  placeTiles = (tiles: number[][], onComplete: () => void) => {
-    // abort if placement overlaps with existing tiles
-    if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
+  createMap = () => {
+    const map = this.scene.make.tilemap(MAP_CONFIG)
+    const width = map.widthInPixels
+    const height = map.heightInPixels
+    this.scene.physics.world.bounds.width = width
+    this.scene.physics.world.bounds.height = height
+    this.scene.cameras.main.setBounds(0, 0, width, height)
+    const groundTiles = map.addTilesetImage('tilemap')
+    this.groundLayer = map.createBlankLayer('World', groundTiles)
+    return map
+  }
 
-    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
-
+  update() {
+    this.updateGrid(this.getMapData())
     this.findPath().then((path) => {
-      if (!path) tiles.forEach(([f, x, y]) => this.placeTile(-1, x, y))
-      if (path) {
-        onComplete()
-      }
+      this.pathGraphics.clear()
+      if (!path) return
+      // @ts-ignore
+      this.path = path
+      this.path.forEach((item) =>
+        this.pathGraphics.lineTo(item.x * 8 + 4, item.y * 8 + 4),
+      )
+      this.pathGraphics.strokePath()
     })
   }
 
@@ -60,6 +68,27 @@ export default class LevelService {
     this.update()
   }
 
+  placeTiles = (tiles: number[][], onComplete: () => void) => {
+    // abort if placement overlaps with existing tiles
+    if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
+
+    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
+
+    this.findPath().then((path) => {
+      if (!path) tiles.forEach(([f, x, y]) => this.placeTile(-1, x, y))
+      if (path) {
+        onComplete()
+      }
+    })
+  }
+
+  findPath = (start = this.findEntrance(), end = this.findExit()) =>
+    new Promise((resolve) => {
+      if (!start || !end) return resolve(null)
+      this.star.findPath(start.x, start.y, end.x, end.y, resolve)
+      this.star.calculate()
+    })
+
   findEntrance = () => {
     const tile = this.map
       .getTilesWithin(0, 0, 8, 8)
@@ -74,45 +103,13 @@ export default class LevelService {
     return { x: tile!.x, y: tile!.y }
   }
 
-  createMap = () => {
-    const map = this.scene.make.tilemap(MAP_CONFIG)
-
-    this.scene.physics.world.bounds.width = this.width
-    this.scene.physics.world.bounds.height = this.height
-    this.scene.cameras.main.setBounds(0, 0, this.width, this.height)
-    const groundTiles = map.addTilesetImage('tilemap')
-    this.groundLayer = map.createBlankLayer('World', groundTiles)
-    return map
-  }
-
-  getMapData = () =>
-    this.map.layers[0].data.map((row) => row.map((tile) => tile.index))
-
   updateGrid = (data: number[][]) => {
     if (data) this.data = data
     this.star.setGrid(this.data)
   }
 
-  findPath = (start = this.findEntrance(), end = this.findExit()) =>
-    new Promise((resolve) => {
-      if (!start || !end) return resolve(null)
-      this.star.findPath(start.x, start.y, end.x, end.y, resolve)
-      this.star.calculate()
-    })
-
-  update() {
-    this.updateGrid(this.getMapData())
-    this.findPath().then((path) => {
-      this.pathGraphics.clear()
-      if (!path) return
-      // @ts-ignore
-      this.path = path
-      this.path.forEach((item) =>
-        this.pathGraphics.lineTo(item.x * 8 + 4, item.y * 8 + 4),
-      )
-      this.pathGraphics.strokePath()
-    })
-  }
+  getMapData = () =>
+    this.map.layers[0].data.map((row) => row.map((tile) => tile.index))
 }
 
 const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }

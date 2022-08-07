@@ -13,6 +13,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setSize(4, 4)
     this.health = 0
     this.healthBar = new HealthBar(scene)
+    this.body.reset(-9, 10)
   }
 
   damage(amount: number) {
