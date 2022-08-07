@@ -133,5 +133,5 @@ const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }
 export const indexToFrame = (frame: number) => {
   if (frame === 1) return WALL_INDEX
   if (frame === 2) return GUN_INDEX
-  return 7
+  return 20
 }

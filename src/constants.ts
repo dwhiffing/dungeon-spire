@@ -30,16 +30,68 @@ export const GUN_STATS = {
 }
 
 export const ENEMIES = {
-  ONE: {
+  SMALL_SLIME: {
+    damage: 1,
+    health: 2,
+    speed: 2000,
+  },
+  DUCK: {
     damage: 1,
     health: 4,
-    speed: 2000,
+    speed: 1000,
+  },
+  DEER: {
+    damage: 1,
+    health: 10,
+    speed: 800,
+  },
+  BIG_SLIME: {
+    damage: 1,
+    health: 20,
+    speed: 3000,
+  },
+  MAN: {
+    damage: 1,
+    health: 30,
+    speed: 1000,
   },
 }
 
 export const LEVEL_TYPES = {
   ONE: {
-    waves: [{ size: 3, delay: 2000, type: 'ONE' }],
+    waves: [{ size: 3, delay: 2000, type: 'SMALL_SLIME' }],
+    tiles: [
+      { frame: WALL_INDEX, x: 3, y: 2 },
+      { frame: EXIT_INDEX, x: 2, y: 2 },
+      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+    ],
+  },
+  TWO: {
+    waves: [{ size: 3, delay: 2000, type: 'DUCK' }],
+    tiles: [
+      { frame: WALL_INDEX, x: 3, y: 2 },
+      { frame: EXIT_INDEX, x: 2, y: 2 },
+      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+    ],
+  },
+  THREE: {
+    waves: [{ size: 3, delay: 2000, type: 'DEER' }],
+    tiles: [
+      { frame: WALL_INDEX, x: 3, y: 2 },
+      { frame: EXIT_INDEX, x: 2, y: 2 },
+      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+    ],
+  },
+  FOUR: {
+    waves: [{ size: 3, delay: 2000, type: 'MAN' }],
+    tiles: [
+      { frame: WALL_INDEX, x: 3, y: 2 },
+      { frame: EXIT_INDEX, x: 2, y: 2 },
+      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+    ],
+  },
+  FIVE: {
+    waves: [{ size: 3, delay: 2000, type: 'BIG_SLIME' }],
     tiles: [
       { frame: WALL_INDEX, x: 3, y: 2 },
       { frame: EXIT_INDEX, x: 2, y: 2 },
@@ -48,7 +100,13 @@ export const LEVEL_TYPES = {
   },
 }
 
-export const LEVELS = [LEVEL_TYPES.ONE]
+export const LEVELS = [
+  LEVEL_TYPES.ONE,
+  LEVEL_TYPES.TWO,
+  LEVEL_TYPES.THREE,
+  LEVEL_TYPES.FOUR,
+  LEVEL_TYPES.FIVE,
+]
 
 export type Path = { x: number; y: number }[]
 

@@ -10,7 +10,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'tilemap')
     this.scene = scene
     this.bulletType = 'ONE'
-    this.setFrame(7).setOrigin(0).setAlpha(0)
+    this.setFrame(20).setOrigin(0).setAlpha(0)
     this.scene.add.existing(this)
     this.scene.time.addEvent({
       callback: () => this.shoot(this.x, this.y),

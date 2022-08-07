@@ -21,6 +21,11 @@ export default class EnemyService {
       visible: false,
       classType: Enemy,
     })
+    this.createAnim('SMALL_SLIME', 0, 1, 4)
+    this.createAnim('BIG_SLIME', 2, 3, 4)
+    this.createAnim('DEER', 4, 5, 4)
+    this.createAnim('DUCK', 6, 7, 4)
+    this.createAnim('MAN', 8, 9, 4)
   }
 
   async spawn(wave: Wave) {
@@ -37,7 +42,12 @@ export default class EnemyService {
       this.scene.time.addEvent({
         delay: wave.delay * i,
         callback: () => {
-          toSpawn[i]?.spawn(start.x * 8, start.y * 8, 'ONE', this.level.path)
+          toSpawn[i]?.spawn(
+            start.x * 8,
+            start.y * 8,
+            wave.type,
+            this.level.path,
+          )
           this.remainingSpawnCount--
         },
       })
@@ -59,4 +69,16 @@ export default class EnemyService {
 
   getSurvivingEnemies = () =>
     (this.group.children.entries as Enemy[]).filter((c) => c.health > 0)
+
+  createAnim = (key, start, end, rate) => {
+    this.scene.anims.create({
+      key: `${key}-walk`,
+      repeat: -1,
+      frameRate: rate,
+      frames: this.scene.anims.generateFrameNumbers('tilemap', {
+        start,
+        end,
+      }),
+    })
+  }
 }
