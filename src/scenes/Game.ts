@@ -66,7 +66,7 @@ export default class extends Phaser.Scene {
     this.events.off('card-click', this.hud?.hideCards)
     this.events.off('changedata-energyCount', this.hud?.setEnergy)
     this.events.off('changedata-healthCount', this.hud?.setHealth)
-    this.scene.start('Win')
+    this.scene.start('Win', { level: this.data.get('levelIndex') })
   }
 
   cardClick = (card) => {

@@ -1,6 +1,11 @@
 export default class extends Phaser.Scene {
+  finalLevel?: number
   constructor() {
     super({ key: 'Win' })
+  }
+
+  init(opts) {
+    this.finalLevel = opts.level
   }
 
   create() {
@@ -8,6 +13,17 @@ export default class extends Phaser.Scene {
 
     this.add
       .bitmapText(width / 2, height / 2 - 10, 'pixel-dan', 'GAME OVER')
+      .setCenterAlign()
+      .setFontSize(5)
+      .setOrigin(0.5)
+
+    this.add
+      .bitmapText(
+        width / 2,
+        height / 2 + 5,
+        'pixel-dan',
+        'LEVEL ' + this.finalLevel,
+      )
       .setCenterAlign()
       .setFontSize(5)
       .setOrigin(0.5)
