@@ -7,6 +7,7 @@ import { HealthBar } from '../sprites/HealthBar'
 export default class HudService {
   scene: IGameScene
   playerHealthBar: HealthBar
+  energyText: Phaser.GameObjects.BitmapText
   drawCount: number
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
@@ -49,11 +50,24 @@ export default class HudService {
     this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
     this.cards = new Array(9).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.hideCards)
-    this.playerHealthBar = new HealthBar(this.scene, 64, 1, 0, 0)
-    this.playerHealthBar.update(this.scene.lifeCount, this.scene.lifeCount)
-    this.playerHealthBar.container.setDepth(1)
-    this.scene.add.existing(this.playerHealthBar.container)
-    this.playerHealthBar.container.setPosition(0, 0)
+    this.scene.events.on('changedata-energyCount', this.setEnergy)
+    this.scene.events.on('changedata-healthCount', this.setHealth)
+
+    this.playerHealthBar = this.createPlayerHealth()
+    this.energyText = this.scene.add
+      .bitmapText(1, 1, 'pixel-dan', '0')
+      .setOrigin(0)
+      .setDepth(11)
+  }
+
+  createPlayerHealth = () => {
+    const bar = new HealthBar(this.scene, 64, 1, 0, 0)
+    const life = this.scene.data.values.healthCount
+    bar.update(life, life)
+    this.scene.add.existing(bar.container)
+    bar.container.setDepth(1)
+    bar.container.setPosition(0, 0)
+    return bar
   }
 
   drawCards = (drawCount = this.drawCount) => {
@@ -69,6 +83,7 @@ export default class HudService {
   showCards = () => {
     this.backdrop.setAlpha(0.4)
     this.playButton.setAlpha(1)
+    this.energyText.setAlpha(1)
     this.hand.forEach((c, i) =>
       this.cards[i].show(this.hand[i], this.hand.length),
     )
@@ -80,6 +95,7 @@ export default class HudService {
       this.hand = this.hand.filter((c, i) => i !== card.index)
     }
     this.playButton.setAlpha(0)
+    this.energyText.setAlpha(0)
     this.backdrop.setAlpha(0)
     this.cards.forEach((c) => c.hide())
   }
@@ -88,5 +104,13 @@ export default class HudService {
     this.discard = [...this.discard, ...this.hand]
     this.hand = []
     this.cards.forEach((c) => c.hide())
+  }
+
+  setEnergy = (_, value) => {
+    this.energyText.text = `${value}`
+  }
+
+  setHealth = (_, value) => {
+    this.playerHealthBar.update(value)
   }
 }

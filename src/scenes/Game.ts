@@ -13,14 +13,10 @@ export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
     this.levelIndex = 0
-    this.lifeCount = 0
-    this.energyCount = 0
   }
 
   levelIndex: number
   levelData?: LevelData
-  energyCount: number
-  lifeCount: number
   level?: LevelService
   enemies?: EnemyService
   marker?: MarkerService
@@ -31,9 +27,12 @@ export default class extends Phaser.Scene {
   init() {}
 
   create() {
+    this.data.set('energyCount', 0)
+    this.data.set('healthCount', 0)
+
     this.cameras.main.setBackgroundColor(0x113300)
     // this.physics.world.fixedDelta = true
-    this.lifeCount = MAX_LIFE
+    this.data.set('healthCount', MAX_LIFE)
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
     this.marker = new MarkerService(this)
@@ -53,9 +52,8 @@ export default class extends Phaser.Scene {
   }
 
   enemyWon = (enemy: Enemy) => {
-    this.lifeCount -= enemy.damageAmount
-    this.hud?.playerHealthBar.update(this.lifeCount)
-    if (this.lifeCount < 1) {
+    this.data.values.healthCount -= enemy.damageAmount
+    if (this.data.values.healthCount < 1) {
       this.gameover()
     } else {
       this.checkEnemies()
@@ -67,6 +65,8 @@ export default class extends Phaser.Scene {
     this.events.off('enemy-killed', this.checkEnemies)
     this.events.off('enemy-won', this.enemyWon)
     this.events.off('card-click', this.hud?.hideCards)
+    this.events.off('changedata-energyCount', this.hud?.setEnergy)
+    this.events.off('changedata-healthCount', this.hud?.setHealth)
     this.scene.start('Win')
   }
 
@@ -90,7 +90,7 @@ export default class extends Phaser.Scene {
     const activeCount = this.enemies.remainingSpawnCount + numActive
     if (activeCount > 0) return
 
-    this.energyCount = 2
+    this.data.set('energyCount', 2)
     if (numIncoming > 0) {
       this.hud?.drawCards()
     } else {
@@ -107,7 +107,7 @@ export default class extends Phaser.Scene {
 
   nextLevel() {
     this.levelIndex++
-    this.energyCount = 2
+    this.data.set('energyCount', 2)
     this.levelData = LEVELS[(this.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
     this.level?.startLevel(this.levelData)
@@ -117,7 +117,7 @@ export default class extends Phaser.Scene {
 
   placeTile = (event) => {
     if (!this.marker?.shape) return
-    this.energyCount--
+    this.data.values.energyCount--
 
     const x = Math.floor(event.downX / 8)
     const y = Math.floor(event.downY / 8)
@@ -127,7 +127,7 @@ export default class extends Phaser.Scene {
       }
       this.enemies?.repath(this.level?.findExit())
       this.marker?.clearShape()
-      if (this.energyCount < 1) {
+      if (this.data.get('energyCount') < 1) {
         this.nextWave()
       } else {
         this.hud?.showCards()
@@ -149,7 +149,6 @@ export interface IGameScene extends Phaser.Scene {
   levelData?: LevelData
   inputService?: InputService
   levelIndex: number
-  lifeCount: number
   rotateTile: () => void
   nextWave: () => void
   placeTile: (event: any) => void
