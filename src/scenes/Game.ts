@@ -12,10 +12,8 @@ const MAX_LIFE = 10
 export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
-    this.levelIndex = 0
   }
 
-  levelIndex: number
   levelData?: LevelData
   level?: LevelService
   enemies?: EnemyService
@@ -28,6 +26,7 @@ export default class extends Phaser.Scene {
 
   create() {
     this.data.set('energyCount', 0)
+    this.data.set('levelIndex', 0)
     this.data.set('healthCount', 0)
 
     this.cameras.main.setBackgroundColor(0x113300)
@@ -106,9 +105,9 @@ export default class extends Phaser.Scene {
   }
 
   nextLevel() {
-    this.levelIndex++
+    this.data.values.levelIndex++
     this.data.set('energyCount', 2)
-    this.levelData = LEVELS[(this.levelIndex - 1) % LEVELS.length]
+    this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
     this.level?.startLevel(this.levelData)
     this.hud?.discardHand()
@@ -148,7 +147,6 @@ export interface IGameScene extends Phaser.Scene {
   hud?: HudService
   levelData?: LevelData
   inputService?: InputService
-  levelIndex: number
   rotateTile: () => void
   nextWave: () => void
   placeTile: (event: any) => void
