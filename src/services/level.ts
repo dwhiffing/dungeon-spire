@@ -55,6 +55,7 @@ export default class LevelService {
     this.updateGrid(this.getMapData())
     this.findPath().then((path) => {
       this.pathGraphics.clear()
+      this.pathGraphics.lineStyle(1, 0xaaaa00)
       if (!path) return
       // @ts-ignore
       this.path = path

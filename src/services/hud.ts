@@ -25,14 +25,21 @@ export default class HudService {
       .setOrigin(0)
       .setInteractive()
       .setDepth(9)
-      .on('pointerdown', () => {
-        this.hideCards()
-        this.backdrop.setAlpha(0.01)
-      })
       .on('pointerup', () => {
         this.showCards()
         this.backdrop.setAlpha(0.4)
       })
+      .on('pointerdown', (e) => {
+        this.hideCards()
+        this.backdrop.setAlpha(0.01)
+      })
+    this.scene.input.on('pointermove', (e) => {
+      const cards = this.cards.filter((c) => c.alpha === 1)
+      cards.forEach((c) => c.unfocus())
+      if (e.y < 36) return
+      const index = Math.floor(((e.x - 3) / 58) * cards.length)
+      cards[index]?.focus()
+    })
 
     this.playButton = this.scene.add
       .sprite(56, 1, 'tilemap', 56)
@@ -48,7 +55,7 @@ export default class HudService {
     this.drawCount = 5
     this.discard = []
     this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
-    this.cards = new Array(9).fill('').map((_, i) => new Card(this.scene, i))
+    this.cards = new Array(32).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.hideCards)
     this.scene.events.on('changedata-energyCount', this.setEnergy)
     this.scene.events.on('changedata-healthCount', this.setHealth)

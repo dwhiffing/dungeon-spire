@@ -18,30 +18,33 @@ export class Card extends Phaser.GameObjects.Rectangle {
     this.labelText = this.scene.add.bitmapText(0, 0, 'pixel-dan', '')
     this.unfocus()
     this.on('pointerdown', (e) => this.scene.events.emit('card-click', this))
-    this.on('pointerover', (e) => this.focus())
-    this.on('pointerout', (e) => this.unfocus())
   }
 
   move(numCards: number) {
     const y = 36
-    const x = 3 + this.index * CARD_POSITIONS[numCards]
+    let x = 2 + this.index * (CARD_POSITIONS[numCards] || 2)
+    if (x > 48) x = 48
     this.setPosition(x, y)
     this.labelText.setPosition(x + 1, y + 19)
   }
 
-  focus() {
+  focus = () => {
     this.setDepth(99)
     this.graphics.setDepth(99)
     this.labelText.setDepth(99)
+    this.setStrokeStyle(1, 0x666666)
+    this.setFillStyle(0x222222)
   }
 
-  unfocus() {
+  unfocus = () => {
+    this.setStrokeStyle(1, 0x222222)
+    this.setFillStyle(0x111111)
     this.setDepth(this.index + 10)
     this.graphics.setDepth(this.index + 10)
     this.labelText.setDepth(this.index + 10)
   }
 
-  show(cardData: any, numCards: number) {
+  show = (cardData: any, numCards: number) => {
     this.move(numCards)
     this.graphics.clear()
 
@@ -64,7 +67,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
     this.graphics.setAlpha(1)
   }
 
-  hide() {
+  hide = () => {
     this.setAlpha(0)
     this.labelText.setAlpha(0)
     this.graphics.setAlpha(0)
@@ -81,4 +84,11 @@ const CARD_POSITIONS = {
   7: 7,
   8: 6,
   9: 5,
+  10: 5,
+  11: 4,
+  12: 4,
+  13: 3,
+  14: 3,
+  15: 3,
+  16: 3,
 }
