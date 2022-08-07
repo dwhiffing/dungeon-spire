@@ -31,8 +31,8 @@ export const GUN_STATS = {
 
 export const ENEMIES = {
   ONE: {
-    damage: 3,
-    health: 10,
+    damage: 1,
+    health: 4,
     speed: 2000,
   },
 }
@@ -62,3 +62,12 @@ export interface Wave {
   delay: number
   type: string
 }
+
+const shapeKeys = Object.keys(SHAPES)
+const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))
+export const SHAPE_CARDS = [...shapeCards, ...shapeCards]
+export const GUN_CARDS = [
+  { key: 'GUN', label: 'GUN' },
+  { key: 'GUN', label: 'GUN' },
+  { key: 'GUN', label: 'GUN' },
+]

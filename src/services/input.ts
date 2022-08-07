@@ -31,8 +31,8 @@ export default class InputService {
       cPressed: () => {},
       mPressed: () => (this.scene.sound.mute = !this.scene.sound.mute),
       spacePressed: () => {
-        this.scene.tweens.timeScale = 4
-        this.scene.time.timeScale = 4
+        this.scene.tweens.timeScale = 8
+        this.scene.time.timeScale = 8
       },
       spaceReleased: () => {
         this.scene.tweens.timeScale = 1

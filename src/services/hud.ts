@@ -1,39 +1,60 @@
 import { shuffle } from 'lodash'
 import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
-import { SHAPES } from '../constants'
+import { GUN_CARDS, SHAPE_CARDS } from '../constants'
 
 export default class HudService {
   scene: IGameScene
+  drawCount: number
   deck: { key: string; label: string }[]
+  hand: { key: string; label: string }[]
+  discard: { key: string; label: string }[]
   cards: Card[]
   backdrop: Phaser.GameObjects.Rectangle
 
   constructor(scene: IGameScene) {
     this.scene = scene
-    const shapeKeys = Object.keys(SHAPES)
-    const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))
-    const gunCards = [{ key: 'GUN', label: 'GUN' }]
 
     this.backdrop = this.scene.add
       .rectangle(0, 0, 64, 64, 0x000000)
       .setAlpha(0)
       .setOrigin(0)
 
-    this.deck = [...shapeCards, ...gunCards]
-    this.deck = shuffle(this.deck)
-    this.cards = new Array(3).fill('').map((_, i) => new Card(this.scene, i))
+    this.hand = []
+    this.drawCount = 5
+    this.discard = []
+    this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
+    this.cards = new Array(9).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.hideCards)
   }
 
-  drawCards = () => {
-    let cards = shuffle(this.deck).slice(0, 3)
-    this.backdrop.setAlpha(0.4)
-    this.cards.forEach((c, i) => c.show(cards[i]))
+  drawCards = (drawCount = this.drawCount) => {
+    if (this.deck.length < drawCount) {
+      drawCount = drawCount - this.deck.length
+      this.hand = [...this.deck]
+      this.deck = shuffle(this.discard)
+    }
+    this.hand = [...this.hand, ...this.deck.splice(0, drawCount)]
+    this.showCards()
   }
 
-  hideCards = () => {
+  showCards = () => {
+    this.backdrop.setAlpha(0.4)
+    this.hand.forEach((c, i) =>
+      this.cards[i].show(this.hand[i], this.hand.length),
+    )
+  }
+
+  hideCards = (card) => {
+    this.discard.push(this.hand[card.index])
+    this.hand = this.hand.filter((c, i) => i !== card.index)
     this.backdrop.setAlpha(0)
+    this.cards.forEach((c) => c.hide())
+  }
+
+  discardHand = () => {
+    this.discard = [...this.discard, ...this.hand]
+    this.hand = []
     this.cards.forEach((c) => c.hide())
   }
 }

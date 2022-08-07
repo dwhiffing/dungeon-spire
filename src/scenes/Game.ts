@@ -32,7 +32,7 @@ export default class extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor(0x113300)
     // this.physics.world.fixedDelta = true
-    this.lifeCount = 10
+    this.lifeCount = 100
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
     this.marker = new MarkerService(this)
@@ -97,7 +97,10 @@ export default class extends Phaser.Scene {
 
   update() {}
 
-  nextWave = () => this.enemies?.spawn(this.levelData!.waves[0])
+  nextWave = () => {
+    this.hud?.discardHand()
+    this.enemies?.spawn(this.levelData!.waves[0])
+  }
 
   nextLevel() {
     this.levelIndex++
@@ -105,6 +108,7 @@ export default class extends Phaser.Scene {
     this.levelData = LEVELS[(this.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
     this.level?.startLevel(this.levelData)
+    this.hud?.discardHand()
     this.hud?.drawCards()
   }
 
@@ -123,7 +127,7 @@ export default class extends Phaser.Scene {
       if (this.energyCount < 1) {
         this.nextWave()
       } else {
-        this.hud?.drawCards()
+        this.hud?.showCards()
       }
     })
   }
