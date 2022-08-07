@@ -11,6 +11,7 @@ export default class HudService {
   discard: { key: string; label: string }[]
   cards: Card[]
   backdrop: Phaser.GameObjects.Rectangle
+  playButton: Phaser.GameObjects.Sprite
 
   constructor(scene: IGameScene) {
     this.scene = scene
@@ -19,6 +20,24 @@ export default class HudService {
       .rectangle(0, 0, 64, 64, 0x000000)
       .setAlpha(0)
       .setOrigin(0)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.hideCards()
+        this.backdrop.setAlpha(0.01)
+      })
+      .on('pointerup', () => {
+        this.showCards()
+        this.backdrop.setAlpha(0.4)
+      })
+
+    this.playButton = this.scene.add
+      .sprite(56, 1, 'tilemap', 56)
+      .setOrigin(0)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.hideCards()
+        this.scene.nextWave()
+      })
 
     this.hand = []
     this.drawCount = 5
@@ -40,14 +59,18 @@ export default class HudService {
 
   showCards = () => {
     this.backdrop.setAlpha(0.4)
+    this.playButton.setAlpha(1)
     this.hand.forEach((c, i) =>
       this.cards[i].show(this.hand[i], this.hand.length),
     )
   }
 
-  hideCards = (card) => {
-    this.discard.push(this.hand[card.index])
-    this.hand = this.hand.filter((c, i) => i !== card.index)
+  hideCards = (card?) => {
+    if (card) {
+      this.discard.push(this.hand[card.index])
+      this.hand = this.hand.filter((c, i) => i !== card.index)
+    }
+    this.playButton.setAlpha(0)
     this.backdrop.setAlpha(0)
     this.cards.forEach((c) => c.hide())
   }
