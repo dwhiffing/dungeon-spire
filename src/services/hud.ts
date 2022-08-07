@@ -2,9 +2,11 @@ import { shuffle } from 'lodash'
 import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
 import { GUN_CARDS, SHAPE_CARDS } from '../constants'
+import { HealthBar } from '../sprites/HealthBar'
 
 export default class HudService {
   scene: IGameScene
+  playerHealthBar: HealthBar
   drawCount: number
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
@@ -21,6 +23,7 @@ export default class HudService {
       .setAlpha(0)
       .setOrigin(0)
       .setInteractive()
+      .setDepth(9)
       .on('pointerdown', () => {
         this.hideCards()
         this.backdrop.setAlpha(0.01)
@@ -34,6 +37,7 @@ export default class HudService {
       .sprite(56, 1, 'tilemap', 56)
       .setOrigin(0)
       .setInteractive()
+      .setDepth(10)
       .on('pointerdown', () => {
         this.hideCards()
         this.scene.nextWave()
@@ -45,6 +49,11 @@ export default class HudService {
     this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
     this.cards = new Array(9).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.hideCards)
+    this.playerHealthBar = new HealthBar(this.scene, 64, 1, 0, 0)
+    this.playerHealthBar.update(this.scene.lifeCount, this.scene.lifeCount)
+    this.playerHealthBar.container.setDepth(1)
+    this.scene.add.existing(this.playerHealthBar.container)
+    this.playerHealthBar.container.setPosition(0, 0)
   }
 
   drawCards = (drawCount = this.drawCount) => {

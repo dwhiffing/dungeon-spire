@@ -8,6 +8,7 @@ import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
 import { LevelData, LEVELS } from '../constants'
 
+const MAX_LIFE = 10
 export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
@@ -32,7 +33,7 @@ export default class extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor(0x113300)
     // this.physics.world.fixedDelta = true
-    this.lifeCount = 100
+    this.lifeCount = MAX_LIFE
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
     this.marker = new MarkerService(this)
@@ -53,6 +54,7 @@ export default class extends Phaser.Scene {
 
   enemyWon = (enemy: Enemy) => {
     this.lifeCount -= enemy.damageAmount
+    this.hud?.playerHealthBar.update(this.lifeCount)
     if (this.lifeCount < 1) {
       this.gameover()
     } else {
@@ -64,6 +66,7 @@ export default class extends Phaser.Scene {
     this.events.off('card-click', this.cardClick)
     this.events.off('enemy-killed', this.checkEnemies)
     this.events.off('enemy-won', this.enemyWon)
+    this.events.off('card-click', this.hud?.hideCards)
     this.scene.start('Win')
   }
 
@@ -146,6 +149,7 @@ export interface IGameScene extends Phaser.Scene {
   levelData?: LevelData
   inputService?: InputService
   levelIndex: number
+  lifeCount: number
   rotateTile: () => void
   nextWave: () => void
   placeTile: (event: any) => void
