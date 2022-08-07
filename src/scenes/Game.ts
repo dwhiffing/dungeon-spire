@@ -4,6 +4,8 @@ import MarkerService from '../services/marker'
 import GunService from '../services/gun'
 import InputService from '../services/input'
 import HudService from '../services/hud'
+import { Enemy } from '~/sprites/Enemy'
+import { Bullet } from '~/sprites/Bullet'
 
 export default class extends Phaser.Scene {
   constructor() {
@@ -39,10 +41,12 @@ export default class extends Phaser.Scene {
     )
   }
 
-  hit = (enemy, bullet) => {
+  hit = (_enemy, _bullet) => {
+    const enemy = _enemy as Enemy
+    const bullet = _bullet as Bullet
     if (!enemy.active || !bullet.active) return
-    enemy.kill()
-    bullet.kill()
+    enemy.damage(bullet.damageAmount)
+    bullet.damage(1)
   }
 
   update() {}

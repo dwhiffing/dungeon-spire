@@ -28,7 +28,7 @@ export default class EnemyService {
     if (!entrance) return
     let enemy = this.group.getFirstDead(false)
     if (enemy) {
-      enemy.spawn(entrance.x * 8, entrance.y * 8)
+      enemy.spawn(entrance.x * 8, entrance.y * 8, 'ONE')
       enemy.followPath(this.level.path)
     }
   }

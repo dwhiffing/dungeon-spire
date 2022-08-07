@@ -19,9 +19,9 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  shoot(x, y) {
+  shoot(x: number, y: number) {
     const bullet = this.guns.bulletGroup.getFirstDead(false)
     const enemy = this.enemies.group.getFirstAlive()
-    if (enemy) bullet?.shoot(x + 4, y + 4, enemy.x + 4, enemy.y + 4)
+    if (enemy) bullet?.shoot(x + 8, y + 8, enemy.x + 8, enemy.y + 8)
   }
 }
