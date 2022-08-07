@@ -12,8 +12,8 @@ export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
     this.levelIndex = 0
-    this.lifeCount = 50
-    this.energyCount = 2
+    this.lifeCount = 0
+    this.energyCount = 0
   }
 
   levelIndex: number
@@ -32,24 +32,16 @@ export default class extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor(0x113300)
     // this.physics.world.fixedDelta = true
+    this.lifeCount = 10
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
     this.marker = new MarkerService(this)
     this.guns = new GunService(this)
     this.hud = new HudService(this)
     this.inputService = new InputService(this)
-    this.events.on('card-click', (card) => {
-      this.time.delayedCall(100, () => this.marker?.getShape(card))
-    })
+    this.events.on('card-click', this.cardClick)
     this.events.on('enemy-killed', this.checkEnemies)
-    this.events.on('enemy-won', (enemy: Enemy) => {
-      this.lifeCount -= enemy.damageAmount
-      if (this.lifeCount < 1) {
-        this.scene.start('Win')
-      } else {
-        this.checkEnemies()
-      }
-    })
+    this.events.on('enemy-won', this.enemyWon)
 
     this.physics.add.overlap(
       this.enemies.group,
@@ -57,6 +49,26 @@ export default class extends Phaser.Scene {
       this.hit,
     )
     this.nextLevel()
+  }
+
+  enemyWon = (enemy: Enemy) => {
+    this.lifeCount -= enemy.damageAmount
+    if (this.lifeCount < 1) {
+      this.gameover()
+    } else {
+      this.checkEnemies()
+    }
+  }
+
+  gameover = () => {
+    this.events.off('card-click', this.cardClick)
+    this.events.off('enemy-killed', this.checkEnemies)
+    this.events.off('enemy-won', this.enemyWon)
+    this.scene.start('Win')
+  }
+
+  cardClick = (card) => {
+    this.time.delayedCall(100, () => this.marker?.getShape(card))
   }
 
   hit = (_enemy, _bullet) => {
@@ -89,6 +101,7 @@ export default class extends Phaser.Scene {
 
   nextLevel() {
     this.levelIndex++
+    this.energyCount = 2
     this.levelData = LEVELS[(this.levelIndex - 1) % LEVELS.length]
     this.guns?.clear()
     this.level?.startLevel(this.levelData)

@@ -13,7 +13,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'tilemap')
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
-    this.setSize(4, 4)
+    this.setSize(4, 4).setActive(false)
     this.health = 0
     this.maxHealth = 0
     this.speed = 0
@@ -46,7 +46,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   _kill = () => {
     this.setActive(false).setVisible(false)
     this.timeline?.stop()
-    this.body.reset(-9, -9)
+    this.body.reset(-9, 10)
     this.healthBar.container.setAlpha(0)
   }
 

@@ -10,7 +10,11 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'tilemap')
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
-    this.setFrame(40).setSize(1, 1).setOffset(0, 0).setOrigin(0, 0)
+    this.setFrame(40)
+      .setSize(1, 1)
+      .setOffset(0, 0)
+      .setOrigin(0, 0)
+      .setActive(false)
     this.damageAmount = 0
     this.health = 1
     this.body.reset(-9, -9)
