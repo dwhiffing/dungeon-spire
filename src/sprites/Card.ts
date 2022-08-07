@@ -68,6 +68,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
   }
 
   hide = () => {
+    this.unfocus()
     this.setAlpha(0)
     this.labelText.setAlpha(0)
     this.graphics.setAlpha(0)

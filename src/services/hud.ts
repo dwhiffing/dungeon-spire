@@ -86,9 +86,16 @@ export default class HudService {
     return bar
   }
 
+  // TODO: more card options
+  getCardAddPool = () => [...GUN_CARDS, ...SHAPE_CARDS]
+
   drawCards = (drawCount = this.drawCount) => {
     if (this.scene.data.get('mode') === 'remove') {
       drawCount = this.deck.length + this.discard.length
+    } else if (this.scene.data.get('mode') === 'add') {
+      this.hand = this.getCardAddPool()
+      this.showCards()
+      return
     }
     if (this.deck.length < drawCount) {
       drawCount = drawCount - this.deck.length
@@ -105,9 +112,16 @@ export default class HudService {
     this.playButton.setAlpha(1)
     this.titleText.setAlpha(1)
     this.energyText.setAlpha(1)
+    this.cards.forEach((c) => c.hide())
     this.hand.forEach((c, i) =>
       this.cards[i].show(this.hand[i], this.hand.length),
     )
+  }
+
+  addCard = (card?) => {
+    const cardSprite = this.hand.find((_c, i) => i === card.index)
+    if (cardSprite) this.deck = [...this.deck, cardSprite]
+    this.hand = []
   }
 
   removeCard = (card?) => {
@@ -117,13 +131,16 @@ export default class HudService {
   }
 
   cardClick = (card?) => {
-    if (this.scene.data.get('mode') === 'remove') {
+    const mode = this.scene.data.get('mode')
+    if (mode === 'remove') {
       this.scene.data.set('mode', 'play')
       this.removeCard(card)
       this.drawCards()
-      this.hideCards()
-      this.showCards()
-    } else {
+    } else if (mode === 'add') {
+      this.scene.data.set('mode', 'play')
+      this.addCard(card)
+      this.drawCards()
+    } else if (mode === 'play') {
       this.scene.events.emit('card-play', card)
       this.hideCards(card)
     }
@@ -158,6 +175,8 @@ export default class HudService {
   setMode = (_, value) => {
     if (value === 'remove') {
       this.titleText.text = 'REMOVE\nA CARD'
+    } else if (value === 'add') {
+      this.titleText.text = 'ADD\nA CARD'
     } else if (value === 'play') {
       this.titleText.text = 'PLAY\nCARD'
     } else {

@@ -98,7 +98,7 @@ export default class extends Phaser.Scene {
       this.hud?.drawCards()
     } else {
       const index = this.data.get('levelIndex')
-      this.data.set('mode', index % 2 === 0 ? 'play' : 'remove')
+      this.data.set('mode', index % 2 === 1 ? 'add' : 'remove')
       this.nextLevel()
     }
   }
