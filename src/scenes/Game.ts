@@ -124,8 +124,8 @@ export default class extends Phaser.Scene {
     const x = Math.floor(event.downX / 8)
     const y = Math.floor(event.downY / 8)
     this.level?.placeTiles(this.marker?.getTileData(x, y), () => {
-      if (this.marker?.card?.key === 'GUN') {
-        this.guns?.createGun(x * 8, y * 8)
+      if (this.marker?.card?.key.match(/GUN/)) {
+        this.guns?.createGun(x * 8, y * 8, this.marker?.card.key)
       }
       this.enemies?.repath(this.level?.findExit())
       this.marker?.clearShape()

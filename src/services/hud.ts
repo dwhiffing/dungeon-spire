@@ -1,7 +1,7 @@
 import { shuffle } from 'lodash'
 import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
-import { GUN_CARDS, SHAPE_CARDS } from '../constants'
+import { BASIC_DECK } from '../constants'
 import { HealthBar } from '../sprites/HealthBar'
 
 export default class HudService {
@@ -57,7 +57,7 @@ export default class HudService {
     this.hand = []
     this.drawCount = 3
     this.discard = []
-    this.deck = shuffle([...SHAPE_CARDS, ...GUN_CARDS])
+    this.deck = shuffle(BASIC_DECK)
     this.cards = new Array(32).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.cardClick)
     this.scene.events.on('changedata-energyCount', this.setEnergy)
@@ -87,7 +87,7 @@ export default class HudService {
   }
 
   // TODO: more card options
-  getCardAddPool = () => shuffle([...GUN_CARDS, ...SHAPE_CARDS])
+  getCardAddPool = () => shuffle(BASIC_DECK)
 
   drawCards = (drawCount = this.drawCount) => {
     const mode = this.scene.data.get('mode')

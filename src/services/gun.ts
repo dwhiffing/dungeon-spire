@@ -27,9 +27,9 @@ export default class GunService {
     })
   }
 
-  createGun(x, y) {
+  createGun(x, y, type) {
     const gun: Gun = this.gunGroup.getFirstDead(false)
-    gun?.spawn(x, y)
+    gun?.spawn(x, y, type)
   }
 
   clear() {

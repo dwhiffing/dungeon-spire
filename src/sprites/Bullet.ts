@@ -1,4 +1,3 @@
-import { GUN_STATS } from '../constants'
 import { IGameScene } from '~/scenes/Game'
 
 export class Bullet extends Phaser.Physics.Arcade.Sprite {
@@ -25,12 +24,16 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     if (this.health <= 0) this.kill()
   }
 
-  shoot(type: string, x: number, y: number, x2: number, y2: number) {
+  shoot(stats: any, x: number, y: number, x2: number, y2: number) {
     this.health = 1
-    this.damageAmount = GUN_STATS[type].damage
+    this.damageAmount = stats.damage
+    // this.setScale(stats.scale || 1)
     this.body.reset(x, y)
     this.setActive(true).setVisible(true)
-    this.scene.physics.moveTo(this, x2, y2)
+    const offset = stats.accuracy
+    x2 += Phaser.Math.RND.between(-offset, offset)
+    y2 += Phaser.Math.RND.between(-offset, offset)
+    this.scene.physics.moveTo(this, x2, y2, stats.bulletSpeed)
     this.call = this.scene.time.delayedCall(10000, this.kill)
   }
 

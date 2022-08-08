@@ -20,39 +20,66 @@ export const SHAPES = {
 }
 
 export const GUNS = {
-  GUN: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
+  GUN1: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
+  GUN2: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
+  GUN3: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
 }
 
 export const GUN_STATS = {
-  ONE: {
+  GUN1: {
+    key: 'GUN1',
     damage: 1,
+    fireRate: 500,
+    bulletSpeed: 50,
+    accuracy: 0,
+  },
+  // BUBBLES: {
+  //   key: 'BUBBLES',
+  //   damage: 0.1,
+  //   fireRate: 50,
+  //   bulletSpeed: 10,
+  //   accuracy: 10,
+  // },
+  GUN2: {
+    key: 'GUN2',
+    damage: 2,
+    fireRate: 500,
+    bulletSpeed: 100,
+    accuracy: 3,
+  },
+  GUN3: {
+    key: 'GUN3',
+    damage: 4,
+    fireRate: 2000,
+    bulletSpeed: 10,
+    accuracy: 10,
   },
 }
 
 export const ENEMIES = {
   SMALL_SLIME: {
     damage: 1,
-    health: 2,
+    health: 4,
     speed: 2000,
   },
   DUCK: {
     damage: 1,
-    health: 4,
+    health: 8,
     speed: 1000,
   },
   DEER: {
     damage: 1,
-    health: 10,
+    health: 16,
     speed: 800,
   },
   BIG_SLIME: {
     damage: 1,
-    health: 20,
+    health: 32,
     speed: 3000,
   },
   MAN: {
     damage: 1,
-    health: 30,
+    health: 32,
     speed: 1000,
   },
 }
@@ -67,7 +94,7 @@ export const LEVEL_TYPES = {
     ],
   },
   TWO: {
-    waves: [{ size: 3, delay: 2000, type: 'DUCK' }],
+    waves: [{ size: 5, delay: 2000, type: 'DUCK' }],
     tiles: [
       { frame: WALL_INDEX, x: 3, y: 2 },
       { frame: EXIT_INDEX, x: 2, y: 2 },
@@ -75,7 +102,7 @@ export const LEVEL_TYPES = {
     ],
   },
   THREE: {
-    waves: [{ size: 3, delay: 2000, type: 'DEER' }],
+    waves: [{ size: 7, delay: 2000, type: 'DEER' }],
     tiles: [
       { frame: WALL_INDEX, x: 3, y: 2 },
       { frame: EXIT_INDEX, x: 2, y: 2 },
@@ -83,7 +110,7 @@ export const LEVEL_TYPES = {
     ],
   },
   FOUR: {
-    waves: [{ size: 3, delay: 2000, type: 'MAN' }],
+    waves: [{ size: 9, delay: 2000, type: 'MAN' }],
     tiles: [
       { frame: WALL_INDEX, x: 3, y: 2 },
       { frame: EXIT_INDEX, x: 2, y: 2 },
@@ -91,7 +118,7 @@ export const LEVEL_TYPES = {
     ],
   },
   FIVE: {
-    waves: [{ size: 3, delay: 2000, type: 'BIG_SLIME' }],
+    waves: [{ size: 5, delay: 2000, type: 'BIG_SLIME' }],
     tiles: [
       { frame: WALL_INDEX, x: 3, y: 2 },
       { frame: EXIT_INDEX, x: 2, y: 2 },
@@ -125,7 +152,9 @@ const shapeKeys = Object.keys(SHAPES)
 const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))
 export const SHAPE_CARDS = [...shapeCards]
 export const GUN_CARDS = [
-  { key: 'GUN', label: 'GUN' },
-  { key: 'GUN', label: 'GUN' },
-  { key: 'GUN', label: 'GUN' },
+  { key: 'GUN1', label: 'GUN1' },
+  { key: 'GUN2', label: 'GUN2' },
+  { key: 'GUN3', label: 'GUN3' },
 ]
+export const BASIC_DECK = [...GUN_CARDS]
+// export const BASIC_DECK = [...GUN_CARDS, ...SHAPE_CARDS]

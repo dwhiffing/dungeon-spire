@@ -67,7 +67,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   followPath = (path: Path) => {
-    if (!path) return
+    if (!path || !this.active) return
 
     this.timeline?.stop()
     this.scene.time.delayedCall(100, () => {
