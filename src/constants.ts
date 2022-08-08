@@ -166,5 +166,4 @@ export const GUN_CARDS = [
   { key: 'GUN2', label: 'GUN2' },
   { key: 'GUN3', label: 'GUN3' },
 ]
-export const BASIC_DECK = [...GUN_CARDS]
-// export const BASIC_DECK = [...GUN_CARDS, ...SHAPE_CARDS]
+export const BASIC_DECK = [...GUN_CARDS, ...SHAPE_CARDS]

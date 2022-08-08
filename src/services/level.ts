@@ -80,8 +80,20 @@ export default class LevelService {
   }
 
   placeTiles = (tiles: number[][], onComplete: () => void) => {
-    // abort if placement overlaps with existing tiles
-    if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
+    const isGun = tiles.some(([f]) => f === 2)
+    if (isGun) {
+      // abort if not all tiles under gun tiles are wall tiles
+      if (tiles.every(([f, x, y]) => this.map.getTileAt(x, y)?.index !== 16))
+        return
+    } else {
+      // abort if placement overlaps with existing tiles
+      if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
+    }
+
+    // prevent placing walls that clip outside map
+    if (tiles.some(([f, x, y]) => x < 0 || y < 0 || x > 7 || y > 7)) {
+      return
+    }
 
     tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
 
