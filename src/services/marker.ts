@@ -1,4 +1,4 @@
-import { GUNS, SHAPES } from '../constants'
+import { GUNS, GUN_STATS, SHAPES } from '../constants'
 import { IGameScene } from '~/scenes/Game'
 import { Card } from '~/sprites/Card'
 import { WallMarker } from '../sprites/WallMarker'
@@ -10,11 +10,15 @@ export default class MarkerService {
   card: Card | null
   shape: number[][] | null
   rotationIndex: number
+  rangeCircle: Phaser.GameObjects.Arc
 
   constructor(scene: IGameScene) {
     this.scene = scene
     this.group = this.scene.add.container()
     this.shape = null
+    this.rangeCircle = this.scene.add.circle(0, 0, 10)
+    this.rangeCircle.setStrokeStyle(1, 0xffffff, 1).setDepth(9)
+    this.rangeCircle.setAlpha(0)
     this.card = null
     this.rotationIndex = 0
     for (let y = 0; y < 3; y++) {
@@ -28,8 +32,16 @@ export default class MarkerService {
     this.updateMarkers()
 
     this.scene.input.on('pointermove', (event) => {
-      this.group.x = Math.floor(event.x / 8) * 8 - 8
-      this.group.y = Math.floor(event.y / 8) * 8 - 8
+      const x = Math.floor(event.x / 8) * 8 - 8
+      const y = Math.floor(event.y / 8) * 8 - 8
+      this.group.x = x
+      this.group.y = y
+      if (this.card) {
+        const stats = GUN_STATS[this.card.key]
+        this.rangeCircle.setPosition(x + 12, y + 12)
+        this.rangeCircle.setAlpha(1)
+        this.rangeCircle.radius = stats.range
+      }
     })
   }
 
@@ -38,6 +50,7 @@ export default class MarkerService {
     this.shape = null
     this.rotationIndex = 0
     this.updateMarkers()
+    this.rangeCircle.setAlpha(0)
   }
 
   getShape = (card: Card) => {
