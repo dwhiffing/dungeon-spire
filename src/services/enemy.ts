@@ -15,7 +15,7 @@ export default class EnemyService {
     this.level = scene.level!
     this.remainingSpawnCount = 0
     this.group.createMultiple({
-      frameQuantity: 5,
+      frameQuantity: 20,
       key: 'enemy',
       active: false,
       visible: false,
