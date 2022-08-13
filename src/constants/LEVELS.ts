@@ -47,8 +47,14 @@ const LEVEL_TYPES = {
     tiles: [...WALL_FRAME, [O, 6, 6], [I, 1, 1]],
   },
   FOUR: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
-    tiles: [...WALL_FRAME, [O, 5, 5], [I, 1, 2]],
+    waves: [{ size: 12, delay: 2000, type: 'SMALL_SLIME' }],
+    tiles: [
+      ...range(0, 8).map((x) => [W, x, 0]),
+      ...range(0, 8).map((x) => [W, x, 7]),
+      ...range(1, 6).map((y) => [W, 7, y]),
+      [O, 6, 1],
+      [I, 0, 1],
+    ],
   },
   DUCK: {
     waves: [{ size: 5, delay: 2000, type: 'DUCK' }],
