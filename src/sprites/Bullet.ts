@@ -7,9 +7,11 @@ export class Bullet extends Phaser.GameObjects.Rectangle {
   hitEnemies: Enemy[]
   health: number
   body: Phaser.Physics.Arcade.Body
+  scene: IGameScene
 
   constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 1, 1, 0xffffff, 1)
+    this.scene = scene as IGameScene
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
     this.setSize(1, 1).setOrigin(0.5).setActive(false).setDepth(3)

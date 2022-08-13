@@ -31,9 +31,12 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     })
     if (!this.active) return
     const bullet = this.scene.guns?.bulletGroup.getFirstDead(false)
+    const _exit = this.scene.level?.findExit()!
+    const exit = { x: _exit.x * 8, y: _exit.y * 8 }
+
     const enemies = this.scene.enemies?.group
       .getMatching('active', true)
-      .map((e) => ({ ...e, dist: Phaser.Math.Distance.BetweenPoints(e, this) }))
+      .map((e) => ({ ...e, dist: Phaser.Math.Distance.BetweenPoints(e, exit) }))
       .filter((e) => e.dist < this.stats.range)
       .sort((a, b) => a.dist - b.dist)
     const enemy = enemies?.[0]
