@@ -33,10 +33,12 @@ export default class InputService {
       spacePressed: () => {
         this.scene.tweens.timeScale = 8
         this.scene.time.timeScale = 8
+        this.scene.physics.world.timeScale = 1 / 8
       },
       spaceReleased: () => {
         this.scene.tweens.timeScale = 1
         this.scene.time.timeScale = 1
+        this.scene.physics.world.timeScale = 1
       },
     }
 
