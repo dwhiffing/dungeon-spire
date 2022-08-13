@@ -48,8 +48,8 @@ export default class extends Phaser.Scene {
       this.guns.bulletGroup,
       this.hit,
     )
-    this.data.set('mode', 'play')
     this.nextLevel()
+    this.data.set('mode', 'play')
   }
 
   enemyWon = (enemy: Enemy) => {
@@ -95,6 +95,7 @@ export default class extends Phaser.Scene {
     this.data.set('energyCount', 2)
     if (numIncoming === 0) {
       const index = this.data.get('levelIndex')
+      // TODO: show some kind of win animation
       this.data.set('mode', index % 2 === 1 ? 'add' : 'remove')
       this.nextLevel()
     } else {
@@ -111,8 +112,8 @@ export default class extends Phaser.Scene {
 
   nextLevel() {
     this.data.values.levelIndex++
-    this.data.set('energyCount', 2)
     this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
+    this.data.set('energyCount', 2)
     this.guns?.clear()
     this.level?.startLevel(this.levelData)
   }

@@ -9,6 +9,7 @@ export default class HudService {
   playerHealthBar: HealthBar
   energyText: Phaser.GameObjects.BitmapText
   titleText: Phaser.GameObjects.BitmapText
+  waveText: Phaser.GameObjects.BitmapText
   drawCount: number
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
@@ -16,6 +17,7 @@ export default class HudService {
   cards: Card[]
   backdrop: Phaser.GameObjects.Rectangle
   playButton: Phaser.GameObjects.Sprite
+  waveSprite: Phaser.GameObjects.Sprite
 
   constructor(scene: IGameScene) {
     this.scene = scene
@@ -50,8 +52,12 @@ export default class HudService {
       .setInteractive()
       .setDepth(10)
       .on('pointerdown', () => {
-        this.hideCards()
-        this.scene.nextWave()
+        if (this.scene.data.get('mode') === 'play') {
+          this.hideCards()
+          this.scene.nextWave()
+        } else {
+          this.scene.data.set('mode', 'play')
+        }
       })
 
     this.hand = []
@@ -71,7 +77,15 @@ export default class HudService {
       .setCenterAlign()
       .setDepth(11)
     this.energyText = this.scene.add
-      .bitmapText(1, 1, 'pixel-dan', '0')
+      .bitmapText(2, 30, 'pixel-dan', '0')
+      .setOrigin(0)
+      .setDepth(11)
+    this.waveSprite = this.scene.add
+      .sprite(0, 0, 'tilemap', 6)
+      .setOrigin(0)
+      .setDepth(11)
+    this.waveText = this.scene.add
+      .bitmapText(9, 3, 'pixel-dan', 'X3')
       .setOrigin(0)
       .setDepth(11)
   }
@@ -109,14 +123,23 @@ export default class HudService {
   }
 
   showCards = () => {
-    this.backdrop.setAlpha(0.7)
+    this.backdrop.setAlpha(this.scene.data.get('mode') === 'play' ? 0.7 : 1)
     this.playButton.setAlpha(1)
     this.titleText.setAlpha(1)
-    this.energyText.setAlpha(1)
     this.cards.forEach((c) => c.hide())
     this.hand.forEach((c, i) =>
       this.cards[i].show(this.hand[i], this.hand.length),
     )
+    if (this.scene.data.get('mode') === 'play') {
+      this.waveText.setAlpha(1)
+      this.waveSprite.setAlpha(1)
+      this.energyText.setAlpha(1)
+      const wave = this.scene.levelData?.waves[0]
+      let remainingCount =
+        this.scene.enemies?.getSurvivingEnemies().length || wave?.size
+      this.waveSprite.play(`${wave?.type}-walk`)
+      this.waveText.setText(`X${remainingCount}`)
+    }
   }
 
   addCard = (card?) => {
@@ -152,6 +175,8 @@ export default class HudService {
     }
     this.playButton.setAlpha(0)
     this.energyText.setAlpha(0)
+    this.waveText.setAlpha(0)
+    this.waveSprite.setAlpha(0)
     this.titleText.setAlpha(0)
     this.backdrop.setAlpha(0)
     this.cards.forEach((c) => c.hide())

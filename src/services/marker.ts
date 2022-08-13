@@ -55,8 +55,8 @@ export default class MarkerService {
           if (this.card) {
             const stats = GUN_STATS[this.card.key]
             if (stats) {
+              this.rangeCircle.setAlpha(this.isValid ? 1 : 0)
               this.rangeCircle.setPosition(this.group.x + 12, this.group.y + 12)
-              this.rangeCircle.setAlpha(1)
               this.rangeCircle.radius = stats.range
             }
           }
