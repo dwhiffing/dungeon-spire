@@ -10,7 +10,7 @@ export const CARD_HEIGHT = 25
 export const STARTING_MAX_LIFE = 30
 export const DEFAULT_ENERGY_COUNT = 3
 export const DEFAULT_DRAW_COUNT = 5
-export const STARTING_LEVEL = 4
+export const STARTING_LEVEL = 1
 
 export const WALL_INDEX = 16
 export const GUN_INDEX = 17

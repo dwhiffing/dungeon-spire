@@ -139,14 +139,14 @@ export default class HudService {
   drawCards = (drawCount = this.drawCount) => {
     const mode = this.scene.data.get('mode')
     if (mode === 'remove') {
-      drawCount = this.deck.length + this.discard.length
+      drawCount = this.deck.length
     } else if (mode === 'add') {
       this.hand = this.getCardAddPool().slice(0, 3)
       this.showCards()
       return
     }
 
-    if (this.scene.data.values.turnIndex === 0) {
+    if (this.scene.data.values.turnIndex === 0 && mode !== 'remove') {
       const randomGun = shuffle(this.deck.filter((c) => c.key.match(/GUN/)))[0]
       this.deck = this.deck.filter((c) => c !== randomGun)
       this.hand = [randomGun]
@@ -214,8 +214,7 @@ export default class HudService {
 
   removeCard = (card?) => {
     this.hand = this.hand.filter((_c, i) => i !== card.index)
-    this.deck = [...this.hand]
-    this.hand = []
+    this.shuffleDeck()
   }
 
   cardClick = (card?) => {
@@ -282,6 +281,7 @@ export default class HudService {
     }
     if (value.match(/remove|add|play/)) {
       this.discardHand()
+      this.shuffleDeck()
       this.drawCards()
     }
   }

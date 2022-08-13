@@ -1,9 +1,6 @@
 export const BASIC_DECK = [
   { key: 'DOT', label: 'TILE' },
   { key: 'DOT', label: 'TILE' },
-  { key: 'CORNER', label: 'TILE' },
-  { key: 'CORNER', label: 'TILE' },
-  { key: 'LINE', label: 'TILE' },
   { key: 'GUN1', label: 'GUN' },
 ]
 
@@ -32,6 +29,6 @@ export const CARD_TIERS = {
   FIVE: [
     { key: 'LINE', label: 'TILE' },
     { key: 'SMALL_LINE', label: 'TILE' },
-    { key: 'GUN1', label: 'TILE' },
+    { key: 'GUN1', label: 'GUN' },
   ],
 }

@@ -16,7 +16,7 @@ const WALL_FRAME = [
 
 const LEVEL_TYPES = {
   ONE: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 4, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
@@ -31,7 +31,7 @@ const LEVEL_TYPES = {
     ],
   },
   TWO: {
-    waves: [{ size: 9, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
@@ -43,11 +43,11 @@ const LEVEL_TYPES = {
     ],
   },
   THREE: {
-    waves: [{ size: 9, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 8, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [...WALL_FRAME, [O, 6, 6], [I, 1, 1]],
   },
   FOUR: {
-    waves: [{ size: 12, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 10, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...range(0, 8).map((x) => [W, x, 0]),
       ...range(0, 8).map((x) => [W, x, 7]),
@@ -56,36 +56,22 @@ const LEVEL_TYPES = {
       [I, 0, 1],
     ],
   },
-  DUCK: {
-    waves: [{ size: 5, delay: 2000, type: 'DUCK' }],
+  FIVE: {
+    waves: [{ size: 12, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
+      [O, 7, 7],
+      [I, 0, 0],
     ],
+    // tiles: [
+    //   [O, 2, 3],
+    //   [I, 4, 3],
+    // ],
   },
-  DEER: {
-    waves: [{ size: 7, delay: 2000, type: 'DEER' }],
+  SIX: {
+    waves: [{ size: 8, delay: 1000, type: 'DEER' }],
     tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-  MAN: {
-    waves: [{ size: 9, delay: 2000, type: 'MAN' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-  SLIME: {
-    waves: [{ size: 5, delay: 2000, type: 'BIG_SLIME' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
+      [O, 7, 7],
+      [I, 0, 0],
     ],
   },
 }
@@ -95,4 +81,6 @@ export const LEVELS = [
   LEVEL_TYPES.TWO,
   LEVEL_TYPES.THREE,
   LEVEL_TYPES.FOUR,
+  LEVEL_TYPES.FIVE,
+  LEVEL_TYPES.SIX,
 ]
