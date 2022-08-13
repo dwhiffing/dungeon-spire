@@ -39,9 +39,7 @@ export default class LevelService {
 
   startLevel = (levelData: LevelData) => {
     this.clearMap()
-    levelData.tiles.forEach((tile) =>
-      this.map.putTileAt(tile.frame, tile.x, tile.y),
-    )
+    levelData.tiles.forEach(([frame, x, y]) => this.map.putTileAt(frame, x, y))
     this.updateGrid(this.getMapData())
     this.findPath().then(this.updatePath)
   }

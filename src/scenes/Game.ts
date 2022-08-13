@@ -6,7 +6,7 @@ import InputService from '../services/input'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
-import { LevelData, LEVELS } from '../constants'
+import { DEFAULT_ENERGY_COUNT, LevelData, LEVELS } from '../constants'
 
 const MAX_LIFE = 10
 export default class extends Phaser.Scene {
@@ -94,7 +94,7 @@ export default class extends Phaser.Scene {
     const activeCount = this.enemies.remainingSpawnCount + numActive
     if (activeCount > 0) return
 
-    this.data.set('energyCount', 2)
+    this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     if (numIncoming === 0) {
       const index = this.data.get('levelIndex')
       // TODO: show some kind of win animation
@@ -115,7 +115,7 @@ export default class extends Phaser.Scene {
   nextLevel() {
     this.data.values.levelIndex++
     this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
-    this.data.set('energyCount', 2)
+    this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     this.guns?.clear()
     this.hud?.shuffleDeck()
     this.level?.startLevel(this.levelData)
