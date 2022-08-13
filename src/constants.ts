@@ -1,3 +1,5 @@
+import { LEVEL_TYPES } from './LEVEL_TYPES'
+
 export const ENTRANCE_INDEX = 32
 export const EXIT_INDEX = 33
 export const WALL_INDEX = 16
@@ -101,70 +103,12 @@ export const ENEMIES = {
     speed: 1000,
   },
 }
-const W = WALL_INDEX
-const I = ENTRANCE_INDEX
-const O = EXIT_INDEX
-const range = (startAt = 0, size) =>
-  [...Array(size).keys()].map((i) => i + startAt)
-
-const SMALL_MAP = [
-  ...range(0, 8).map((x) => [W, x, 0]),
-  ...range(0, 8).map((x) => [W, x, 1]),
-  ...range(0, 8).map((x) => [W, x, 6]),
-  ...range(0, 8).map((x) => [W, x, 7]),
-  ...range(2, 5).map((y) => [W, 0, y]),
-  ...range(2, 5).map((y) => [W, 7, y]),
-]
-export const LEVEL_TYPES = {
-  ONE: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
-    tiles: [
-      ...SMALL_MAP,
-      ...range(2, 5).map((y) => [W, 6, y]),
-      [O, 5, 5],
-      [I, 1, 2],
-    ],
-  },
-  TWO: {
-    waves: [{ size: 5, delay: 2000, type: 'DUCK' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-  THREE: {
-    waves: [{ size: 7, delay: 2000, type: 'DEER' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-  FOUR: {
-    waves: [{ size: 9, delay: 2000, type: 'MAN' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-  FIVE: {
-    waves: [{ size: 5, delay: 2000, type: 'BIG_SLIME' }],
-    tiles: [
-      [W, 3, 2],
-      [O, 2, 2],
-      [I, 4, 2],
-    ],
-  },
-}
 
 export const LEVELS = [
   LEVEL_TYPES.ONE,
   LEVEL_TYPES.TWO,
   LEVEL_TYPES.THREE,
   LEVEL_TYPES.FOUR,
-  LEVEL_TYPES.FIVE,
 ]
 
 export type Path = { x: number; y: number }[]
