@@ -69,6 +69,9 @@ export default class extends Phaser.Scene {
     this.events.off('changedata-healthCount', this.hud?.setHealth)
     this.events.off('changedata-mode', this.hud?.setMode)
     this.scene.start('Win', { level: this.data.get('levelIndex') })
+    this.tweens.timeScale = 1
+    this.time.timeScale = 1
+    this.physics.world.timeScale = 1
   }
 
   cardClick = (card) => {
