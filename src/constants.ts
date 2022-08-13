@@ -1,6 +1,8 @@
 export const ENTRANCE_INDEX = 32
 export const EXIT_INDEX = 33
 export const WALL_INDEX = 16
+export const PLAYER_WALL_INDEX = 18
+export const ARMOR_WALL_INDEX = 19
 export const GUN_INDEX = 17
 export const DEFAULT_ENERGY_COUNT = 3
 
@@ -10,6 +12,10 @@ export const SHAPES = {
   LINE: [
     [-1, 1, -1, -1, 1, -1, -1, 1, -1],
     [-1, -1, -1, 1, 1, 1, -1, -1, -1],
+  ],
+  ARMOR_LINE: [
+    [-1, 3, -1, -1, 3, -1, -1, 3, -1],
+    [-1, -1, -1, 3, 3, 3, -1, -1, -1],
   ],
   DOT: [[-1, -1, -1, -1, 1, -1, -1, -1, -1]],
   CORNER: [
@@ -177,12 +183,16 @@ export interface Wave {
 
 export const SHAPE_CARDS = [
   { key: 'LINE', label: 'TILE' },
-  { key: 'LINE', label: 'TILE' },
-  // { key: 'CORNER', label: 'TILE' },
+  { key: 'ARMOR_LINE', label: 'TILE' },
+  { key: 'CORNER', label: 'TILE' },
 ]
 export const GUN_CARDS = [
   { key: 'GUN1', label: 'GUN' },
   // { key: 'GUN2', label: 'GUN' },
   // { key: 'GUN3', label: 'GUN' },
 ]
-export const BASIC_DECK = [...GUN_CARDS, ...SHAPE_CARDS]
+export const BASIC_DECK = [
+  { key: 'LINE', label: 'TILE' },
+  { key: 'LINE', label: 'TILE' },
+  { key: 'GUN1', label: 'GUN' },
+]

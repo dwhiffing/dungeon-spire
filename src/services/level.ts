@@ -1,11 +1,12 @@
 import easystarjs from 'easystarjs'
 import {
+  ARMOR_WALL_INDEX,
   ENTRANCE_INDEX,
   EXIT_INDEX,
   GUN_INDEX,
   LevelData,
   Path,
-  WALL_INDEX,
+  PLAYER_WALL_INDEX,
 } from '../constants'
 import { IGameScene } from '~/scenes/Game'
 
@@ -96,7 +97,12 @@ export default class LevelService {
       const isGun = tiles.some(([f]) => f === 2)
       if (isGun) {
         // abort if not all tiles under gun tiles are wall tiles
-        if (tiles.every(([f, x, y]) => this.map.getTileAt(x, y)?.index !== 16))
+        if (
+          tiles.every(
+            ([f, x, y]) =>
+              this.map.getTileAt(x, y)?.index !== PLAYER_WALL_INDEX,
+          )
+        )
           resolve(false)
 
         return resolve(true)
@@ -171,7 +177,8 @@ export default class LevelService {
 const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }
 
 export const indexToFrame = (frame: number) => {
-  if (frame === 1) return WALL_INDEX
+  if (frame === 1) return PLAYER_WALL_INDEX
+  if (frame === 3) return ARMOR_WALL_INDEX
   if (frame === 2) return GUN_INDEX
   return 20
 }

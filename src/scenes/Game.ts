@@ -6,7 +6,12 @@ import InputService from '../services/input'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
-import { DEFAULT_ENERGY_COUNT, LevelData, LEVELS } from '../constants'
+import {
+  ARMOR_WALL_INDEX,
+  DEFAULT_ENERGY_COUNT,
+  LevelData,
+  LEVELS,
+} from '../constants'
 
 const MAX_LIFE = 10
 export default class extends Phaser.Scene {
@@ -26,8 +31,9 @@ export default class extends Phaser.Scene {
 
   create() {
     this.data.set('energyCount', 0)
-    this.data.set('levelIndex', 0)
+    this.data.set('levelIndex', 1)
     this.data.set('healthCount', 0)
+    this.data.set('armorCount', 0)
     this.data.set('mode', '')
 
     this.cameras.main.setBackgroundColor(0x113300)
@@ -52,7 +58,17 @@ export default class extends Phaser.Scene {
   }
 
   enemyWon = (enemy: Enemy) => {
-    this.data.values.healthCount -= enemy.damageAmount
+    let incomingDamage = enemy.damageAmount
+
+    if (this.data.values.armorCount > 0) {
+      incomingDamage -= this.data.values.armorCount
+      this.data.values.armorCount -= enemy.damageAmount
+      if (this.data.values.armorCount < 0) this.data.values.armorCount = 0
+    }
+
+    if (incomingDamage > 0) {
+      this.data.values.healthCount -= incomingDamage
+    }
     if (this.data.values.healthCount < 1) {
       this.gameover()
     } else {
@@ -67,6 +83,7 @@ export default class extends Phaser.Scene {
     this.events.off('card-click', this.hud?.hideCards)
     this.events.off('changedata-energyCount', this.hud?.setEnergy)
     this.events.off('changedata-healthCount', this.hud?.setHealth)
+    this.events.off('changedata-armorCount', this.hud?.setArmor)
     this.events.off('changedata-mode', this.hud?.setMode)
     this.scene.start('Win', { level: this.data.get('levelIndex') })
     this.tweens.timeScale = 1
@@ -109,6 +126,12 @@ export default class extends Phaser.Scene {
 
   nextWave = () => {
     this.data.set('mode', 'fight')
+    const value =
+      this.level?.map.layers[0].data
+        .flat()
+        .filter((i) => i.index === ARMOR_WALL_INDEX).length || 0
+    this.data.values.armorCount = value
+    this.hud?.playerArmorBar.update(value, value)
     this.enemies?.spawn(this.levelData!.waves[0])
   }
 

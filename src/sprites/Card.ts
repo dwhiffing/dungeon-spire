@@ -56,7 +56,9 @@ export class Card extends Phaser.GameObjects.Rectangle {
         if (frame === -1) return
         const _x = this.x + (index % 3) * 3 + 4
         const _y = this.y + Math.floor(index / 3) * 3 + 4
-        this.graphics.fillStyle(0x00aa00).fillRect(_x, _y, 2, 2)
+        this.graphics
+          .fillStyle(frame === 1 ? 0x00aa00 : 0x0000aa)
+          .fillRect(_x, _y, 2, 2)
       })
     }
 

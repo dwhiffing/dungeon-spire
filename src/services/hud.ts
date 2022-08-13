@@ -7,6 +7,7 @@ import { HealthBar } from '../sprites/HealthBar'
 export default class HudService {
   scene: IGameScene
   playerHealthBar: HealthBar
+  playerArmorBar: HealthBar
   energyText: Phaser.GameObjects.BitmapText
   titleText: Phaser.GameObjects.BitmapText
   waveText: Phaser.GameObjects.BitmapText
@@ -75,9 +76,11 @@ export default class HudService {
     this.scene.events.on('card-click', this.cardClick)
     this.scene.events.on('changedata-energyCount', this.setEnergy)
     this.scene.events.on('changedata-healthCount', this.setHealth)
+    this.scene.events.on('changedata-armorCount', this.setArmor)
     this.scene.events.on('changedata-mode', this.setMode)
 
     this.playerHealthBar = this.createPlayerHealth()
+    this.playerArmorBar = this.createPlayerArmor()
     this.titleText = this.scene.add
       .bitmapText(32, 1, 'pixel-dan', '')
       .setOrigin(0.5, 0)
@@ -95,6 +98,16 @@ export default class HudService {
       .bitmapText(10, 30, 'pixel-dan', 'X3')
       .setOrigin(0)
       .setDepth(11)
+  }
+
+  createPlayerArmor = () => {
+    const bar = new HealthBar(this.scene, 64, 1, 0, 0, 0x001144, 0x0044aa)
+    const life = this.scene.data.values.armorCount
+    bar.update(life, life)
+    this.scene.add.existing(bar.container)
+    bar.container.setDepth(1)
+    bar.container.setPosition(0, 1)
+    return bar
   }
 
   createPlayerHealth = () => {
@@ -225,6 +238,10 @@ export default class HudService {
 
   setHealth = (_, value) => {
     this.playerHealthBar.update(value)
+  }
+
+  setArmor = (_, value) => {
+    this.playerArmorBar.update(value)
   }
 
   setMode = (_, value) => {

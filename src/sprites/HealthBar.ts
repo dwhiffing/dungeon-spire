@@ -16,17 +16,19 @@ export class HealthBar {
     height: number = 1,
     xOffset: number = 2,
     yOffset: number = -1,
+    bgColor: number = 0x440000,
+    color: number = 0xaa0000,
   ) {
     this.scene = scene
     this.width = width
     this.height = height
 
     this.rectangle = this.scene.add
-      .rectangle(xOffset, yOffset, this.width, this.height, 0x440000)
+      .rectangle(xOffset, yOffset, this.width, this.height, bgColor)
       .setOrigin(0)
 
     this.rectangle2 = this.scene.add
-      .rectangle(xOffset, yOffset, this.width, this.height, 0xaa0000)
+      .rectangle(xOffset, yOffset, this.width, this.height, color)
       .setOrigin(0)
 
     this.container = this.scene.add.container(0, 0, [
