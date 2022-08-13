@@ -4,7 +4,6 @@ import {
   EXIT_INDEX,
   GUN_INDEX,
   LevelData,
-  LEVELS,
   Path,
   WALL_INDEX,
 } from '../constants'
@@ -13,6 +12,7 @@ import { IGameScene } from '~/scenes/Game'
 export default class LevelService {
   scene: IGameScene
   pathGraphics: Phaser.GameObjects.Graphics
+  pathGraphicsGhost: Phaser.GameObjects.Graphics
   path: Path
   map: Phaser.Tilemaps.Tilemap
   data: number[][]
@@ -21,7 +21,14 @@ export default class LevelService {
 
   constructor(scene: IGameScene) {
     this.scene = scene
+    this.pathGraphicsGhost = this.scene.add.graphics()
     this.pathGraphics = this.scene.add.graphics()
+    this.scene.tweens.add({
+      targets: [this.pathGraphicsGhost],
+      alpha: 0.4,
+      yoyo: true,
+      repeat: -1,
+    })
 
     this.map = this.createMap()
     this.data = this.getMapData()
@@ -35,7 +42,8 @@ export default class LevelService {
     levelData.tiles.forEach((tile) =>
       this.map.putTileAt(tile.frame, tile.x, tile.y),
     )
-    this.update()
+    this.updateGrid(this.getMapData())
+    this.findPath().then(this.updatePath)
   }
 
   createMap = () => {
@@ -50,19 +58,26 @@ export default class LevelService {
     return map
   }
 
-  update() {
-    this.updateGrid(this.getMapData())
-    this.findPath().then((path) => {
-      this.pathGraphics.clear()
-      this.pathGraphics.lineStyle(1, 0x5500aa)
-      if (!path) return
-      // @ts-ignore
-      this.path = path
-      this.path.forEach((item) =>
-        this.pathGraphics.lineTo(item.x * 8 + 4, item.y * 8 + 4),
-      )
-      this.pathGraphics.strokePath()
-    })
+  updatePath = (path) => {
+    this.pathGraphics.clear()
+    this.pathGraphics.lineStyle(1, 0x5500aa)
+    if (!path) return
+    // @ts-ignore
+    this.path = path
+    this.path.forEach((item) =>
+      this.pathGraphics.lineTo(item.x * 8 + 4, item.y * 8 + 4),
+    )
+    this.pathGraphics.strokePath()
+  }
+
+  updatePathGhost(path) {
+    this.pathGraphicsGhost.clear()
+    this.pathGraphicsGhost.lineStyle(1, 0x5500aa)
+    if (!path) return
+    path.forEach((item) =>
+      this.pathGraphicsGhost.lineTo(item.x * 8 + 4, item.y * 8 + 4),
+    )
+    this.pathGraphicsGhost.strokePath()
   }
 
   placeTile = (i: number, x: number, y: number) => {
@@ -76,7 +91,6 @@ export default class LevelService {
         .forEach((t) => this.map.putTileAt(-1, t.x, t.y))
     }
     this.map.putTileAt(i, x, y)
-    this.update()
   }
 
   canPlaceTiles = (tiles: number[][]) =>
@@ -100,8 +114,11 @@ export default class LevelService {
 
       tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
 
+      this.updateGrid(this.getMapData())
       this.findPath().then((path) => {
+        this.updatePathGhost(path)
         tiles.forEach(([f, x, y]) => this.placeTile(-1, x, y))
+        this.updateGrid(this.getMapData())
         resolve(!!path)
       })
     })
@@ -110,6 +127,8 @@ export default class LevelService {
     const canPlace = await this.canPlaceTiles(tiles)
     if (!canPlace) throw new Error()
     tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
+    this.updateGrid(this.getMapData())
+    this.findPath().then(this.updatePath)
   }
 
   findPath = (
@@ -144,7 +163,11 @@ export default class LevelService {
   getMapData = () =>
     this.map.layers[0].data.map((row) => row.map((tile) => tile.index))
 
-  clearMap = () => this.map.fill(-1, 0, 0, 64, 64)
+  clearMap = () => {
+    this.pathGraphics.clear()
+    this.pathGraphicsGhost.clear()
+    this.map.fill(-1, 0, 0, 64, 64)
+  }
 }
 
 const MAP_CONFIG = { tileWidth: 8, tileHeight: 8, width: 8, height: 8 }
