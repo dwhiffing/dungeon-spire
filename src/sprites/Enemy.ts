@@ -8,15 +8,20 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   maxHealth: number
   speed: number
   damageAmount: number
+  progress: number
+  coord?: { x: number; y: number }
+  scene: IGameScene
   healthBar: HealthBar
 
   constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 'tilemap')
+    this.scene = scene
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
     this.setSize(3, 3).setActive(false).setOffset(3, 3)
     this.health = 0
     this.maxHealth = 0
+    this.progress = 0
     this.speed = 0
     this.damageAmount = 0
     this.healthBar = new HealthBar(scene)
@@ -79,6 +84,21 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
           x: x * 8,
           y: y * 8,
           duration: this.speed,
+          onUpdate: () => {
+            const coord = {
+              x: Math.floor(this.x / 8),
+              y: Math.floor(this.y / 8),
+            }
+            if (coord.x === this.coord?.x && coord.y === this.coord?.y) return
+            this.coord = coord
+            const index =
+              this.scene.level?.path.findIndex(
+                (c) => c.x === coord.x && c.y === coord.y,
+              ) || 0
+            const length = this.scene.level?.path.length || 1
+
+            this.progress = index / length
+          },
           onStart: () => {
             this.flipX = this.x > x * 8
           },

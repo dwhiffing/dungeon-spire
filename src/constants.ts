@@ -111,7 +111,7 @@ const SMALL_MAP = [
 ]
 export const LEVEL_TYPES = {
   ONE: {
-    waves: [{ size: 10, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...SMALL_MAP,
       ...range(2, 5).map((y) => [W, 6, y]),
