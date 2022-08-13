@@ -20,7 +20,8 @@ const WALL_FRAME_BIG = [
   ...range(0, 8).map((x) => [W, x, 6]),
   ...range(2, 5).map((y) => [W, 6, y]),
 ]
-export const LEVEL_TYPES = {
+
+const LEVEL_TYPES = {
   ONE: {
     waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [...WALL_FRAME_BIG, [O, 5, 5], [I, 1, 2]],
@@ -70,3 +71,10 @@ export const LEVEL_TYPES = {
     ],
   },
 }
+
+export const LEVELS = [
+  LEVEL_TYPES.ONE,
+  LEVEL_TYPES.TWO,
+  LEVEL_TYPES.THREE,
+  LEVEL_TYPES.FOUR,
+]

@@ -1,6 +1,6 @@
-import { ENEMIES, Path } from '../constants'
-import { IGameScene } from '~/scenes/Game'
+import { ENEMIES } from '../constants'
 import { HealthBar } from './HealthBar'
+import { IGameScene, Path } from '~/types'
 
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline

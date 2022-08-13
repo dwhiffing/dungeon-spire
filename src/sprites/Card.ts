@@ -1,5 +1,5 @@
-import { IGameScene } from '~/scenes/Game'
-import { CARD_HEIGHT, CARD_WIDTH, SHAPES } from '../constants'
+import { IGameScene } from '~/types'
+import { SHAPES, CARD_HEIGHT, CARD_WIDTH } from '../constants'
 
 export class Card extends Phaser.GameObjects.Rectangle {
   graphics: Phaser.GameObjects.Graphics

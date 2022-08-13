@@ -1,5 +1,4 @@
-import { Wave } from '../constants'
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene, Wave } from '~/types'
 import { Enemy } from '../sprites/Enemy'
 import LevelService from './level'
 

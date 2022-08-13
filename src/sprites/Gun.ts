@@ -1,5 +1,5 @@
+import { IGameScene } from '~/types'
 import { GUN_STATS } from '../constants'
-import { IGameScene } from '~/scenes/Game'
 
 export class Gun extends Phaser.Physics.Arcade.Sprite {
   scene: IGameScene

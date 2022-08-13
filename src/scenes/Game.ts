@@ -6,12 +6,8 @@ import InputService from '../services/input'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
-import {
-  ARMOR_WALL_INDEX,
-  DEFAULT_ENERGY_COUNT,
-  LevelData,
-  LEVELS,
-} from '../constants'
+import { ARMOR_WALL_INDEX, DEFAULT_ENERGY_COUNT, LEVELS } from '../constants'
+import { LevelData } from '~/types'
 
 const MAX_LIFE = 10
 export default class extends Phaser.Scene {
@@ -171,17 +167,4 @@ export default class extends Phaser.Scene {
   rotateTile = () => {
     this.marker?.rotate()
   }
-}
-
-export interface IGameScene extends Phaser.Scene {
-  level?: LevelService
-  enemies?: EnemyService
-  marker?: MarkerService
-  guns?: GunService
-  hud?: HudService
-  levelData?: LevelData
-  inputService?: InputService
-  rotateTile: () => void
-  nextWave: () => void
-  placeTile: (event: any) => void
 }

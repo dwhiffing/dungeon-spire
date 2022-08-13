@@ -1,8 +1,8 @@
-import { GUNS, GUN_STATS, SHAPES } from '../constants'
-import { IGameScene } from '~/scenes/Game'
+import { SHAPES, GUN_SHAPES, GUN_STATS } from '../constants'
 import { Card } from '~/sprites/Card'
 import { WallMarker } from '../sprites/WallMarker'
 import { indexToFrame } from './level'
+import { IGameScene } from '~/types'
 
 export default class MarkerService {
   scene: IGameScene
@@ -75,7 +75,7 @@ export default class MarkerService {
   getShape = (card: Card) => {
     this.card = card
     this.shape =
-      card.labelText.text === 'TILE' ? SHAPES[card.key] : GUNS[card.key]
+      card.labelText.text === 'TILE' ? SHAPES[card.key] : GUN_SHAPES[card.key]
     this.rotationIndex = 0
     this.updateMarkers()
   }

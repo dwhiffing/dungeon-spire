@@ -4,11 +4,9 @@ import {
   ENTRANCE_INDEX,
   EXIT_INDEX,
   GUN_INDEX,
-  LevelData,
-  Path,
   PLAYER_WALL_INDEX,
 } from '../constants'
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene, LevelData, Path } from '~/types'
 
 export default class LevelService {
   scene: IGameScene

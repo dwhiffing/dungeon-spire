@@ -1,8 +1,8 @@
 import { shuffle } from 'lodash'
-import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
 import { BASIC_DECK, CARD_TIERS } from '../constants'
 import { HealthBar } from '../sprites/HealthBar'
+import { IGameScene } from '~/types'
 
 export default class HudService {
   scene: IGameScene
