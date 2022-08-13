@@ -119,7 +119,7 @@ export default class extends Phaser.Scene {
   }
 
   placeTile = (event) => {
-    if (!this.marker?.shape) return
+    if (!this.marker?.shape || !this.marker.isValid) return
     this.data.values.energyCount--
 
     const x = Math.floor(event.downX / 8)
