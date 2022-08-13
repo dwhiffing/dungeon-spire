@@ -216,6 +216,7 @@ export default class HudService {
     } else if (value === 'play') {
       this.titleText.text = 'PLAY\nCARD'
     } else {
+      this.playButton.setAlpha(0)
       this.titleText.text = ''
     }
     if (value.match(/remove|add|play/)) {
