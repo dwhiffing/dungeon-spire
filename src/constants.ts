@@ -31,7 +31,7 @@ export const GUN_STATS = {
     damage: 1,
     range: 20,
     bulletSpeed: 40,
-    fireRate: 500,
+    fireRate: 1000,
     accuracy: 0,
     scale: 1,
     tint: 0xff0000,
@@ -97,43 +97,43 @@ export const ENEMIES = {
 
 export const LEVEL_TYPES = {
   ONE: {
-    waves: [{ size: 3, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 10, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
-      { frame: WALL_INDEX, x: 3, y: 2 },
-      { frame: EXIT_INDEX, x: 2, y: 2 },
-      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+      [WALL_INDEX, 3, 2],
+      [EXIT_INDEX, 6, 6],
+      [ENTRANCE_INDEX, 2, 2],
     ],
   },
   TWO: {
     waves: [{ size: 5, delay: 2000, type: 'DUCK' }],
     tiles: [
-      { frame: WALL_INDEX, x: 3, y: 2 },
-      { frame: EXIT_INDEX, x: 2, y: 2 },
-      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+      [WALL_INDEX, 3, 2],
+      [EXIT_INDEX, 2, 2],
+      [ENTRANCE_INDEX, 4, 2],
     ],
   },
   THREE: {
     waves: [{ size: 7, delay: 2000, type: 'DEER' }],
     tiles: [
-      { frame: WALL_INDEX, x: 3, y: 2 },
-      { frame: EXIT_INDEX, x: 2, y: 2 },
-      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+      [WALL_INDEX, 3, 2],
+      [EXIT_INDEX, 2, 2],
+      [ENTRANCE_INDEX, 4, 2],
     ],
   },
   FOUR: {
     waves: [{ size: 9, delay: 2000, type: 'MAN' }],
     tiles: [
-      { frame: WALL_INDEX, x: 3, y: 2 },
-      { frame: EXIT_INDEX, x: 2, y: 2 },
-      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+      [WALL_INDEX, 3, 2],
+      [EXIT_INDEX, 2, 2],
+      [ENTRANCE_INDEX, 4, 2],
     ],
   },
   FIVE: {
     waves: [{ size: 5, delay: 2000, type: 'BIG_SLIME' }],
     tiles: [
-      { frame: WALL_INDEX, x: 3, y: 2 },
-      { frame: EXIT_INDEX, x: 2, y: 2 },
-      { frame: ENTRANCE_INDEX, x: 4, y: 2 },
+      [WALL_INDEX, 3, 2],
+      [EXIT_INDEX, 2, 2],
+      [ENTRANCE_INDEX, 4, 2],
     ],
   },
 }
@@ -150,7 +150,8 @@ export type Path = { x: number; y: number }[]
 
 export interface LevelData {
   waves: Wave[]
-  tiles: { frame: number; x: number; y: number }[]
+  // tiles: [frame: number, x: number, y: number][]
+  tiles: number[][]
 }
 
 export interface Wave {
@@ -164,7 +165,7 @@ const shapeCards = shapeKeys.map((key) => ({ key, label: 'TILE' }))
 export const SHAPE_CARDS = [...shapeCards]
 export const GUN_CARDS = [
   { key: 'GUN1', label: 'GUN1' },
-  { key: 'GUN2', label: 'GUN2' },
-  { key: 'GUN3', label: 'GUN3' },
+  // { key: 'GUN2', label: 'GUN2' },
+  // { key: 'GUN3', label: 'GUN3' },
 ]
 export const BASIC_DECK = [...GUN_CARDS, ...SHAPE_CARDS]

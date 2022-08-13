@@ -31,7 +31,6 @@ export default class extends Phaser.Scene {
     this.data.set('mode', '')
 
     this.cameras.main.setBackgroundColor(0x113300)
-    // this.physics.world.fixedDelta = true
     this.data.set('healthCount', MAX_LIFE)
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
@@ -115,6 +114,7 @@ export default class extends Phaser.Scene {
     this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
     this.data.set('energyCount', 2)
     this.guns?.clear()
+    this.hud?.shuffleDeck()
     this.level?.startLevel(this.levelData)
   }
 

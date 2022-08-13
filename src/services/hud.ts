@@ -15,6 +15,7 @@ export default class HudService {
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
   discard: { key: string; label: string }[]
+  banish: { key: string; label: string }[]
   cards: Card[]
   backdrop: Phaser.GameObjects.Rectangle
   playButton: Phaser.GameObjects.Sprite
@@ -68,6 +69,7 @@ export default class HudService {
     this.hand = []
     this.drawCount = 3
     this.discard = []
+    this.banish = []
     this.deck = shuffle(BASIC_DECK)
     this.cards = new Array(32).fill('').map((_, i) => new Card(this.scene, i))
     this.scene.events.on('card-click', this.cardClick)
@@ -127,6 +129,18 @@ export default class HudService {
     this.showCards()
   }
 
+  shuffleDeck = () => {
+    this.deck = shuffle([
+      ...this.deck,
+      ...this.discard,
+      ...this.banish,
+      ...this.hand,
+    ])
+    this.banish = []
+    this.discard = []
+    this.hand = []
+  }
+
   showCards = () => {
     this.backdrop.setAlpha(this.scene.data.get('mode') === 'play' ? 0.7 : 1)
     this.playButton.setAlpha(1)
@@ -179,7 +193,12 @@ export default class HudService {
 
   discardCard = (card = this.activeCard) => {
     if (card) {
-      this.discard.push(this.hand[card.index])
+      if (card.key.match(/GUN/)) {
+        this.banish.push(this.hand[card.index])
+      } else {
+        this.discard.push(this.hand[card.index])
+      }
+
       this.hand = this.hand.filter((c, i) => i !== card.index)
     }
   }
