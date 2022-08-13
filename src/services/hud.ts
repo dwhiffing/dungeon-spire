@@ -1,7 +1,7 @@
 import { shuffle } from 'lodash'
 import { IGameScene } from '~/scenes/Game'
 import { Card } from '../sprites/Card'
-import { BASIC_DECK } from '../constants'
+import { BASIC_DECK, CARD_TIERS } from '../constants'
 import { HealthBar } from '../sprites/HealthBar'
 
 export default class HudService {
@@ -120,8 +120,15 @@ export default class HudService {
     return bar
   }
 
-  // TODO: more card options
-  getCardAddPool = () => shuffle(BASIC_DECK)
+  getCardAddPool = () => {
+    const level = this.scene.data.values.levelIndex
+    let tier
+    if (level <= 3) tier = CARD_TIERS.TWO
+    if (level === 1) tier = CARD_TIERS.ONE
+    if (level === 4) tier = CARD_TIERS.THREE
+    if (level > 4) tier = CARD_TIERS.FOUR
+    return shuffle(tier)
+  }
 
   drawCards = (drawCount = this.drawCount) => {
     const mode = this.scene.data.get('mode')

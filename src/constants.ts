@@ -140,3 +140,13 @@ export const BASIC_DECK = [
   { key: 'LINE', label: 'TILE' },
   { key: 'GUN1', label: 'GUN' },
 ]
+export const CARD_TIERS = {
+  ONE: [{ key: 'CORNER', label: 'TILE' }],
+  TWO: [{ key: 'ARMOR_LINE', label: 'TILE' }],
+  THREE: [{ key: 'GUN1', label: 'TILE' }],
+  FOUR: [
+    { key: 'LINE', label: 'TILE' },
+    { key: 'CORNER', label: 'TILE' },
+    { key: 'GUN1', label: 'TILE' },
+  ],
+}

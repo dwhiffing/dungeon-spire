@@ -31,7 +31,7 @@ export default class extends Phaser.Scene {
 
   create() {
     this.data.set('energyCount', 0)
-    this.data.set('levelIndex', 1)
+    this.data.set('levelIndex', 0)
     this.data.set('healthCount', 0)
     this.data.set('armorCount', 0)
     this.data.set('mode', '')
@@ -115,7 +115,7 @@ export default class extends Phaser.Scene {
     if (numIncoming === 0) {
       const index = this.data.get('levelIndex')
       // TODO: show some kind of win animation
-      this.data.set('mode', index % 2 === 1 ? 'add' : 'remove')
+      this.data.set('mode', index % 5 === 0 ? 'remove' : 'add')
       this.nextLevel()
     } else {
       this.data.set('mode', 'play')
