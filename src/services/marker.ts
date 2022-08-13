@@ -10,6 +10,9 @@ export default class MarkerService {
   card: Card | null
   shape: number[][] | null
   rotationIndex: number
+  tileX: number
+  tileY: number
+  isValid: boolean
   rangeCircle: Phaser.GameObjects.Arc
 
   constructor(scene: IGameScene) {
@@ -20,6 +23,9 @@ export default class MarkerService {
     this.rangeCircle.setStrokeStyle(1, 0xffffff, 1).setDepth(9)
     this.rangeCircle.setAlpha(0)
     this.card = null
+    this.tileX = 0
+    this.tileY = 0
+    this.isValid = true
     this.rotationIndex = 0
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 3; x++) {
@@ -32,18 +38,29 @@ export default class MarkerService {
     this.updateMarkers()
 
     this.scene.input.on('pointermove', (event) => {
-      const x = Math.floor(event.x / 8) * 8 - 8
-      const y = Math.floor(event.y / 8) * 8 - 8
-      this.group.x = x
-      this.group.y = y
-      if (this.card) {
-        const stats = GUN_STATS[this.card.key]
-        if (stats) {
-          this.rangeCircle.setPosition(x + 12, y + 12)
-          this.rangeCircle.setAlpha(1)
-          this.rangeCircle.radius = stats.range
-        }
-      }
+      if (!this.shape) return
+      const x = Math.floor(event.x / 8)
+      const y = Math.floor(event.y / 8)
+      if (this.tileX === x && this.tileY === y) return
+      this.tileX = x
+      this.tileY = y
+      this.group.x = this.tileX * 8 - 8
+      this.group.y = this.tileY * 8 - 8
+
+      this.scene.level
+        ?.canPlaceTiles(this.getTileData(this.tileX, this.tileY))
+        .then((isValid) => {
+          this.isValid = !!isValid
+          this.updateMarkers()
+          if (this.card) {
+            const stats = GUN_STATS[this.card.key]
+            if (stats) {
+              this.rangeCircle.setPosition(this.group.x + 12, this.group.y + 12)
+              this.rangeCircle.setAlpha(1)
+              this.rangeCircle.radius = stats.range
+            }
+          }
+        })
     })
   }
 
@@ -74,7 +91,12 @@ export default class MarkerService {
     if (!this.shape) return
     this.rotationIndex++
     this.rotationIndex = this.rotationIndex % this.shape.length
-    this.updateMarkers()
+    this.scene.level
+      ?.canPlaceTiles(this.getTileData(this.tileX, this.tileY))
+      .then((isValid) => {
+        this.isValid = !!isValid
+        this.updateMarkers()
+      })
   }
 
   updateMarkers = () => {
@@ -83,6 +105,7 @@ export default class MarkerService {
     markers.forEach((wallMarker, i) => {
       let frame = shape[this.rotationIndex][i] || 1
       wallMarker.setFrame(indexToFrame(frame))
+      wallMarker.setTint(this.isValid ? 0xffffff : 0xff0000)
     })
   }
 }

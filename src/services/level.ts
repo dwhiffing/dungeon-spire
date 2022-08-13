@@ -79,30 +79,37 @@ export default class LevelService {
     this.update()
   }
 
-  placeTiles = (tiles: number[][], onComplete: () => void) => {
-    const isGun = tiles.some(([f]) => f === 2)
-    if (isGun) {
-      // abort if not all tiles under gun tiles are wall tiles
-      if (tiles.every(([f, x, y]) => this.map.getTileAt(x, y)?.index !== 16))
-        return
-    } else {
-      // abort if placement overlaps with existing tiles
-      if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y))) return
-    }
+  canPlaceTiles = (tiles: number[][]) =>
+    new Promise((resolve) => {
+      const isGun = tiles.some(([f]) => f === 2)
+      if (isGun) {
+        // abort if not all tiles under gun tiles are wall tiles
+        if (tiles.every(([f, x, y]) => this.map.getTileAt(x, y)?.index !== 16))
+          resolve(false)
 
-    // prevent placing walls that clip outside map
-    if (tiles.some(([f, x, y]) => x < 0 || y < 0 || x > 7 || y > 7)) {
-      return
-    }
-
-    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
-
-    this.findPath().then((path) => {
-      if (!path) tiles.forEach(([f, x, y]) => this.placeTile(-1, x, y))
-      if (path) {
-        onComplete()
+        return resolve(true)
       }
+      // abort if placement overlaps with existing tiles
+      if (tiles.some(([f, x, y]) => this.map.getTileAt(x, y)))
+        return resolve(false)
+
+      // prevent placing walls that clip outside map
+      if (tiles.some(([f, x, y]) => x < 0 || y < 0 || x > 7 || y > 7)) {
+        return resolve(false)
+      }
+
+      tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
+
+      this.findPath().then((path) => {
+        tiles.forEach(([f, x, y]) => this.placeTile(-1, x, y))
+        resolve(!!path)
+      })
     })
+
+  placeTiles = async (tiles: number[][]) => {
+    const canPlace = await this.canPlaceTiles(tiles)
+    if (!canPlace) throw new Error()
+    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
   }
 
   findPath = (
