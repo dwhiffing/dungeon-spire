@@ -234,16 +234,10 @@ export default class HudService {
     }
   }
 
-  discardCard = (card = this.activeCard) => {
-    if (card) {
-      if (card.key.match(/GUN/)) {
-        this.banish.push(this.hand[card.index])
-      } else {
-        this.discard.push(this.hand[card.index])
-      }
-
-      this.hand = this.hand.filter((c, i) => i !== card.index)
-    }
+  useCard = (card = this.activeCard) => {
+    if (!card) return
+    this.banish.push(this.hand[card.index])
+    this.hand = this.hand.filter((c, i) => i !== card.index)
   }
 
   hideCards = () => {
