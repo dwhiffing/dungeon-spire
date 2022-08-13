@@ -6,10 +6,15 @@ import InputService from '../services/input'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
-import { ARMOR_WALL_INDEX, DEFAULT_ENERGY_COUNT, LEVELS } from '../constants'
+import {
+  ARMOR_WALL_INDEX,
+  DEFAULT_ENERGY_COUNT,
+  LEVELS,
+  STARTING_LEVEL,
+  STARTING_MAX_LIFE,
+} from '../constants'
 import { LevelData } from '~/types'
 
-const MAX_LIFE = 10
 export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
@@ -27,13 +32,14 @@ export default class extends Phaser.Scene {
 
   create() {
     this.data.set('energyCount', 0)
-    this.data.set('levelIndex', 0)
+    this.data.set('levelIndex', STARTING_LEVEL - 1)
+    this.data.set('turnIndex', 0)
     this.data.set('healthCount', 0)
     this.data.set('armorCount', 0)
     this.data.set('mode', '')
 
     this.cameras.main.setBackgroundColor(0x113300)
-    this.data.set('healthCount', MAX_LIFE)
+    this.data.set('healthCount', STARTING_MAX_LIFE)
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)
     this.marker = new MarkerService(this)
@@ -114,6 +120,7 @@ export default class extends Phaser.Scene {
       this.data.set('mode', index % 5 === 0 ? 'remove' : 'add')
       this.nextLevel()
     } else {
+      this.data.inc('turnIndex')
       this.data.set('mode', 'play')
     }
   }
@@ -133,6 +140,7 @@ export default class extends Phaser.Scene {
 
   nextLevel() {
     this.data.values.levelIndex++
+    this.data.set('turnIndex', 0)
     this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     this.guns?.clear()

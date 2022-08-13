@@ -1,6 +1,11 @@
 import { shuffle } from 'lodash'
 import { Card } from '../sprites/Card'
-import { BASIC_DECK, CARD_TIERS } from '../constants'
+import {
+  BASIC_DECK,
+  CARD_TIERS,
+  DEFAULT_DRAW_COUNT,
+  PLAYER_WALL_INDEX,
+} from '../constants'
 import { HealthBar } from '../sprites/HealthBar'
 import { IGameScene } from '~/types'
 
@@ -68,7 +73,7 @@ export default class HudService {
       })
 
     this.hand = []
-    this.drawCount = 3
+    this.drawCount = DEFAULT_DRAW_COUNT
     this.discard = []
     this.banish = []
     this.deck = shuffle(BASIC_DECK)
@@ -139,7 +144,25 @@ export default class HudService {
       this.showCards()
       return
     }
-    if (this.deck.length < drawCount) {
+
+    if (this.scene.data.values.turnIndex === 0) {
+      const randomGun = shuffle(this.deck.filter((c) => c.key.match(/GUN/)))[0]
+      this.deck = this.deck.filter((c) => c !== randomGun)
+      this.hand = [randomGun]
+      drawCount -= 1
+      const shouldForceWall =
+        this.scene
+          .level!.map.layers[0].data.flat()
+          .filter((i) => i.index === PLAYER_WALL_INDEX).length === 0
+      const randomWall = shuffle(
+        this.deck.filter((c) => c.label.match(/TILE/)),
+      )[0]
+      if (shouldForceWall && randomWall) {
+        drawCount -= 1
+        this.hand = [...this.hand, randomWall]
+        this.deck = this.deck.filter((c) => c !== randomWall)
+      }
+    } else if (this.deck.length < drawCount) {
       drawCount = drawCount - this.deck.length
       this.hand = [...this.deck]
       this.deck = shuffle(this.discard)
