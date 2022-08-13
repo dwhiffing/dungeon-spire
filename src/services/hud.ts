@@ -11,6 +11,7 @@ export default class HudService {
   titleText: Phaser.GameObjects.BitmapText
   waveText: Phaser.GameObjects.BitmapText
   drawCount: number
+  activeCard?: Card
   deck: { key: string; label: string }[]
   hand: { key: string; label: string }[]
   discard: { key: string; label: string }[]
@@ -51,8 +52,12 @@ export default class HudService {
       .setOrigin(0)
       .setInteractive()
       .setDepth(10)
-      .on('pointerdown', () => {
-        if (this.scene.data.get('mode') === 'play') {
+      .on('pointerdown', (e) => {
+        if (this.scene.marker?.shape) {
+          this.showCards()
+          this.scene.marker?.clearShape()
+          e.stopPropagation()
+        } else if (this.scene.data.get('mode') === 'play') {
           this.hideCards()
           this.scene.nextWave()
         } else {
@@ -77,15 +82,15 @@ export default class HudService {
       .setCenterAlign()
       .setDepth(11)
     this.energyText = this.scene.add
-      .bitmapText(2, 30, 'pixel-dan', '0')
+      .bitmapText(55, 30, 'pixel-dan', '0')
       .setOrigin(0)
       .setDepth(11)
     this.waveSprite = this.scene.add
-      .sprite(0, 0, 'tilemap', 6)
+      .sprite(1, 27, 'tilemap', 6)
       .setOrigin(0)
       .setDepth(11)
     this.waveText = this.scene.add
-      .bitmapText(9, 3, 'pixel-dan', 'X3')
+      .bitmapText(10, 30, 'pixel-dan', 'X3')
       .setOrigin(0)
       .setDepth(11)
   }
@@ -125,6 +130,7 @@ export default class HudService {
   showCards = () => {
     this.backdrop.setAlpha(this.scene.data.get('mode') === 'play' ? 0.7 : 1)
     this.playButton.setAlpha(1)
+    this.playButton.setFlipX(false)
     this.titleText.setAlpha(1)
     this.cards.forEach((c) => c.hide())
     this.hand.forEach((c, i) =>
@@ -163,16 +169,22 @@ export default class HudService {
       this.addCard(card)
       this.scene.data.set('mode', 'play')
     } else if (mode === 'play') {
+      this.activeCard = card
       this.scene.events.emit('card-play', card)
-      this.hideCards(card)
+      this.hideCards()
+      this.playButton.setAlpha(1)
+      this.playButton.setFlipX(true)
     }
   }
 
-  hideCards = (card?) => {
+  discardCard = (card = this.activeCard) => {
     if (card) {
       this.discard.push(this.hand[card.index])
       this.hand = this.hand.filter((c, i) => i !== card.index)
     }
+  }
+
+  hideCards = () => {
     this.playButton.setAlpha(0)
     this.energyText.setAlpha(0)
     this.waveText.setAlpha(0)
