@@ -14,25 +14,37 @@ const WALL_FRAME = [
   ...range(1, 6).map((y) => [W, 7, y]),
 ]
 
-const WALL_FRAME_BIG = [
-  ...WALL_FRAME,
-  ...range(0, 8).map((x) => [W, x, 1]),
-  ...range(0, 8).map((x) => [W, x, 6]),
-  ...range(2, 5).map((y) => [W, 6, y]),
-]
-
 const LEVEL_TYPES = {
   ONE: {
     waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
-    tiles: [...WALL_FRAME_BIG, [O, 5, 5], [I, 1, 2]],
+    tiles: [
+      ...WALL_FRAME,
+      ...range(0, 8).map((x) => [W, x, 1]),
+      ...range(0, 8).map((x) => [W, x, 6]),
+      ...range(2, 5).map((y) => [W, 6, y]),
+      [W + 2, 2, 3],
+      [W + 2, 2, 4],
+      [W + 2, 4, 3],
+      [W + 2, 4, 4],
+      [O, 5, 5],
+      [I, 1, 2],
+    ],
   },
   TWO: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
-    tiles: [...WALL_FRAME_BIG, [O, 5, 5], [I, 1, 2]],
+    waves: [{ size: 9, delay: 2000, type: 'SMALL_SLIME' }],
+    tiles: [
+      ...WALL_FRAME,
+      ...range(0, 8).map((x) => [W, x, 1]),
+      [W + 2, 2, 2],
+      [W + 2, 2, 3],
+      [W + 2, 2, 4],
+      [O, 6, 6],
+      [I, 1, 2],
+    ],
   },
   THREE: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
-    tiles: [...WALL_FRAME, [O, 5, 5], [I, 1, 2]],
+    waves: [{ size: 9, delay: 2000, type: 'SMALL_SLIME' }],
+    tiles: [...WALL_FRAME, [O, 6, 6], [I, 1, 1]],
   },
   FOUR: {
     waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],

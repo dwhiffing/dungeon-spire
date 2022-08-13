@@ -128,10 +128,11 @@ export default class HudService {
   getCardAddPool = () => {
     const level = this.scene.data.values.levelIndex
     let tier
-    if (level <= 3) tier = CARD_TIERS.TWO
     if (level === 1) tier = CARD_TIERS.ONE
-    if (level === 4) tier = CARD_TIERS.THREE
-    if (level > 4) tier = CARD_TIERS.FOUR
+    if (level === 2) tier = CARD_TIERS.TWO
+    if (level === 3) tier = CARD_TIERS.THREE
+    if (level === 4) tier = CARD_TIERS.FOUR
+    if (level > 4) tier = CARD_TIERS.FIVE
     return shuffle(tier)
   }
 
