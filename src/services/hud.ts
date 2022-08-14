@@ -86,6 +86,7 @@ export default class HudService {
 
     this.playerHealthBar = this.createPlayerHealth()
     this.playerArmorBar = this.createPlayerArmor()
+    this.playerArmorBar.container.setAlpha(0)
     this.titleText = this.scene.add
       .bitmapText(32, 1, 'pixel-dan', '')
       .setOrigin(0.5, 0)

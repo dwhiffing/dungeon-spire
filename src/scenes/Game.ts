@@ -142,6 +142,7 @@ export default class extends Phaser.Scene {
         .filter((i) => i.index === ARMOR_WALL_INDEX).length || 0
     this.data.values.armorCount = value
     this.hud?.playerArmorBar.update(value, value)
+    this.hud?.playerArmorBar.container.setAlpha(value > 0 ? 1 : 0)
     this.time.delayedCall(1000, () => {
       this.enemies?.spawn(this.levelData!.waves[0])
     })

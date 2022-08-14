@@ -1,4 +1,4 @@
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene } from '~/types'
 
 export class HealthBar {
   scene: IGameScene
