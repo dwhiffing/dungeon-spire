@@ -132,7 +132,8 @@ export default class HudService {
     if (level === 2) tier = CARD_TIERS.TWO
     if (level === 3) tier = CARD_TIERS.THREE
     if (level === 4) tier = CARD_TIERS.FOUR
-    if (level > 4) tier = CARD_TIERS.FIVE
+    if (level === 5) tier = CARD_TIERS.FIVE
+    if (level > 5) tier = CARD_TIERS.SIX
     return shuffle(tier)
   }
 

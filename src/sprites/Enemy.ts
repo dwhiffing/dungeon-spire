@@ -10,6 +10,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   maxHealth: number
   speed: number
   damageAmount: number
+  flying: boolean
   progress: number
   coord?: { x: number; y: number }
   scene: IGameScene
@@ -23,6 +24,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setSize(3, 3).setActive(false).setOffset(3, 3).setDepth(8)
     this.health = 0
     this.maxHealth = 0
+    this.flying = false
     this.progress = 0
     this.speed = 0
     this.damageAmount = 0
@@ -46,7 +48,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.coord = coord
     const path = this.scene.level?.path
     const lava = this.scene.level?.lavaTiles || []
-    if (lava.some((t) => t.x === coord.x && t.y === coord.y)) {
+    if (lava.some((t) => t.x === coord.x && t.y === coord.y) && !this.flying) {
       this.damage(1)
     }
 
@@ -92,6 +94,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.health = data.health
       this.maxHealth = data.health
       this.speed = data.speed
+      this.flying = data.flying || false
       this.damageAmount = data.damage
     }
     this.healthBar.update(this.health, this.maxHealth)

@@ -17,11 +17,7 @@ export const ENEMIES = {
   DUCK: {
     damage: 1,
     health: 8,
-    speed: 1000,
-  },
-  MAN: {
-    damage: 1,
-    health: 32,
-    speed: 1000,
+    speed: 1200,
+    flying: true,
   },
 }

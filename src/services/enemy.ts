@@ -24,7 +24,6 @@ export default class EnemyService {
     this.createAnim('BIG_SLIME', 2, 3, 4)
     this.createAnim('DEER', 4, 5, 4)
     this.createAnim('DUCK', 6, 7, 4)
-    this.createAnim('MAN', 8, 9, 4)
   }
 
   async spawn(wave: Wave) {

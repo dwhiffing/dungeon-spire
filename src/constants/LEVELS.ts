@@ -121,6 +121,32 @@ const LEVEL_TYPES = {
       [I, 0, 1],
     ],
   },
+  SEVEN: {
+    waves: [{ size: 10, delay: 5000, type: 'DUCK' }],
+    tiles: [
+      ...range(0, 8).map((x) => [W, x, 0]),
+      ...range(0, 8).map((x) => [W, x, 7]),
+      [P, 0, 2],
+      [P, 1, 2],
+      [P, 2, 2],
+      [P, 4, 5],
+      [P, 6, 2],
+      [P, 2, 4],
+      [P, 5, 5],
+      [P, 7, 5],
+      [L, 3, 2],
+      [L, 4, 2],
+      [L, 5, 2],
+      [L, 3, 3],
+      [L, 4, 3],
+      [L, 5, 3],
+      [L, 3, 4],
+      [L, 4, 4],
+      [L, 5, 4],
+      [O, 7, 6],
+      [I, 0, 1],
+    ],
+  },
 }
 
 export const LEVELS = [
@@ -130,4 +156,5 @@ export const LEVELS = [
   LEVEL_TYPES.FOUR,
   LEVEL_TYPES.FIVE,
   LEVEL_TYPES.SIX,
+  LEVEL_TYPES.SEVEN,
 ]
