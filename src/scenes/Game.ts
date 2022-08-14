@@ -184,7 +184,7 @@ export default class extends Phaser.Scene {
     } else {
       if (enemyTypes.length === 0) enemyTypes = shuffle(Object.keys(ENEMIES))
       let type = enemyTypes.pop() as string
-      let size = Math.floor((10 + levelIndex / 1.5) * ENEMIES[type].waveSize)
+      let size = Math.floor((10 + levelIndex / 2) * ENEMIES[type].waveSize)
       let tiles = [] as number[][]
 
       const expectedDistance = Math.max(1, 11 - Math.floor(levelIndex / 4))

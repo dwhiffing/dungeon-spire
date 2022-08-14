@@ -59,7 +59,8 @@ export default class extends Phaser.Scene {
 const PAGES = [
   'Monsters are \nattacking your \ndungeon\nbuild mazes to\nstop them',
   'if you fail\nthey damage you\nand come back\nnext wave',
-  'you can play\n3 cards per wave\n\nblue tiles will\nadd armor',
+  'you can play\n3 cards per wave\n\npress during\nfight for fast\n mode',
+  'blue tiles will\nadd armor so\nyou take less\ndamage each wave',
   'press space to\nrotate pieces\n\nlast as long\nas you can',
   'GAME BY\nDANIEL WHIFFING\n\nMUSIC BY\nPURPLE PLANET',
 ]

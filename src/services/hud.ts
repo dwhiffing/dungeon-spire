@@ -113,7 +113,7 @@ export default class HudService {
     const life = this.scene.data.values.armorCount
     bar.update(life, life)
     this.scene.add.existing(bar.container)
-    bar.container.setDepth(1)
+    bar.container.setDepth(7)
     bar.container.setPosition(0, 62)
     return bar
   }
@@ -123,7 +123,7 @@ export default class HudService {
     const life = this.scene.data.values.healthCount
     bar.update(life, life)
     this.scene.add.existing(bar.container)
-    bar.container.setDepth(1)
+    bar.container.setDepth(7)
     bar.container.setPosition(0, 63)
     return bar
   }
