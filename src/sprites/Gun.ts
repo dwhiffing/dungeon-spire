@@ -45,8 +45,8 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     if (!this.active) return
     // let sorter= (a, b) => b.health - a.health
     let sorter = (a, b) => b.progress - a.progress
-    if (this.stats.slow)
-      sorter = (a, b) => b.timeline?.timeScale || 0 - a.timeline?.timeScale || 0
+    // if (this.stats.slow)
+    //   sorter = (a, b) => b.timeline?.timeScale || 0 - a.timeline?.timeScale || 0
     const enemies = this.scene.enemies?.group
       .getMatching('active', true)
       .filter(
