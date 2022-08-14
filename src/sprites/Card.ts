@@ -5,6 +5,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
   graphics: Phaser.GameObjects.Graphics
   key: string
   index: number
+  isFocused: boolean
   labelText: Phaser.GameObjects.BitmapText
 
   constructor(scene: IGameScene, index: number) {
@@ -13,6 +14,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
     this.scene.add.existing(this)
     this.index = index
     this.key = ''
+    this.isFocused = false
     this.setStrokeStyle(1, 0x555555).setInteractive().setOrigin(0).setAlpha(0)
     this.graphics = this.scene.add.graphics()
     this.labelText = this.scene.add.bitmapText(0, 0, 'pixel-dan', '')
@@ -29,6 +31,9 @@ export class Card extends Phaser.GameObjects.Rectangle {
   }
 
   focus = () => {
+    if (this.isFocused) return
+    this.isFocused = true
+    this.scene.sound.play('menu3')
     this.setDepth(99)
     this.graphics.setDepth(99)
     this.labelText.setDepth(99)
@@ -37,6 +42,7 @@ export class Card extends Phaser.GameObjects.Rectangle {
   }
 
   unfocus = () => {
+    this.isFocused = false
     this.setStrokeStyle(1, 0x222222)
     this.setFillStyle(0x111111)
     this.setDepth(this.index + 10)

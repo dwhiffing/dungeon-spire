@@ -87,6 +87,7 @@ export default class MarkerService {
     ]).filter(([f]) => f > -1)
 
   rotate = () => {
+    this.scene.sound.play('menu1')
     if (!this.shape) return
     this.rotationIndex++
     this.rotationIndex = this.rotationIndex % this.shape.length

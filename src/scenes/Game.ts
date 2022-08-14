@@ -121,13 +121,14 @@ export default class extends Phaser.Scene {
       this.nextLevel()
     } else {
       this.data.inc('turnIndex')
-      this.data.set('mode', 'play')
+      this.time.delayedCall(1500, () => this.data.set('mode', 'play'))
     }
   }
 
   update() {}
 
   nextWave = () => {
+    this.sound.play('menu4')
     this.data.set('mode', 'fight')
     const value =
       this.level?.map.layers[0].data
@@ -135,7 +136,9 @@ export default class extends Phaser.Scene {
         .filter((i) => i.index === ARMOR_WALL_INDEX).length || 0
     this.data.values.armorCount = value
     this.hud?.playerArmorBar.update(value, value)
-    this.enemies?.spawn(this.levelData!.waves[0])
+    this.time.delayedCall(1000, () => {
+      this.enemies?.spawn(this.levelData!.waves[0])
+    })
   }
 
   nextLevel() {
@@ -157,6 +160,7 @@ export default class extends Phaser.Scene {
     this.level
       ?.placeTiles(this.marker?.getTileData(x, y))
       .then(() => {
+        this.sound.play('place', { volume: 0.5 })
         if (this.marker?.card?.key.match(/GUN/)) {
           this.guns?.createGun(x * 8, y * 8, this.marker?.card.key)
         }

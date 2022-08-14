@@ -81,6 +81,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   damage(amount: number) {
+    this.scene.sound.play('enemy-hit', { volume: 0.5 })
     this.health -= amount
     this.healthBar.update(this.health)
     if (this.health <= 0) this.kill()
@@ -89,6 +90,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   spawn(x: number, y: number, type: string, path: Path) {
     this.setActive(true).setVisible(true).setOrigin(0, 0)
     this.body.reset(x, y)
+    this.scene.sound.play('slime-spawn', { rate: 4, volume: 0.4 })
     if (this.health === 0) {
       const data = ENEMIES[type]
       this.health = data.health
@@ -112,12 +114,15 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   kill = () => {
+    this.scene.sound.play('slime-dead', { volume: 0.5 })
     this._kill()
     this.health = 0
     this.scene.events.emit('enemy-killed')
   }
 
   win = () => {
+    this.scene.sound.play('enemy-won', { volume: 0.5 })
+    this.scene.cameras.main.shake(200, 0.03)
     this._kill()
     this.scene.events.emit('enemy-won', this)
   }

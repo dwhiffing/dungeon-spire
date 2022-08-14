@@ -13,6 +13,16 @@ export default class extends Phaser.Scene {
       progress.fillRect(0, 0, +width * value, +height)
     })
 
+    this.load.audio('menu1', 'assets/audio/menu1.wav')
+    this.load.audio('menu2', 'assets/audio/menu2.wav')
+    this.load.audio('menu3', 'assets/audio/menu3.wav')
+    this.load.audio('menu4', 'assets/audio/menu4.wav')
+    this.load.audio('menu5', 'assets/audio/menu5.wav')
+    this.load.audio('place', 'assets/audio/place.wav')
+    this.load.audio('slime-spawn', 'assets/audio/slime-spawn.wav')
+    this.load.audio('slime-dead', 'assets/audio/slime-dead.wav')
+    this.load.audio('enemy-hit', 'assets/audio/enemy-hit.wav')
+    this.load.audio('enemy-won', 'assets/audio/enemy-won.wav')
     this.load.image('title', 'assets/images/dungeon-spire.png')
     this.load.spritesheet('tilemap', 'assets/images/tilemap.png', {
       frameWidth: 8,

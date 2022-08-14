@@ -45,13 +45,13 @@ export default class HudService {
         this.backdrop.setAlpha(0.01)
       })
     this.scene.input.on('pointermove', (e) => {
-      const cards = this.cards.filter((c) => c.alpha === 1)
-      cards.forEach((c) => c.unfocus())
       if (e.y < 36) return
+      const cards = this.cards.filter((c, i) => c.alpha === 1)
       let width = 58
       if (cards.length < 3) width = 35
       const index = Math.floor(((e.x - 3) / width) * cards.length)
       cards[index]?.focus()
+      cards.filter((c) => c !== cards[index]).forEach((c) => c.unfocus())
     })
 
     this.playButton = this.scene.add
@@ -232,6 +232,8 @@ export default class HudService {
       const index = this.scene.data.get('levelIndex') - 1
       this.scene.data.set('mode', index % 5 === 0 ? 'remove' : 'play')
     } else if (mode === 'play') {
+      this.scene.sound.play('menu2')
+
       this.activeCard = card
       this.scene.events.emit('card-play', card)
       this.hideCards()
