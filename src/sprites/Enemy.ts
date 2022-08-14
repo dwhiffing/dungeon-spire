@@ -6,6 +6,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline
   slowTween?: Phaser.Tweens.Tween
   tintTween?: Phaser.Tweens.Tween
+  emitter?: Phaser.GameObjects.Particles.ParticleEmitter
   health: number
   maxHealth: number
   speed: number
@@ -26,6 +27,15 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       .setOffset(3, 3)
       .setDepth(8)
       .setPipeline('Light2D')
+
+    this.emitter = this.scene.particles
+      ?.createEmitter({
+        speed: { min: -20, max: 20 },
+        angle: { min: 0, max: 360 },
+        alpha: { start: 1, end: 0 },
+        lifespan: { max: 700, min: 200 },
+      })
+      .stop()
 
     this.health = 0
     this.maxHealth = 0
@@ -54,7 +64,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     const path = this.scene.level?.path
     const lava = this.scene.level?.lavaTiles || []
     if (lava.some((t) => t.x === coord.x && t.y === coord.y) && !this.flying) {
-      this.damage(1)
+      this.damage(1, true)
     }
 
     const index =
@@ -95,12 +105,21 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  damage(amount: number) {
+  damage(amount: number, isLava: boolean = false) {
     this.tweenTint('#ff0000', '#ffffff', 500)
-    this.scene.sound.play('enemy-hit', { volume: 0.5 })
+
     this.health -= amount
     this.healthBar.update(this.health)
-    if (this.health <= 0) this.kill()
+    if (this.health <= 0) {
+      this.scene.sound.play('slime-dead', { volume: 0.5 })
+      this.emitter?.setTint(0xff0000)
+      this.emitter?.explode(25, this.x + 4, this.y + 4)
+      this.kill()
+    } else {
+      this.scene.sound.play('enemy-hit', { volume: 0.5 })
+      this.emitter?.setTint(isLava ? 0xffff00 : 0xa6bfb3)
+      this.emitter?.explode(5, this.x + 4, this.y + 4)
+    }
   }
 
   spawn(x: number, y: number, type: string, path: Path) {
@@ -130,7 +149,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   kill = () => {
-    this.scene.sound.play('slime-dead', { volume: 0.5 })
     this._kill()
     this.health = 0
     this.scene.events.emit('enemy-killed')

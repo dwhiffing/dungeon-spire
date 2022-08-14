@@ -24,6 +24,7 @@ export interface IGameScene extends Phaser.Scene {
   enemies?: EnemyService
   marker?: MarkerService
   guns?: GunService
+  particles?: Phaser.GameObjects.Particles.ParticleEmitterManager
   hud?: HudService
   levelData?: LevelData
   inputService?: InputService

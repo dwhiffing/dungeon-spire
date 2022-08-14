@@ -15,6 +15,7 @@ export default class extends Phaser.Scene {
 
     this.load.audio('menu-music', 'assets/audio/menu-music.mp3')
     this.load.audio('game-music-0', 'assets/audio/game-music-0.mp3')
+    this.load.image('particle', 'assets/images/spark.png')
     // this.load.audio('game-music-1', 'assets/audio/game-music-1.mp3')
     this.load.audio('menu1', 'assets/audio/menu1.wav')
     this.load.audio('menu2', 'assets/audio/menu2.wav')

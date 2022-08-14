@@ -23,6 +23,7 @@ export default class extends Phaser.Scene {
   levelData?: LevelData
   level?: LevelService
   enemies?: EnemyService
+  particles?: Phaser.GameObjects.Particles.ParticleEmitterManager
   marker?: MarkerService
   guns?: GunService
   hud?: HudService
@@ -40,6 +41,7 @@ export default class extends Phaser.Scene {
 
     this.sound.stopAll()
     this.sound.play('game-music-0', { loop: true, volume: 0.5 })
+    this.particles = this.add.particles('particle').setDepth(3)
 
     this.cameras.main.setBackgroundColor(0x2f2820)
     this.lights.enable()
