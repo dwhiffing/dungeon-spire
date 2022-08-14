@@ -126,7 +126,7 @@ export default class LevelService {
 
   updatePath = (path) => {
     this.pathGraphics.clear()
-    this.pathGraphics.lineStyle(1, 0xbba862).setAlpha(0.5)
+    this.pathGraphics.lineStyle(1, 0xd6c06e).setAlpha(0.5)
     if (!path) return
     // @ts-ignore
     this.path = path
@@ -138,7 +138,7 @@ export default class LevelService {
 
   updatePathGhost(path) {
     this.pathGraphicsGhost.clear()
-    this.pathGraphicsGhost.lineStyle(1, 0xbba862)
+    this.pathGraphicsGhost.lineStyle(1, 0xd6c06e)
     if (!path) return
     path.forEach((item) =>
       this.pathGraphicsGhost.lineTo(item.x * 8 + 4, item.y * 8 + 4),
