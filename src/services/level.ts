@@ -75,6 +75,7 @@ export default class LevelService {
   startLevel = (levelData: LevelData) => {
     this.clearMap()
     levelData.tiles.forEach(([frame, x, y]) => this.map.putTileAt(frame, x, y))
+    this.map.forEachTile((t) => (t.tint = 0xffffff))
     this.updateGrid(this.getMapData())
     this.findPath().then(this.updatePath)
     this.lavaTiles = this.map.layers[0].data
@@ -147,7 +148,7 @@ export default class LevelService {
     this.pathGraphicsGhost.strokePath()
   }
 
-  placeTile = (i: number, x: number, y: number) => {
+  placeTile = (i: number, x: number, y: number, tint?) => {
     const tile = this.map.getTileAt(x, y)
     if (tile?.index === i) i = -1
     // if placing entrance/exit, remove existing instance
@@ -158,6 +159,7 @@ export default class LevelService {
         .forEach((t) => this.map.putTileAt(-1, t.x, t.y))
     }
     this.map.putTileAt(i, x, y)
+    if (this.groundLayer && tint) this.groundLayer.layer.data[y][x].tint = tint
   }
 
   canPlaceTiles = (tiles: number[][]) =>
@@ -195,10 +197,10 @@ export default class LevelService {
       })
     })
 
-  placeTiles = async (tiles: number[][]) => {
+  placeTiles = async (tiles: number[][], tint?: any) => {
     const canPlace = await this.canPlaceTiles(tiles)
     if (!canPlace) throw new Error()
-    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y))
+    tiles.forEach(([f, x, y]) => this.placeTile(indexToFrame(f), x, y, tint))
     this.updateGrid(this.getMapData())
     this.findPath().then(this.updatePath)
   }

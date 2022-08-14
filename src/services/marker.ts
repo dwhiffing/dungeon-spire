@@ -106,7 +106,12 @@ export default class MarkerService {
     markers.forEach((wallMarker, i) => {
       let frame = shape[this.rotationIndex][i] || 1
       wallMarker.setFrame(indexToFrame(frame))
-      wallMarker.setTint(this.isValid ? 0xffffff : 0xff0000)
+      let gunStats
+      if (this.card) gunStats = GUN_STATS[this.card.key]
+
+      wallMarker.setTint(
+        this.isValid ? gunStats?.baseTint || 0xffffff : 0xff0000,
+      )
       wallMarker.setAlpha(this.isValid ? 1 : 1)
     })
   }

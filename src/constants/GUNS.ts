@@ -8,6 +8,8 @@ export const GUN_STATS = {
     accuracy: 0,
     scale: 2,
     pierce: 1,
+    baseTint: 0x766962,
+    barrelTint: 0x766962,
     tint: 0xff0000,
   },
   GUN_SLOW: {
@@ -20,6 +22,8 @@ export const GUN_STATS = {
     accuracy: 0,
     pierce: 1,
     scale: 2,
-    tint: 0x0000ff,
+    baseTint: 0x3344cc,
+    barrelTint: 0x99aabb,
+    tint: 0x2b565f,
   },
 }

@@ -3,6 +3,7 @@ import EnemyService from '../services/enemy'
 import MarkerService from '../services/marker'
 import GunService from '../services/gun'
 import InputService from '../services/input'
+import { GUN_STATS } from '../constants'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
@@ -182,16 +183,16 @@ export default class extends Phaser.Scene {
   placeTile = (event) => {
     if (!this.marker?.shape || !this.marker.isValid) return
     this.data.values.energyCount--
-
+    const cardKey = this.marker?.card?.key || ''
+    const isGun = cardKey.match(/GUN/)
     const x = Math.floor(event.downX / 8)
     const y = Math.floor(event.downY / 8)
+    const tint = isGun ? GUN_STATS[cardKey].baseTint : undefined
     this.level
-      ?.placeTiles(this.marker?.getTileData(x, y))
+      ?.placeTiles(this.marker?.getTileData(x, y), tint)
       .then(() => {
         this.sound.play('place', { volume: 0.5 })
-        if (this.marker?.card?.key.match(/GUN/)) {
-          this.guns?.createGun(x * 8, y * 8, this.marker?.card.key)
-        }
+        if (isGun) this.guns?.createGun(x * 8, y * 8, cardKey)
         this.enemies?.repath(this.level?.findExit())
         this.marker?.clearShape()
         this.hud?.useCard()
