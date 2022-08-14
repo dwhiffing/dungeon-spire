@@ -39,6 +39,9 @@ export default class extends Phaser.Scene {
     this.data.set('mode', '')
 
     this.cameras.main.setBackgroundColor(0x2f2820)
+    this.lights.enable()
+    this.lights.setAmbientColor(0xbbbbbb)
+
     this.data.set('healthCount', STARTING_MAX_LIFE)
     this.level = new LevelService(this)
     this.enemies = new EnemyService(this)

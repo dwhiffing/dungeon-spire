@@ -17,11 +17,22 @@ export default class LevelService {
   lavaTiles: { x: number; y: number }[]
   map: Phaser.Tilemaps.Tilemap
   data: number[][]
+  lavaSprites: any[]
+  lights: any[]
   groundLayer?: Phaser.Tilemaps.TilemapLayer
   star: any
 
   constructor(scene: IGameScene) {
     this.scene = scene
+
+    this.map = this.createMap()
+    this.data = this.getMapData()
+    this.path = []
+    this.lavaTiles = []
+    this.star = new easystarjs.js()
+    this.star.setAcceptableTiles([-1, LAVA_INDEX, EXIT_INDEX, ENTRANCE_INDEX])
+    this.lavaSprites = []
+    this.lights = []
     this.pathGraphicsGhost = this.scene.add.graphics().setDepth(1)
     this.pathGraphics = this.scene.add.graphics().setDepth(1)
     this.scene.tweens.add({
@@ -31,12 +42,34 @@ export default class LevelService {
       repeat: -1,
     })
 
-    this.map = this.createMap()
-    this.data = this.getMapData()
-    this.path = []
-    this.lavaTiles = []
-    this.star = new easystarjs.js()
-    this.star.setAcceptableTiles([-1, LAVA_INDEX, EXIT_INDEX, ENTRANCE_INDEX])
+    for (let i = 0; i < 10; i++) {
+      const sprite = this.scene.add
+        .sprite(-8, -8, 'tilemap', 21)
+        .setPipeline('Light2D')
+        .setOrigin(0)
+        .setDepth(0)
+      this.lavaSprites.push(sprite)
+      this.scene.tweens.add({
+        targets: [sprite],
+        alpha: 0,
+        yoyo: true,
+        duration: 1400,
+        repeat: -1,
+      })
+      const light = this.scene.lights
+        .addLight(-8, -8, 32)
+        .setColor(0x872f01)
+        .setIntensity(2)
+      this.lights.push(light)
+      this.scene.tweens.add({
+        targets: [light],
+        intensity: 1.2,
+        ease: Phaser.Math.Easing.Quadratic.InOut,
+        yoyo: true,
+        repeat: -1,
+        duration: 1400,
+      })
+    }
   }
 
   startLevel = (levelData: LevelData) => {
@@ -48,17 +81,46 @@ export default class LevelService {
       .flat()
       .filter((t) => t.index === 20)
       .map((t) => ({ x: t.x, y: t.y }))
+
+    this.drawLavaEffects()
+  }
+
+  drawLavaEffects = () => {
+    this.lights.forEach((l) => {
+      l.x = -64
+      l.y = -64
+    })
+    this.lavaSprites.forEach((l) => {
+      l.x = -64
+      l.y = -64
+    })
+    this.lavaTiles.forEach((lt, i) => {
+      const sprite = this.lavaSprites[i]
+      const light = this.lights[i]
+      sprite.x = lt.x * 8
+      sprite.y = lt.y * 8
+      light.x = lt.x * 8 + 4
+      light.y = lt.y * 8 + 4
+    })
   }
 
   createMap = () => {
     const map = this.scene.make.tilemap(MAP_CONFIG)
+    const map2 = this.scene.make.tilemap(MAP_CONFIG)
     const width = map.widthInPixels
     const height = map.heightInPixels
     this.scene.physics.world.bounds.width = width
     this.scene.physics.world.bounds.height = height
     this.scene.cameras.main.setBounds(0, 0, width, height)
     const groundTiles = map.addTilesetImage('tilemap')
-    this.groundLayer = map.createBlankLayer('World', groundTiles)
+    map2
+      .createBlankLayer('World', groundTiles)
+      .fill(24, 0, 0, 64, 64)
+      .setPipeline('Light2D')
+    this.groundLayer = map
+      .createBlankLayer('World', groundTiles)
+      .setDepth(0)
+      .setPipeline('Light2D')
     return map
   }
 

@@ -5,7 +5,7 @@ import { IGameScene, Path } from '~/types'
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline
   slowTween?: Phaser.Tweens.Tween
-  slowTween2?: Phaser.Tweens.Tween
+  tintTween?: Phaser.Tweens.Tween
   health: number
   maxHealth: number
   speed: number
@@ -21,7 +21,12 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene = scene
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
-    this.setSize(3, 3).setActive(false).setOffset(3, 3).setDepth(8)
+    this.setSize(3, 3)
+      .setActive(false)
+      .setOffset(3, 3)
+      .setDepth(8)
+      .setPipeline('Light2D')
+
     this.health = 0
     this.maxHealth = 0
     this.flying = false
@@ -62,25 +67,36 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   getSlowed() {
     if (!this.timeline) return
     this.slowTween?.stop()
-    this.slowTween2?.stop()
 
     this.timeline.timeScale = 0.1
-    this.setTint(0x0000ff)
     this.slowTween = this.scene.tweens.add({
       targets: [this.timeline],
       ease: Phaser.Math.Easing.Quadratic.Out,
       timeScale: 1,
       duration: 4000,
     })
-    this.slowTween2 = this.scene.tweens.addCounter({
+
+    this.tweenTint('#0000ff', '#ffffff', 4000)
+  }
+
+  tweenTint = (fromColor: string, toColor: string, duration: number) => {
+    this.tintTween?.stop()
+    this.tintTween = this.scene.tweens.addCounter({
       from: 0,
       to: 100,
-      onUpdate: (tween) => this.setTint(getTintColor(tween)),
-      duration: 4000,
+      onUpdate: (tween) => {
+        const _fromColor = Phaser.Display.Color.HexStringToColor(fromColor)
+        const _toColor = Phaser.Display.Color.HexStringToColor(toColor)
+        const { ColorWithColor } = Phaser.Display.Color.Interpolate
+        const tint = ColorWithColor(_fromColor, _toColor, 100, tween.getValue())
+        this.setTint(Phaser.Display.Color.ObjectToColor(tint).color)
+      },
+      duration,
     })
   }
 
   damage(amount: number) {
+    this.tweenTint('#ff0000', '#ffffff', 500)
     this.scene.sound.play('enemy-hit', { volume: 0.5 })
     this.health -= amount
     this.healthBar.update(this.health)
@@ -151,14 +167,4 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.timeline.play()
     })
   }
-}
-
-function getTintColor(tween: Phaser.Tweens.Tween) {
-  var tint = Phaser.Display.Color.Interpolate.ColorWithColor(
-    new Phaser.Display.Color(0, 0, 255),
-    new Phaser.Display.Color(255, 255, 255),
-    100,
-    tween.getValue(),
-  )
-  return Phaser.Display.Color.ObjectToColor(tint).color
 }

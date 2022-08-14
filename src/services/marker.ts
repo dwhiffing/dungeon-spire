@@ -17,10 +17,11 @@ export default class MarkerService {
 
   constructor(scene: IGameScene) {
     this.scene = scene
-    this.group = this.scene.add.container()
+    this.group = this.scene.add.container().setDepth(9).setPipeline('Light2D')
+
     this.shape = null
     this.rangeCircle = this.scene.add.circle(0, 0, 10)
-    this.rangeCircle.setStrokeStyle(1, 0xffffff, 1).setDepth(9)
+    this.rangeCircle.setStrokeStyle(1, 0xffffff, 1)
     this.rangeCircle.setAlpha(0)
     this.card = null
     this.tileX = 0
@@ -106,6 +107,7 @@ export default class MarkerService {
       let frame = shape[this.rotationIndex][i] || 1
       wallMarker.setFrame(indexToFrame(frame))
       wallMarker.setTint(this.isValid ? 0xffffff : 0xff0000)
+      wallMarker.setAlpha(this.isValid ? 1 : 1)
     })
   }
 }
