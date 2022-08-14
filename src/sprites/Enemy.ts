@@ -27,7 +27,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.healthBar = new HealthBar(scene)
     this.healthBar.container.setDepth(8)
     this.scene.time.addEvent({
-      delay: 100,
+      delay: 500,
       repeat: -1,
       callback: this.updateProgress,
     })
@@ -36,7 +36,9 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   updateProgress = () => {
-    const coord = { x: Math.floor(this.x / 8), y: Math.floor(this.y / 8) }
+    if (!this.active) return
+
+    const coord = { x: Math.round(this.x / 8), y: Math.round(this.y / 8) }
     if (coord.x === this.coord?.x && coord.y === this.coord?.y) return
 
     this.coord = coord
