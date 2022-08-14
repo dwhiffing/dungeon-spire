@@ -64,7 +64,7 @@ export default class LevelService {
 
   updatePath = (path) => {
     this.pathGraphics.clear()
-    this.pathGraphics.lineStyle(1, 0x5500aa)
+    this.pathGraphics.lineStyle(1, 0xbba862).setAlpha(0.5)
     if (!path) return
     // @ts-ignore
     this.path = path
@@ -76,7 +76,7 @@ export default class LevelService {
 
   updatePathGhost(path) {
     this.pathGraphicsGhost.clear()
-    this.pathGraphicsGhost.lineStyle(1, 0x5500aa)
+    this.pathGraphicsGhost.lineStyle(1, 0xbba862)
     if (!path) return
     path.forEach((item) =>
       this.pathGraphicsGhost.lineTo(item.x * 8 + 4, item.y * 8 + 4),
@@ -185,5 +185,5 @@ export const indexToFrame = (frame: number) => {
   if (frame === 1) return PLAYER_WALL_INDEX
   if (frame === 3) return ARMOR_WALL_INDEX
   if (frame === 2) return GUN_INDEX
-  return 21
+  return 23
 }

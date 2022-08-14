@@ -1,4 +1,4 @@
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene } from '~/types'
 
 export class WallMarker extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: IGameScene, x: number, y: number) {

@@ -1,20 +1,20 @@
 {
-	"name": "phaser3-parcel-template",
+	"name": "dungeon-spire",
 	"version": "1.0.0",
-	"description": "A typescript template project for Phaser 3 using Parceljs",
+	"description": "A phaser 3 game made for LOWREZJAM 2022",
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
 		"build": "parcel build src/index.html --out-dir dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
 	},
-	"author": "supertommy",
+	"author": "dwhiffing",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ourcade/phaser3-parcel-template.git"
+		"url": "https://github.com/dwhiffing/dungeon-spire.git"
 	},
-	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
+	"homepage": "https://github.com/dwhiffing/dungeon-spire",
 	"devDependencies": {
 		"@parcel/packager-raw-url": "^2.7.0",
 		"@parcel/transformer-webmanifest": "^2.7.0",
