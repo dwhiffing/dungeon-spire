@@ -13,6 +13,7 @@ export default class extends Phaser.Scene {
       progress.fillRect(0, 0, +width * value, +height)
     })
 
+    this.load.image('title', 'assets/images/dungeon-spire.png')
     this.load.spritesheet('tilemap', 'assets/images/tilemap.png', {
       frameWidth: 8,
       frameHeight: 8,

@@ -11,6 +11,8 @@ export default class extends Phaser.Scene {
 
     this.input.keyboard.addKey('SPACE').addListener('down', start)
 
+    this.add.image(32, 20, 'title')
+
     this.add
       .image(width / 2 - 15, height - 10, 'tilemap', 56)
       .setInteractive()
@@ -20,7 +22,7 @@ export default class extends Phaser.Scene {
       .image(width / 2 + 15, height - 10, 'tilemap', 57)
       .setInteractive()
       .on('pointerdown', () => this.scene.start('Credits'))
-    start()
+    // start()
   }
 
   update() {}
