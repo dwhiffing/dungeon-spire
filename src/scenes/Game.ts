@@ -194,6 +194,7 @@ export default class extends Phaser.Scene {
   }
 
   rotateTile = () => {
+    if (!this.marker?.shape) return
     this.marker?.rotate()
   }
 }
