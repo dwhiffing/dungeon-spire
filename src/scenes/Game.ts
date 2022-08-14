@@ -85,6 +85,7 @@ export default class extends Phaser.Scene {
     }
 
     if (incomingDamage > 0) {
+      this.cameras.main.shake(200, 0.03)
       this.data.values.healthCount -= incomingDamage
     }
     if (this.data.values.healthCount < 1 && !this.isGameOver) {
