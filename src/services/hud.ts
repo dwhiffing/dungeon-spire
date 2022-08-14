@@ -37,10 +37,12 @@ export default class HudService {
       .setInteractive()
       .setDepth(9)
       .on('pointerup', () => {
+        if (this.scene.data.get('mode') !== 'play') return
         this.showCards()
         this.backdrop.setAlpha(0.7)
       })
       .on('pointerdown', (e) => {
+        if (this.scene.data.get('mode') !== 'play') return
         this.hideCards()
         this.backdrop.setAlpha(0.01)
       })

@@ -1,3 +1,4 @@
+import { TIME_SPEED_FACTOR } from '../constants'
 import { IGameScene } from '~/types'
 
 export default class InputService {
@@ -15,6 +16,12 @@ export default class InputService {
     this.scene = scene
     this.direction = {}
     const noop = () => {}
+    const setTimeSpeed = (fast) => {
+      this.scene.tweens.timeScale = fast ? TIME_SPEED_FACTOR : 1
+      this.scene.time.timeScale = fast ? TIME_SPEED_FACTOR : 1
+      // this.scene.sound.setRate(1.5)
+      this.scene.physics.world.timeScale = fast ? 1 / TIME_SPEED_FACTOR : 1
+    }
     this.events = {
       leftPressed: () => (this.direction.left = true),
       leftReleased: () => (this.direction.left = false),
@@ -30,25 +37,26 @@ export default class InputService {
       xPressed: () => {},
       cPressed: () => {},
       mPressed: () => (this.scene.sound.mute = !this.scene.sound.mute),
-      spacePressed: () => {
-        this.scene.tweens.timeScale = 4
-        this.scene.time.timeScale = 4
-        // this.scene.sound.setRate(1.5)
-        this.scene.physics.world.timeScale = 1 / 4
-      },
-      spaceReleased: () => {
-        this.scene.tweens.timeScale = 1
-        this.scene.time.timeScale = 1
-        // this.scene.sound.setRate(1)
-        this.scene.physics.world.timeScale = 1
-      },
+      spacePressed: () => setTimeSpeed(true),
+      spaceReleased: () => setTimeSpeed(false),
     }
 
     // @ts-ignore
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // this.addTouchControls()
     } else {
-      this.scene.input.on('pointerdown', this.scene.placeTile)
+      this.scene.input.on('pointerdown', (event) => {
+        if (this.scene.data.get('mode') === 'fight') {
+          setTimeSpeed(true)
+        } else {
+          this.scene.placeTile(event)
+        }
+      })
+      this.scene.input.on('pointerup', (event) => {
+        if (this.scene.data.get('mode') === 'fight') {
+          setTimeSpeed(false)
+        }
+      })
       this.cursors = this.scene.input.keyboard.createCursorKeys()
       this.spaceKey = this.scene.input.keyboard.addKey('SPACE')
       this.zKey = this.scene.input.keyboard.addKey('Z')

@@ -6,6 +6,7 @@ export * from './LEVELS'
 
 export const CARD_WIDTH = 18
 export const CARD_HEIGHT = 25
+export const TIME_SPEED_FACTOR = 10
 
 export const STARTING_MAX_LIFE = 15
 export const DEFAULT_ENERGY_COUNT = 3
