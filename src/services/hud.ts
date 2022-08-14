@@ -281,7 +281,7 @@ export default class HudService {
     }
     if (value.match(/remove|add|play/)) {
       this.discardHand()
-      this.shuffleDeck()
+      if (value.match(/remove/)) this.shuffleDeck()
       this.drawCards()
     }
   }
