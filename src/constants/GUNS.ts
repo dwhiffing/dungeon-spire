@@ -9,14 +9,6 @@ export const GUN_STATS = {
     scale: 1,
     tint: 0xff0000,
   },
-  // BUBBLES: {
-  //   key: 'BUBBLES',
-  //   range: 10,
-  //   damage: 0.1,
-  //   fireRate: 50,
-  //   bulletSpeed: 10,
-  //   accuracy: 10,
-  // },
   GUN2: {
     key: 'GUN2',
     damage: 2,
