@@ -128,7 +128,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.sound.play('slime-spawn', { rate: 4, volume: 0.4 })
     if (this.health === 0) {
       const data = ENEMIES[type]
-      this.health = data.health
+      const levelIndex = this.scene.data.get('levelIndex')
+      this.health = Math.floor(data.health * Math.max(1, levelIndex / 12))
       this.maxHealth = data.health
       this.speed = data.speed
       this.flying = data.flying || false
@@ -156,7 +157,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   win = () => {
     this.scene.sound.play('enemy-won', { volume: 0.5 })
-    this.scene.cameras.main.shake(200, 0.03)
     this._kill()
     this.scene.events.emit('enemy-won', this)
   }
