@@ -10,7 +10,7 @@ export const GUN_STATS = {
     damage: 1,
     range: 20,
     bulletSpeed: 40,
-    fireRate: 1000,
+    fireRate: 2000,
     accuracy: 0,
     scale: 1,
     tint: 0xff0000,

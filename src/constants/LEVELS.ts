@@ -30,12 +30,16 @@ const LEVEL_TYPES = {
       [P, 2, 4],
       [P, 4, 3],
       [P, 4, 4],
+      [L, 3, 2],
+      [L, 3, 3],
+      [L, 3, 4],
+      [L, 3, 5],
       [O, 5, 5],
       [I, 1, 2],
     ],
   },
   TWO: {
-    waves: [{ size: 8, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),

@@ -1,7 +1,6 @@
 export const BASIC_DECK = [
   { key: 'DOT', label: 'TILE' },
   { key: 'DOT', label: 'TILE' },
-  { key: 'GUN1', label: 'GUN' },
 ]
 
 export const SHAPE_CARDS = [
@@ -18,17 +17,13 @@ export const GUN_CARDS = [
 ]
 
 export const CARD_TIERS = {
-  ONE: [{ key: 'CORNER', label: 'TILE' }],
+  ONE: [{ key: 'GUN1', label: 'GUN' }],
   TWO: [{ key: 'LINE', label: 'TILE' }],
-  THREE: [
+  THREE: [{ key: 'CORNER', label: 'TILE' }],
+  FOUR: [
     { key: 'LINE', label: 'TILE' },
     { key: 'SMALL_LINE', label: 'TILE' },
-    { key: 'CORNER', label: 'TILE' },
+    { key: 'DOT', label: 'TILE' },
   ],
-  FOUR: [{ key: 'GUN1', label: 'GUN' }],
-  FIVE: [
-    { key: 'LINE', label: 'TILE' },
-    { key: 'SMALL_LINE', label: 'TILE' },
-    { key: 'GUN1', label: 'GUN' },
-  ],
+  FIVE: [{ key: 'GUN2', label: 'GUN' }],
 }
