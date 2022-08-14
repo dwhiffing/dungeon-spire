@@ -7,14 +7,18 @@ import { GUN_STATS } from '../constants'
 import HudService from '../services/hud'
 import { Enemy } from '~/sprites/Enemy'
 import { Bullet } from '~/sprites/Bullet'
+import { shuffle } from 'lodash'
 import {
   ARMOR_WALL_INDEX,
   DEFAULT_ENERGY_COUNT,
   LEVELS,
   STARTING_LEVEL,
   STARTING_MAX_LIFE,
+  ENEMIES,
 } from '../constants'
 import { LevelData } from '~/types'
+
+let enemyTypes = [] as string[]
 
 export default class extends Phaser.Scene {
   constructor() {
@@ -48,7 +52,7 @@ export default class extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor(0x2f2820)
     this.lights.enable()
-    this.lights.setAmbientColor(0x777777)
+    this.lights.setAmbientColor(0x888888)
 
     this.data.set('healthCount', STARTING_MAX_LIFE)
     this.level = new LevelService(this)
@@ -173,11 +177,60 @@ export default class extends Phaser.Scene {
   nextLevel() {
     this.data.values.levelIndex++
     this.data.set('turnIndex', 0)
-    this.levelData = LEVELS[(this.data.values.levelIndex - 1) % LEVELS.length]
+    const levelIndex = this.data.values.levelIndex - 1
+    if (levelIndex < 7) {
+      this.levelData = LEVELS[levelIndex]
+    } else {
+      if (enemyTypes.length === 0) enemyTypes = shuffle(Object.keys(ENEMIES))
+      let type = enemyTypes.pop() as string
+      let size = Math.floor((10 + levelIndex / 1.5) * ENEMIES[type].waveSize)
+      let tiles = [] as number[][]
+
+      const expectedDistance = Math.max(1, 11 - Math.floor(levelIndex / 4))
+      let entranceCoords
+      let exitCoords
+      do {
+        entranceCoords = this.getRandomFreeCoord(tiles)
+        exitCoords = this.getRandomFreeCoord(tiles)
+      } while (
+        Math.abs(
+          Phaser.Math.Distance.Between(
+            entranceCoords[0],
+            entranceCoords[1],
+            exitCoords[0],
+            exitCoords[1],
+          ) - expectedDistance,
+        ) > 1
+      )
+      tiles.push([33, ...entranceCoords])
+      tiles.push([32, ...exitCoords])
+
+      // TODO: figure out how wall generation works
+      // tiles.push([18, ...this.getRandomFreeCoord(tiles)])
+      // on early levels, generates 2 lines of size 4
+      // then 2 lines of size 3
+      // then 2 lines of size 2
+      // then 2 lines of size 1
+
+      const numLavaTiles = Math.max(2, 9 - Math.floor(levelIndex / 5))
+      for (let l = 0; l < numLavaTiles; l++)
+        tiles.push([20, ...this.getRandomFreeCoord(tiles)])
+      this.levelData = { waves: [{ size, type }], tiles }
+    }
+
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     this.guns?.clear()
     this.hud?.shuffleDeck()
     this.level?.startLevel(this.levelData)
+  }
+
+  getRandomFreeCoord = (tiles: number[][]) => {
+    let x, y
+    do {
+      x = Phaser.Math.RND.between(0, 7)
+      y = Phaser.Math.RND.between(0, 7)
+    } while (tiles.some((t) => t[1] === x && t[2] === y))
+    return [x, y]
   }
 
   placeTile = (event) => {

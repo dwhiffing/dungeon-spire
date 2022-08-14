@@ -42,7 +42,7 @@ export default class LevelService {
       repeat: -1,
     })
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       const sprite = this.scene.add
         .sprite(-8, -8, 'tilemap', 21)
         .setPipeline('Light2D')

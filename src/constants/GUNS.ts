@@ -18,7 +18,7 @@ export const GUN_STATS = {
     range: 20,
     fireRate: 1300,
     slow: true,
-    bulletSpeed: 80,
+    bulletSpeed: 110,
     accuracy: 0,
     pierce: 1,
     scale: 2,

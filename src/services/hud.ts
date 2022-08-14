@@ -150,6 +150,8 @@ export default class HudService {
       return
     }
 
+    this.scene.inputService?.setTimeSpeed(false)
+
     const randomGun = shuffle(this.deck.filter((c) => c.key.match(/GUN/)))[0]
     if (
       this.scene.data.values.turnIndex === 0 &&
