@@ -59,7 +59,7 @@ export default class LevelService {
       const light = this.scene.lights
         .addLight(-8, -8, 32)
         .setColor(0x872f01)
-        .setIntensity(2)
+        .setIntensity(0)
       this.lights.push(light)
       this.scene.tweens.add({
         targets: [light],
@@ -101,6 +101,7 @@ export default class LevelService {
       sprite.y = lt.y * 8
       light.x = lt.x * 8 + 4
       light.y = lt.y * 8 + 4
+      light.setIntensity(2.5)
     })
   }
 
