@@ -116,7 +116,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.emitter?.explode(25, this.x + 4, this.y + 4)
       this.kill()
     } else {
-      this.scene.sound.play('enemy-hit', { volume: 0.5 })
+      this.scene.sound.play('enemy-hit', { volume: 0.8 })
       this.emitter?.setTint(isLava ? 0xffff00 : 0xa6bfb3)
       this.emitter?.explode(5, this.x + 4, this.y + 4)
     }

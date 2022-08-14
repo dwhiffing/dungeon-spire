@@ -26,6 +26,7 @@ export default class extends Phaser.Scene {
   particles?: Phaser.GameObjects.Particles.ParticleEmitterManager
   marker?: MarkerService
   guns?: GunService
+  isGameOver?: boolean
   hud?: HudService
   inputService?: InputService
 
@@ -57,6 +58,7 @@ export default class extends Phaser.Scene {
     this.events.on('card-play', this.cardClick)
     this.events.on('enemy-killed', this.checkEnemies)
     this.events.on('enemy-won', this.enemyWon)
+    this.isGameOver = false
 
     this.physics.add.overlap(
       this.enemies.group,
@@ -79,8 +81,10 @@ export default class extends Phaser.Scene {
     if (incomingDamage > 0) {
       this.data.values.healthCount -= incomingDamage
     }
-    if (this.data.values.healthCount < 1) {
-      this.gameover()
+    if (this.data.values.healthCount < 1 && !this.isGameOver) {
+      this.isGameOver = true
+      this.sound.play('game-over')
+      this.time.delayedCall(1500, this.gameover)
     } else {
       this.checkEnemies()
     }
@@ -125,6 +129,8 @@ export default class extends Phaser.Scene {
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     if (numIncoming === 0) {
       // TODO: show some kind of win animation
+      this.sound.play('success')
+      this.inputService?.setTimeSpeed(false)
       this.time.delayedCall(1500, () => {
         this.data.set('mode', 'add')
         this.nextLevel()

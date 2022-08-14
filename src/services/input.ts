@@ -16,12 +16,7 @@ export default class InputService {
     this.scene = scene
     this.direction = {}
     const noop = () => {}
-    const setTimeSpeed = (fast) => {
-      this.scene.tweens.timeScale = fast ? TIME_SPEED_FACTOR : 1
-      this.scene.time.timeScale = fast ? TIME_SPEED_FACTOR : 1
-      // this.scene.sound.setRate(1.5)
-      this.scene.physics.world.timeScale = fast ? 1 / TIME_SPEED_FACTOR : 1
-    }
+
     this.events = {
       leftPressed: () => (this.direction.left = true),
       leftReleased: () => (this.direction.left = false),
@@ -37,8 +32,8 @@ export default class InputService {
       xPressed: () => {},
       cPressed: () => {},
       mPressed: () => (this.scene.sound.mute = !this.scene.sound.mute),
-      spacePressed: () => setTimeSpeed(true),
-      spaceReleased: () => setTimeSpeed(false),
+      spacePressed: () => this.setTimeSpeed(true),
+      spaceReleased: () => this.setTimeSpeed(false),
     }
 
     // @ts-ignore
@@ -47,14 +42,14 @@ export default class InputService {
     } else {
       this.scene.input.on('pointerdown', (event) => {
         if (this.scene.data.get('mode') === 'fight') {
-          setTimeSpeed(true)
+          this.setTimeSpeed(true)
         } else {
           this.scene.placeTile(event)
         }
       })
       this.scene.input.on('pointerup', (event) => {
         if (this.scene.data.get('mode') === 'fight') {
-          setTimeSpeed(false)
+          this.setTimeSpeed(false)
         }
       })
       this.cursors = this.scene.input.keyboard.createCursorKeys()
@@ -94,6 +89,13 @@ export default class InputService {
     this.makeButton(X * 2.6, H, 214, 'right')
     this.makeButton(width - X, H, 217, 'jump')
     this.makeButton(width - X * 2, H, 218, 'shoot')
+  }
+
+  setTimeSpeed = (fast) => {
+    this.scene.tweens.timeScale = fast ? TIME_SPEED_FACTOR : 1
+    this.scene.time.timeScale = fast ? TIME_SPEED_FACTOR : 1
+    // this.scene.sound.setRate(1.5)
+    this.scene.physics.world.timeScale = fast ? 1 / TIME_SPEED_FACTOR : 1
   }
 
   makeButton = (x: number, y: number, key: number, type: string) => {
