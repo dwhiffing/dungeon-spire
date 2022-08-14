@@ -11,8 +11,8 @@ export const ENEMIES = {
   },
   BIG_SLIME: {
     damage: 1,
-    health: 32,
-    speed: 3000,
+    health: 15,
+    speed: 2000,
   },
   DUCK: {
     damage: 1,

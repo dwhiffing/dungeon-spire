@@ -62,19 +62,19 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.slowTween?.stop()
     this.slowTween2?.stop()
 
-    this.timeline.timeScale = 0
+    this.timeline.timeScale = 0.1
     this.setTint(0x0000ff)
     this.slowTween = this.scene.tweens.add({
       targets: [this.timeline],
       ease: Phaser.Math.Easing.Quadratic.Out,
       timeScale: 1,
-      duration: 5000,
+      duration: 4000,
     })
     this.slowTween2 = this.scene.tweens.addCounter({
       from: 0,
       to: 100,
       onUpdate: (tween) => this.setTint(getTintColor(tween)),
-      duration: 5000,
+      duration: 4000,
     })
   }
 

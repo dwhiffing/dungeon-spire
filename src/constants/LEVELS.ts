@@ -100,6 +100,10 @@ const LEVEL_TYPES = {
       [P, 1, 2],
       [P, 2, 2],
       [P, 3, 2],
+      [P, 4, 5],
+      [P, 5, 5],
+      [P, 6, 5],
+      [P, 7, 5],
       [I, 0, 1],
       [O, 7, 6],
     ],
@@ -109,10 +113,12 @@ const LEVEL_TYPES = {
     // ],
   },
   SIX: {
-    waves: [{ size: 8, delay: 1000, type: 'DEER' }],
+    waves: [{ size: 3, delay: 3000, type: 'BIG_SLIME' }],
     tiles: [
-      [O, 7, 7],
-      [I, 0, 0],
+      ...range(0, 8).map((x) => [W, x, 0]),
+      ...range(0, 8).map((x) => [W, x, 7]),
+      [O, 7, 6],
+      [I, 0, 1],
     ],
   },
 }

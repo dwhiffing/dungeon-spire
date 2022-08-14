@@ -20,8 +20,5 @@ export const CARD_TIERS = {
   TWO: [{ key: 'LINE', label: 'TILE' }],
   THREE: [{ key: 'CORNER', label: 'TILE' }],
   FOUR: [{ key: 'GUN_SLOW', label: 'GUN' }],
-  FIVE: [
-    { key: 'LINE', label: 'TILE' },
-    { key: 'GUN_BASIC', label: 'GUN' },
-  ],
+  FIVE: [{ key: 'ARMOR_2', label: 'TILE' }],
 }
