@@ -11,19 +11,17 @@ export const SHAPE_CARDS = [
 ]
 
 export const GUN_CARDS = [
-  { key: 'GUN1', label: 'GUN' },
-  // { key: 'GUN2', label: 'GUN' },
-  // { key: 'GUN3', label: 'GUN' },
+  { key: 'GUN_BASIC', label: 'GUN' },
+  { key: 'GUN_SLOW', label: 'GUN' },
 ]
 
 export const CARD_TIERS = {
-  ONE: [{ key: 'GUN1', label: 'GUN' }],
+  ONE: [{ key: 'GUN_BASIC', label: 'GUN' }],
   TWO: [{ key: 'LINE', label: 'TILE' }],
   THREE: [{ key: 'CORNER', label: 'TILE' }],
-  FOUR: [
+  FOUR: [{ key: 'GUN_SLOW', label: 'GUN' }],
+  FIVE: [
     { key: 'LINE', label: 'TILE' },
-    { key: 'SMALL_LINE', label: 'TILE' },
-    { key: 'DOT', label: 'TILE' },
+    { key: 'GUN_BASIC', label: 'GUN' },
   ],
-  FIVE: [{ key: 'GUN2', label: 'GUN' }],
 }

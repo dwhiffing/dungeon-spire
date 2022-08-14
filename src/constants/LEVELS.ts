@@ -92,10 +92,16 @@ const LEVEL_TYPES = {
     ],
   },
   FIVE: {
-    waves: [{ size: 12, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 4, delay: 4000, type: 'DEER' }],
     tiles: [
-      [O, 7, 7],
-      [I, 0, 0],
+      ...range(0, 8).map((x) => [W, x, 0]),
+      ...range(0, 8).map((x) => [W, x, 7]),
+      [P, 0, 2],
+      [P, 1, 2],
+      [P, 2, 2],
+      [P, 3, 2],
+      [I, 0, 1],
+      [O, 7, 6],
     ],
     // tiles: [
     //   [O, 2, 3],

@@ -32,6 +32,12 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     if (!this.active) return
     const bullet = this.scene.guns?.bulletGroup.getFirstDead(false)
 
+    // TODO: allow gun to change aiming style
+
+    // let sorter= (a, b) => b.health - a.health
+    let sorter = (a, b) => b.progress - a.progress
+    if (this.stats.slow)
+      sorter = (a, b) => b.timeline.timeScale - a.timeline.timeScale
     const enemies = this.scene.enemies?.group
       .getMatching('active', true)
       .map((e) => ({
@@ -39,7 +45,8 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
         dist: Phaser.Math.Distance.Between(e.x + 4, e.y + 4, this.x, this.y),
       }))
       .filter((e) => e.dist < this.stats.range)
-      .sort((a, b) => b.progress - a.progress)
+      .sort(sorter)
+
     const enemy = enemies?.[0]
     if (enemy) bullet?.shoot(this.stats, x, y, enemy.x + 4, enemy.y + 4)
   }

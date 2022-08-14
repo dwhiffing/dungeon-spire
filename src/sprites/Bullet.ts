@@ -1,4 +1,4 @@
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene } from '~/types'
 import { Enemy } from './Enemy'
 
 export class Bullet extends Phaser.GameObjects.Rectangle {
@@ -6,6 +6,7 @@ export class Bullet extends Phaser.GameObjects.Rectangle {
   damageAmount: number
   hitEnemies: Enemy[]
   health: number
+  slow: boolean
   body: Phaser.Physics.Arcade.Body
   scene: IGameScene
 
@@ -16,6 +17,7 @@ export class Bullet extends Phaser.GameObjects.Rectangle {
     this.scene.physics.world.enable(this)
     this.setSize(1, 1).setOrigin(0.5).setActive(false).setDepth(3)
     this.damageAmount = 0
+    this.slow = false
     this.hitEnemies = []
     this.health = 1
     // @ts-ignore
@@ -33,6 +35,7 @@ export class Bullet extends Phaser.GameObjects.Rectangle {
   shoot(stats: any, x: number, y: number, x2: number, y2: number) {
     this.health = 1
     this.damageAmount = stats.damage || 1
+    this.slow = stats.slow || false
     this.setScale(stats.scale || 1)
     this.hitEnemies = []
     this.health = stats.pierce || 1

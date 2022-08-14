@@ -6,13 +6,18 @@ export const ENEMIES = {
   },
   DEER: {
     damage: 1,
-    health: 16,
-    speed: 800,
+    health: 6,
+    speed: 700,
   },
   BIG_SLIME: {
     damage: 1,
     health: 32,
     speed: 3000,
+  },
+  DUCK: {
+    damage: 1,
+    health: 8,
+    speed: 1000,
   },
   MAN: {
     damage: 1,

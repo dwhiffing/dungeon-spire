@@ -103,6 +103,7 @@ export default class extends Phaser.Scene {
     if (!enemy.active || !bullet.active) return
     enemy.damage(bullet.damageAmount)
     bullet.damage(enemy)
+    if (bullet.slow) enemy.getSlowed()
   }
 
   checkEnemies = () => {

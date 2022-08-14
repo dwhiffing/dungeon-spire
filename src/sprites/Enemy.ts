@@ -4,6 +4,8 @@ import { IGameScene, Path } from '~/types'
 
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   timeline?: Phaser.Tweens.Timeline
+  slowTween?: Phaser.Tweens.Tween
+  slowTween2?: Phaser.Tweens.Tween
   health: number
   maxHealth: number
   speed: number
@@ -53,6 +55,27 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     const length = path?.length || 1
 
     this.progress = index / length
+  }
+
+  getSlowed() {
+    if (!this.timeline) return
+    this.slowTween?.stop()
+    this.slowTween2?.stop()
+
+    this.timeline.timeScale = 0
+    this.setTint(0x0000ff)
+    this.slowTween = this.scene.tweens.add({
+      targets: [this.timeline],
+      ease: Phaser.Math.Easing.Quadratic.Out,
+      timeScale: 1,
+      duration: 5000,
+    })
+    this.slowTween2 = this.scene.tweens.addCounter({
+      from: 0,
+      to: 100,
+      onUpdate: (tween) => this.setTint(getTintColor(tween)),
+      duration: 5000,
+    })
   }
 
   damage(amount: number) {
@@ -120,4 +143,14 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.timeline.play()
     })
   }
+}
+
+function getTintColor(tween: Phaser.Tweens.Tween) {
+  var tint = Phaser.Display.Color.Interpolate.ColorWithColor(
+    new Phaser.Display.Color(0, 0, 255),
+    new Phaser.Display.Color(255, 255, 255),
+    100,
+    tween.getValue(),
+  )
+  return Phaser.Display.Color.ObjectToColor(tint).color
 }
