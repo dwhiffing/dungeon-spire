@@ -2,12 +2,7 @@ export const ENEMIES = {
   SMALL_SLIME: {
     damage: 1,
     health: 4,
-    speed: 2000,
-  },
-  DUCK: {
-    damage: 1,
-    health: 8,
-    speed: 1000,
+    speed: 1200,
   },
   DEER: {
     damage: 1,

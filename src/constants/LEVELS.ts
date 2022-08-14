@@ -39,7 +39,7 @@ const LEVEL_TYPES = {
     ],
   },
   TWO: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 4, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
