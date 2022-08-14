@@ -173,7 +173,7 @@ export default class extends Phaser.Scene {
         this.enemies?.repath(this.level?.findExit())
         this.marker?.clearShape()
         this.hud?.useCard()
-        if (this.data.get('energyCount') < 1) {
+        if (this.data.get('energyCount') < 1 || this.hud?.hand.length === 0) {
           this.nextWave()
         } else {
           this.hud?.showCards()
