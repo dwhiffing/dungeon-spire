@@ -114,7 +114,7 @@ export default class HudService {
     bar.update(life, life)
     this.scene.add.existing(bar.container)
     bar.container.setDepth(1)
-    bar.container.setPosition(0, 1)
+    bar.container.setPosition(0, 62)
     return bar
   }
 
@@ -124,7 +124,7 @@ export default class HudService {
     bar.update(life, life)
     this.scene.add.existing(bar.container)
     bar.container.setDepth(1)
-    bar.container.setPosition(0, 0)
+    bar.container.setPosition(0, 63)
     return bar
   }
 
