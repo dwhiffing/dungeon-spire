@@ -85,6 +85,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
         duration: 500,
       })
       this.target?.takeDamage(this.stats.damage)
+      if (this.stats.slow) this.target?.getSlowed()
     } else {
       const bullet = this.scene.guns?.bulletGroup.getFirstDead(false)
       if (!bullet) return
