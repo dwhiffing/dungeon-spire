@@ -24,6 +24,7 @@ export default class extends Phaser.Scene {
     this.load.audio('menu5', 'assets/audio/menu5.wav')
     this.load.audio('success', 'assets/audio/success.wav')
     this.load.audio('game-over', 'assets/audio/game-over.wav')
+    this.load.audio('game-start', 'assets/audio/game-start.wav')
     this.load.audio('shoot', 'assets/audio/shoot.wav')
     this.load.audio('place', 'assets/audio/place.wav')
     this.load.audio('slime-spawn', 'assets/audio/slime-spawn.wav')

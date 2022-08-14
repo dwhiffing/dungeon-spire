@@ -12,6 +12,7 @@ export default class extends Phaser.Scene {
       if (started) return
       started = true
       this.cameras.main.fadeOut(1000, 0, 0, 0)
+      this.sound.play('game-start')
       this.time.delayedCall(1000, () => {
         this.scene.start('Game', { level: 1 })
       })
