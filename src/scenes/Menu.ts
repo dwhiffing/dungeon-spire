@@ -5,13 +5,15 @@ export default class extends Phaser.Scene {
 
   create() {
     const { width, height } = this.cameras.main
+    this.sound.stopAll()
+    this.sound.play('menu-music', { loop: true, volume: 0.5 })
     const start = () => {
       this.scene.start('Game', { level: 1 })
     }
 
     this.input.keyboard.addKey('SPACE').addListener('down', start)
 
-    this.add.image(32, 20, 'title')
+    this.add.image(32, 24, 'title')
 
     this.add
       .image(width / 2 - 15, height - 10, 'tilemap', 56)

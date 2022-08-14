@@ -38,6 +38,9 @@ export default class extends Phaser.Scene {
     this.data.set('armorCount', 0)
     this.data.set('mode', '')
 
+    this.sound.stopAll()
+    this.sound.play('game-music-0', { loop: true, volume: 0.5 })
+
     this.cameras.main.setBackgroundColor(0x2f2820)
     this.lights.enable()
     this.lights.setAmbientColor(0xbbbbbb)

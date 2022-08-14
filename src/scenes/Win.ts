@@ -10,6 +10,8 @@ export default class extends Phaser.Scene {
 
   create() {
     const { width, height } = this.cameras.main
+    this.sound.stopAll()
+    this.sound.play('menu-music', { loop: true, volume: 0.5 })
 
     this.add
       .bitmapText(width / 2, height / 2 - 10, 'pixel-dan', 'GAME OVER')
