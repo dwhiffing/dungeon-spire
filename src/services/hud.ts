@@ -229,6 +229,7 @@ export default class HudService {
 
   cardClick = (card?) => {
     const mode = this.scene.data.get('mode')
+    this.scene.sound.play('menu2')
     if (mode === 'remove') {
       this.removeCard(card)
       this.scene.doFade(() => this.scene.data.set('mode', 'play'))
@@ -239,8 +240,6 @@ export default class HudService {
         this.scene.data.set('mode', index % 5 === 0 ? 'remove' : 'play')
       })
     } else if (mode === 'play') {
-      this.scene.sound.play('menu2')
-
       this.activeCard = card
       this.scene.events.emit('card-play', card)
       this.hideCards()
