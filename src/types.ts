@@ -15,7 +15,7 @@ export interface LevelData {
 
 export interface Wave {
   size: number
-  delay: number
+  // delay: number
   type: string
 }
 

@@ -1,3 +1,4 @@
+import { ENEMIES } from '../constants'
 import { IGameScene, Wave } from '~/types'
 import { Enemy } from '../sprites/Enemy'
 import LevelService from './level'
@@ -38,7 +39,7 @@ export default class EnemyService {
     this.remainingSpawnCount = toSpawn.length
     for (let i = 0; i < toSpawn.length; i++) {
       this.scene.time.addEvent({
-        delay: wave.delay * i,
+        delay: ENEMIES[wave.type].delay * i,
         callback: () => {
           toSpawn[i]?.spawn(
             start.x * 8,

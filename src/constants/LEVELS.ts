@@ -20,7 +20,7 @@ const WALL_FRAME = [
 
 const LEVEL_TYPES = {
   ONE: {
-    waves: [{ size: 4, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 4, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
@@ -39,7 +39,7 @@ const LEVEL_TYPES = {
     ],
   },
   TWO: {
-    waves: [{ size: 4, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 4, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
@@ -56,7 +56,7 @@ const LEVEL_TYPES = {
     ],
   },
   THREE: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 6, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       [L, 6, 1],
@@ -73,7 +73,7 @@ const LEVEL_TYPES = {
     ],
   },
   FOUR: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 6, type: 'SMALL_SLIME' }],
     tiles: [
       ...range(0, 8).map((x) => [W, x, 0]),
       ...range(0, 8).map((x) => [W, x, 7]),
@@ -92,7 +92,7 @@ const LEVEL_TYPES = {
     ],
   },
   FIVE: {
-    waves: [{ size: 4, delay: 4000, type: 'DEER' }],
+    waves: [{ size: 4, type: 'DEER' }],
     tiles: [
       ...range(0, 8).map((x) => [W, x, 0]),
       ...range(0, 8).map((x) => [W, x, 7]),
@@ -114,7 +114,7 @@ const LEVEL_TYPES = {
     // ],
   },
   SIX: {
-    waves: [{ size: 3, delay: 3000, type: 'BIG_SLIME' }],
+    waves: [{ size: 3, type: 'BIG_SLIME' }],
     tiles: [
       ...range(0, 8).map((x) => [W, x, 0]),
       ...range(0, 8).map((x) => [W, x, 7]),
@@ -124,7 +124,7 @@ const LEVEL_TYPES = {
     ],
   },
   SEVEN: {
-    waves: [{ size: 10, delay: 5000, type: 'DUCK' }],
+    waves: [{ size: 10, type: 'DUCK' }],
     tiles: [
       ...range(0, 8).map((x) => [W, x, 0]),
       ...range(0, 8).map((x) => [W, x, 7]),
