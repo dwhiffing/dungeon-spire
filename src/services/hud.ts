@@ -137,7 +137,7 @@ export default class HudService {
     if (level === 4) tier = CARD_TIERS.FOUR
     if (level === 5) tier = CARD_TIERS.FIVE
     if (level > 5) tier = CARD_TIERS.SIX
-    return shuffle(tier)
+    return shuffle(Phaser.Math.RND.pick(tier))
   }
 
   drawCards = (drawCount = this.drawCount) => {
