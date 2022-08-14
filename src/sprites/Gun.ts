@@ -7,6 +7,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
   target: any
   rangeCircle: Phaser.GameObjects.Arc
   barrel: Phaser.GameObjects.Rectangle
+  raytrace: Phaser.GameObjects.Line
 
   constructor(scene: IGameScene, x: number, y: number) {
     super(scene, x, y, 'tilemap')
@@ -17,6 +18,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     this.barrel = this.scene.add
       .rectangle(0, 0, 2, 4, 0x766962)
       .setAlpha(0)
+      .setDepth(2)
       .setOrigin(0.5, 1)
     this.rangeCircle.setStrokeStyle(1, 0xffffff, 1)
     this.rangeCircle.setAlpha(0)
@@ -33,6 +35,10 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
       delay: 100,
       repeat: -1,
     })
+
+    this.raytrace = this.scene.add.line(0, 0, -10, -10, -11, -11, 0xffffff, 1)
+    this.raytrace.setLineWidth(1).setDepth(10)
+    this.raytrace.isStroked = true
   }
 
   checkTargets(x: number, y: number) {
@@ -43,11 +49,11 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
       sorter = (a, b) => b.timeline?.timeScale || 0 - a.timeline?.timeScale || 0
     const enemies = this.scene.enemies?.group
       .getMatching('active', true)
-      .map((e) => ({
-        ...e,
-        dist: Phaser.Math.Distance.Between(e.x + 4, e.y + 4, this.x, this.y),
-      }))
-      .filter((e) => e.dist < this.stats.range)
+      .filter(
+        (e) =>
+          Phaser.Math.Distance.Between(e.x + 4, e.y + 4, this.x, this.y) <
+          this.stats.range,
+      )
       .sort(sorter)
 
     this.target = enemies?.[0]
@@ -61,9 +67,27 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
       callback: () => this.shoot(this.x, this.y),
       delay: this.stats.fireRate || 500,
     })
-    if (!this.active) return
-    const bullet = this.scene.guns?.bulletGroup.getFirstDead(false)
-    if (this.target && bullet) {
+    if (!this.active || !this.target) return
+    if (this.stats.bulletSpeed > 100) {
+      this.scene.sound.play('shoot', { rate: 1, volume: 0.33 })
+
+      this.raytrace.setTo(
+        x + Math.sin((this.barrel.angle * Math.PI) / 180) * 4,
+        y + -Math.cos((this.barrel.angle * Math.PI) / 180) * 4,
+        this.target.x + 6,
+        this.target.y + 6,
+      )
+      this.raytrace.setAlpha(1)
+      this.raytrace.setStrokeStyle(1, this.stats.tint, 1)
+      this.scene.tweens.add({
+        targets: [this.raytrace],
+        alpha: 0,
+        duration: 500,
+      })
+      this.target?.takeDamage(this.stats.damage)
+    } else {
+      const bullet = this.scene.guns?.bulletGroup.getFirstDead(false)
+      if (!bullet) return
       this.scene.sound.play('shoot', { rate: 1, volume: 0.33 })
       bullet.shoot(this.stats, x, y, this.target.x + 4, this.target.y + 4)
     }

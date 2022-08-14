@@ -115,7 +115,7 @@ export default class extends Phaser.Scene {
     const enemy = _enemy as Enemy
     const bullet = _bullet as Bullet
     if (!enemy.active || !bullet.active) return
-    enemy.damage(bullet.damageAmount)
+    enemy.takeDamage(bullet.damageAmount)
     bullet.damage(enemy)
     if (bullet.slow) enemy.getSlowed()
   }

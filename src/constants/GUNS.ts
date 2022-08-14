@@ -3,7 +3,7 @@ export const GUN_STATS = {
     key: 'GUN_BASIC',
     damage: 1,
     range: 20,
-    bulletSpeed: 80,
+    bulletSpeed: 110,
     fireRate: 1300,
     accuracy: 0,
     scale: 2,

@@ -64,7 +64,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     const path = this.scene.level?.path
     const lava = this.scene.level?.lavaTiles || []
     if (lava.some((t) => t.x === coord.x && t.y === coord.y) && !this.flying) {
-      this.damage(1, true)
+      this.takeDamage(1, true)
     }
 
     const index =
@@ -105,7 +105,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  damage(amount: number, isLava: boolean = false) {
+  takeDamage(amount: number, isLava: boolean = false) {
     this.tweenTint('#ff0000', '#ffffff', 500)
 
     this.health -= amount
