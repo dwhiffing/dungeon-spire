@@ -116,9 +116,8 @@ export default class extends Phaser.Scene {
 
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     if (numIncoming === 0) {
-      const index = this.data.get('levelIndex')
       // TODO: show some kind of win animation
-      this.data.set('mode', index % 5 === 0 ? 'remove' : 'add')
+      this.data.set('mode', 'add')
       this.nextLevel()
     } else {
       this.data.inc('turnIndex')

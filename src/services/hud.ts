@@ -228,7 +228,8 @@ export default class HudService {
       this.scene.data.set('mode', 'play')
     } else if (mode === 'add') {
       this.addCard(card)
-      this.scene.data.set('mode', 'play')
+      const index = this.scene.data.get('levelIndex') - 1
+      this.scene.data.set('mode', index % 5 === 0 ? 'remove' : 'play')
     } else if (mode === 'play') {
       this.activeCard = card
       this.scene.events.emit('card-play', card)
