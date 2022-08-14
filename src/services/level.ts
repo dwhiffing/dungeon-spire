@@ -103,7 +103,7 @@ export default class LevelService {
       if (isGun) {
         // abort if not all tiles under gun tiles are wall tiles
         if (
-          tiles.every(
+          tiles.some(
             ([f, x, y]) =>
               this.map.getTileAt(x, y)?.index !== PLAYER_WALL_INDEX,
           )
