@@ -30,5 +30,6 @@ export interface IGameScene extends Phaser.Scene {
   inputService?: InputService
   rotateTile: () => void
   nextWave: () => void
+  doFade: (onComplete: any) => void
   placeTile: (event: any) => void
 }

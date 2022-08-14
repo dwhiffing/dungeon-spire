@@ -39,6 +39,7 @@ export default class extends Phaser.Scene {
     this.data.set('healthCount', 0)
     this.data.set('armorCount', 0)
     this.data.set('mode', '')
+    this.cameras.main.fadeFrom(500, 0, 0, 0)
 
     this.sound.stopAll()
     this.sound.play('game-music-0', { loop: true, volume: 0.5 })
@@ -46,7 +47,7 @@ export default class extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor(0x2f2820)
     this.lights.enable()
-    this.lights.setAmbientColor(0xbbbbbb)
+    this.lights.setAmbientColor(0xaaaaaa)
 
     this.data.set('healthCount', STARTING_MAX_LIFE)
     this.level = new LevelService(this)
@@ -84,7 +85,7 @@ export default class extends Phaser.Scene {
     if (this.data.values.healthCount < 1 && !this.isGameOver) {
       this.isGameOver = true
       this.sound.play('game-over')
-      this.time.delayedCall(1500, this.gameover)
+      this.time.delayedCall(1500, () => this.doFade(this.gameover))
     } else {
       this.checkEnemies()
     }
@@ -131,14 +132,24 @@ export default class extends Phaser.Scene {
       // TODO: show some kind of win animation
       this.sound.play('success')
       this.inputService?.setTimeSpeed(false)
-      this.time.delayedCall(1500, () => {
-        this.data.set('mode', 'add')
-        this.nextLevel()
-      })
+      this.time.delayedCall(500, () =>
+        this.doFade(() => {
+          this.data.set('mode', 'add')
+          this.nextLevel()
+        }),
+      )
     } else {
       this.data.inc('turnIndex')
-      this.time.delayedCall(1500, () => this.data.set('mode', 'play'))
+      this.time.delayedCall(1000, () => this.data.set('mode', 'play'))
     }
+  }
+
+  doFade = (onComplete: any) => {
+    this.cameras.main.fadeOut(500, 0, 0, 0)
+    this.time.delayedCall(1000, () => {
+      onComplete()
+      this.cameras.main.fadeIn(500, 0, 0, 0)
+    })
   }
 
   update() {}

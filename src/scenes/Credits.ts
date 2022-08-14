@@ -37,7 +37,10 @@ export default class extends Phaser.Scene {
   nextPage = () => {
     this.pageIndex++
     if (this.pageIndex > PAGES.length - 1) {
-      return this.scene.start('Game')
+      this.cameras.main.fadeOut(1000, 0, 0, 0)
+      return this.time.delayedCall(1000, () =>
+        this.scene.start('Game', { level: 1 }),
+      )
     }
     this.loadPage()
   }

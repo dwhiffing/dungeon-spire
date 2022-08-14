@@ -8,7 +8,10 @@ export default class extends Phaser.Scene {
     this.sound.stopAll()
     this.sound.play('menu-music', { loop: true, volume: 0.5 })
     const start = () => {
-      this.scene.start('Game', { level: 1 })
+      this.cameras.main.fadeOut(1000, 0, 0, 0)
+      this.time.delayedCall(1000, () => {
+        this.scene.start('Game', { level: 1 })
+      })
     }
 
     this.input.keyboard.addKey('SPACE').addListener('down', start)
