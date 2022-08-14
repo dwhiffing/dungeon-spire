@@ -10,7 +10,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'tilemap')
     this.scene = scene
     this.stats = {}
-    this.setFrame(17).setOrigin(1).setAlpha(0.2).setInteractive().setDepth(1)
+    this.setFrame(17).setOrigin(0).setAlpha(0.2).setInteractive().setDepth(1)
     this.rangeCircle = this.scene.add.circle(10, 10, 0)
     this.rangeCircle.setStrokeStyle(1, 0xffffff, 1)
     this.rangeCircle.setAlpha(0)
@@ -36,7 +36,7 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
       .getMatching('active', true)
       .map((e) => ({
         ...e,
-        dist: Phaser.Math.Distance.BetweenPoints(e, this),
+        dist: Phaser.Math.Distance.Between(e.x + 4, e.y + 4, this.x, this.y),
       }))
       .filter((e) => e.dist < this.stats.range)
       .sort((a, b) => b.progress - a.progress)
