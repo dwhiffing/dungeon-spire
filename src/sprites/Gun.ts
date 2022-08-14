@@ -48,7 +48,11 @@ export class Gun extends Phaser.Physics.Arcade.Sprite {
       .sort(sorter)
 
     const enemy = enemies?.[0]
-    if (enemy) bullet?.shoot(this.stats, x, y, enemy.x + 4, enemy.y + 4)
+    if (enemy && bullet) {
+      this.scene.sound.play('shoot', { rate: 1, volume: 0.33 })
+
+      bullet.shoot(this.stats, x, y, enemy.x + 4, enemy.y + 4)
+    }
   }
 
   spawn(x: number, y: number, type) {

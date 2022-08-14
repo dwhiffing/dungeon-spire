@@ -123,8 +123,10 @@ export default class extends Phaser.Scene {
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     if (numIncoming === 0) {
       // TODO: show some kind of win animation
-      this.data.set('mode', 'add')
-      this.nextLevel()
+      this.time.delayedCall(1500, () => {
+        this.data.set('mode', 'add')
+        this.nextLevel()
+      })
     } else {
       this.data.inc('turnIndex')
       this.time.delayedCall(1500, () => this.data.set('mode', 'play'))
