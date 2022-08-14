@@ -18,7 +18,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene = scene
     this.scene.add.existing(this)
     this.scene.physics.world.enable(this)
-    this.setSize(3, 3).setActive(false).setOffset(3, 3)
+    this.setSize(3, 3).setActive(false).setOffset(3, 3).setDepth(8)
     this.health = 0
     this.maxHealth = 0
     this.progress = 0
@@ -26,9 +26,31 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.damageAmount = 0
     this.healthBar = new HealthBar(scene)
     this.healthBar.container.setDepth(8)
+    this.scene.time.addEvent({
+      delay: 100,
+      repeat: -1,
+      callback: this.updateProgress,
+    })
     this.body.reset(-9, 10)
-
     this.flipX = true
+  }
+
+  updateProgress = () => {
+    const coord = { x: Math.floor(this.x / 8), y: Math.floor(this.y / 8) }
+    if (coord.x === this.coord?.x && coord.y === this.coord?.y) return
+
+    this.coord = coord
+    const path = this.scene.level?.path
+    const lava = this.scene.level?.lavaTiles || []
+    if (lava.some((t) => t.x === coord.x && t.y === coord.y)) {
+      this.damage(1)
+    }
+
+    const index =
+      path?.findIndex((c) => c.x === coord.x && c.y === coord.y) || 0
+    const length = path?.length || 1
+
+    this.progress = index / length
   }
 
   damage(amount: number) {
@@ -51,6 +73,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.healthBar.container.setPosition(this.x, this.y)
     if (path) this.followPath(path)
     this.play(type + '-walk')
+    this.setDepth(7)
   }
 
   _kill = () => {
@@ -84,21 +107,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
           x: x * 8,
           y: y * 8,
           duration: this.speed,
-          onUpdate: () => {
-            const coord = {
-              x: Math.floor(this.x / 8),
-              y: Math.floor(this.y / 8),
-            }
-            if (coord.x === this.coord?.x && coord.y === this.coord?.y) return
-            this.coord = coord
-            const index =
-              this.scene.level?.path.findIndex(
-                (c) => c.x === coord.x && c.y === coord.y,
-              ) || 0
-            const length = this.scene.level?.path.length || 1
 
-            this.progress = index / length
-          },
           onStart: () => {
             this.flipX = this.x > x * 8
           },

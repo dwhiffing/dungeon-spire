@@ -1,4 +1,4 @@
-import { IGameScene } from '~/scenes/Game'
+import { IGameScene } from '~/types'
 
 export default class InputService {
   scene: IGameScene
@@ -88,18 +88,15 @@ export default class InputService {
 
   makeButton = (x: number, y: number, key: number, type: string) => {
     const noop = () => {}
-    return (
-      this.scene.add
-        .image(x, y, 'tilemap', key)
-        .setScale(1)
-        .setInteractive()
-        .setScrollFactor(0)
-        // .setDepth(1000)
-        .setAlpha(0.6)
-        .on('pointerdown', this.events[`${type}Pressed`] || noop)
-        .on('pointerup', this.events[`${type}Released`] || noop)
-        .on('pointerout', this.events[`${type}Released`] || noop)
-    )
+    return this.scene.add
+      .image(x, y, 'tilemap', key)
+      .setScale(1)
+      .setInteractive()
+      .setScrollFactor(0)
+      .setAlpha(0.6)
+      .on('pointerdown', this.events[`${type}Pressed`] || noop)
+      .on('pointerup', this.events[`${type}Released`] || noop)
+      .on('pointerout', this.events[`${type}Released`] || noop)
   }
 
   cleanup = () => {

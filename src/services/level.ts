@@ -4,6 +4,7 @@ import {
   ENTRANCE_INDEX,
   EXIT_INDEX,
   GUN_INDEX,
+  LAVA_INDEX,
   PLAYER_WALL_INDEX,
 } from '../constants'
 import { IGameScene, LevelData, Path } from '~/types'
@@ -13,6 +14,7 @@ export default class LevelService {
   pathGraphics: Phaser.GameObjects.Graphics
   pathGraphicsGhost: Phaser.GameObjects.Graphics
   path: Path
+  lavaTiles: { x: number; y: number }[]
   map: Phaser.Tilemaps.Tilemap
   data: number[][]
   groundLayer?: Phaser.Tilemaps.TilemapLayer
@@ -20,8 +22,8 @@ export default class LevelService {
 
   constructor(scene: IGameScene) {
     this.scene = scene
-    this.pathGraphicsGhost = this.scene.add.graphics()
-    this.pathGraphics = this.scene.add.graphics()
+    this.pathGraphicsGhost = this.scene.add.graphics().setDepth(1)
+    this.pathGraphics = this.scene.add.graphics().setDepth(1)
     this.scene.tweens.add({
       targets: [this.pathGraphicsGhost],
       alpha: 0.4,
@@ -32,8 +34,9 @@ export default class LevelService {
     this.map = this.createMap()
     this.data = this.getMapData()
     this.path = []
+    this.lavaTiles = []
     this.star = new easystarjs.js()
-    this.star.setAcceptableTiles([-1, EXIT_INDEX, ENTRANCE_INDEX])
+    this.star.setAcceptableTiles([-1, LAVA_INDEX, EXIT_INDEX, ENTRANCE_INDEX])
   }
 
   startLevel = (levelData: LevelData) => {
@@ -41,6 +44,10 @@ export default class LevelService {
     levelData.tiles.forEach(([frame, x, y]) => this.map.putTileAt(frame, x, y))
     this.updateGrid(this.getMapData())
     this.findPath().then(this.updatePath)
+    this.lavaTiles = this.map.layers[0].data
+      .flat()
+      .filter((t) => t.index === 20)
+      .map((t) => ({ x: t.x, y: t.y }))
   }
 
   createMap = () => {
@@ -178,5 +185,5 @@ export const indexToFrame = (frame: number) => {
   if (frame === 1) return PLAYER_WALL_INDEX
   if (frame === 3) return ARMOR_WALL_INDEX
   if (frame === 2) return GUN_INDEX
-  return 20
+  return 21
 }

@@ -13,6 +13,7 @@ export const DEFAULT_DRAW_COUNT = 5
 export const STARTING_LEVEL = 1
 
 export const WALL_INDEX = 16
+export const LAVA_INDEX = 20
 export const GUN_INDEX = 17
 export const PLAYER_WALL_INDEX = 18
 export const ARMOR_WALL_INDEX = 19

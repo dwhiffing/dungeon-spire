@@ -1,9 +1,13 @@
 const ENTRANCE_INDEX = 32
 const EXIT_INDEX = 33
 const WALL_INDEX = 16
+const PLAYER_WALL_INDEX = 18
+const LAVA_INDEX = 20
 const W = WALL_INDEX
+const P = PLAYER_WALL_INDEX
 const I = ENTRANCE_INDEX
 const O = EXIT_INDEX
+const L = LAVA_INDEX
 const range = (startAt = 0, size) =>
   [...Array(size).keys()].map((i) => i + startAt)
 
@@ -22,22 +26,27 @@ const LEVEL_TYPES = {
       ...range(0, 8).map((x) => [W, x, 1]),
       ...range(0, 8).map((x) => [W, x, 6]),
       ...range(2, 5).map((y) => [W, 6, y]),
-      [W + 2, 2, 3],
-      [W + 2, 2, 4],
-      [W + 2, 4, 3],
-      [W + 2, 4, 4],
+      [P, 2, 3],
+      [P, 2, 4],
+      [P, 4, 3],
+      [P, 4, 4],
       [O, 5, 5],
       [I, 1, 2],
     ],
   },
   TWO: {
-    waves: [{ size: 6, delay: 2000, type: 'SMALL_SLIME' }],
+    waves: [{ size: 8, delay: 2000, type: 'SMALL_SLIME' }],
     tiles: [
       ...WALL_FRAME,
       ...range(0, 8).map((x) => [W, x, 1]),
-      [W + 2, 2, 2],
-      [W + 2, 2, 3],
-      [W + 2, 2, 4],
+      [P, 2, 2],
+      [P, 2, 3],
+      [P, 2, 4],
+      [P, 4, 4],
+      [P, 4, 5],
+      [P, 4, 6],
+      [L, 4, 2],
+      [L, 2, 6],
       [O, 6, 6],
       [I, 1, 2],
     ],
