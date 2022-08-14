@@ -1,9 +1,3 @@
-export const GUN_SHAPES = {
-  GUN1: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
-  GUN2: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
-  GUN3: [[-1, -1, -1, -1, 2, -1, -1, -1, -1]],
-}
-
 export const GUN_STATS = {
   GUN1: {
     key: 'GUN1',

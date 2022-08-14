@@ -50,17 +50,15 @@ export class Card extends Phaser.GameObjects.Rectangle {
 
     this.key = cardData.key
 
-    if (cardData.label === 'TILE') {
-      const shape = SHAPES[this.key][0] as number[]
-      shape.forEach((frame, index) => {
-        if (frame === -1) return
-        const _x = this.x + (index % 3) * 3 + 4
-        const _y = this.y + Math.floor(index / 3) * 3 + 4
-        this.graphics
-          .fillStyle(frame === 1 ? 0x00aa00 : 0x0000aa)
-          .fillRect(_x, _y, 2, 2)
-      })
-    }
+    const shape = SHAPES[this.key][0] as number[]
+    shape.forEach((frame, index) => {
+      if (frame === -1) return
+      const _x = this.x + (index % 3) * 3 + 4
+      const _y = this.y + Math.floor(index / 3) * 3 + 4
+      this.graphics
+        .fillStyle(frame === 1 ? 0x00aa00 : frame === 2 ? 0xaa0000 : 0x0000aa)
+        .fillRect(_x, _y, 2, 2)
+    })
 
     this.labelText.text = cardData.label
 

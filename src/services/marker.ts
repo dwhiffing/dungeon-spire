@@ -1,4 +1,4 @@
-import { SHAPES, GUN_SHAPES, GUN_STATS } from '../constants'
+import { SHAPES, GUN_STATS } from '../constants'
 import { Card } from '~/sprites/Card'
 import { WallMarker } from '../sprites/WallMarker'
 import { indexToFrame } from './level'
@@ -74,8 +74,7 @@ export default class MarkerService {
 
   getShape = (card: Card) => {
     this.card = card
-    this.shape =
-      card.labelText.text === 'TILE' ? SHAPES[card.key] : GUN_SHAPES[card.key]
+    this.shape = SHAPES[card.key]
     this.rotationIndex = 0
     this.updateMarkers()
   }
