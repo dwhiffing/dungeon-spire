@@ -70,6 +70,9 @@ export default class HudService {
           this.hideCards()
           this.scene.nextWave()
         } else {
+          if (this.scene.data.get('mode') === 'add') {
+            this.hand = []
+          }
           this.scene.data.set('mode', 'play')
         }
       })

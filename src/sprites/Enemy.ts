@@ -130,7 +130,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       const data = ENEMIES[type]
       const levelIndex = this.scene.data.get('levelIndex')
       this.health = Math.floor(data.health * Math.max(1, levelIndex / 12))
-      this.maxHealth = data.health
+      this.maxHealth = Math.floor(data.health * Math.max(1, levelIndex / 12))
       this.speed = data.speed
       this.flying = data.flying || false
       this.damageAmount = data.damage
@@ -143,6 +143,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   _kill = () => {
+    if (!this.active) return
     this.setActive(false).setVisible(false)
     this.timeline?.stop()
     this.body.reset(-9, 10)
@@ -150,6 +151,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   kill = () => {
+    if (!this.active) return
     this._kill()
     this.health = 0
     this.scene.events.emit('enemy-killed')

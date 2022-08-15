@@ -19,7 +19,7 @@ import {
 import { LevelData } from '~/types'
 
 let enemyTypes = [] as string[]
-
+let nextLevelTriggered = false
 export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' })
@@ -134,13 +134,14 @@ export default class extends Phaser.Scene {
     if (activeCount > 0) return
 
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
-    if (numIncoming === 0) {
-      // TODO: show some kind of win animation
+    if (numIncoming === 0 && !nextLevelTriggered) {
+      nextLevelTriggered = true
       this.sound.play('success')
       this.inputService?.setTimeSpeed(false)
       this.time.delayedCall(500, () =>
         this.doFade(() => {
           this.data.set('mode', 'add')
+          nextLevelTriggered = false
           this.nextLevel()
         }),
       )
