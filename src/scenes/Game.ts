@@ -235,7 +235,10 @@ export default class extends Phaser.Scene {
   }
 
   placeTile = (event) => {
-    if (!this.marker?.shape || !this.marker.isValid) return
+    if (!this.marker?.shape) return
+    if (!this.marker.isValid) {
+      return this.sound.play('error', { volume: 0.5, rate: 0.6 })
+    }
     this.data.values.energyCount--
     const cardKey = this.marker?.card?.key || ''
     const isGun = cardKey.match(/GUN/)

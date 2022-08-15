@@ -18,6 +18,7 @@ export default class extends Phaser.Scene {
     this.load.image('particle', 'assets/images/spark.png')
     // this.load.audio('game-music-1', 'assets/audio/game-music-1.mp3')
     this.load.audio('menu1', 'assets/audio/menu1.wav')
+    this.load.audio('error', 'assets/audio/error.wav')
     this.load.audio('menu2', 'assets/audio/menu2.wav')
     this.load.audio('menu3', 'assets/audio/menu3.wav')
     this.load.audio('menu4', 'assets/audio/menu4.wav')
