@@ -26,4 +26,17 @@ export const GUN_STATS = {
     barrelTint: 0x99aabb,
     tint: 0x2b565f,
   },
+  GUN_SNIPE: {
+    key: 'GUN_SNIPE',
+    damage: 4,
+    range: 40,
+    fireRate: 3000,
+    bulletSpeed: 110,
+    accuracy: 0,
+    pierce: 1,
+    scale: 2,
+    baseTint: 0x00aa00,
+    barrelTint: 0x55ffaa,
+    tint: 0xffffff,
+  },
 }

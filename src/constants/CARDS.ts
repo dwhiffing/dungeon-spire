@@ -4,12 +4,13 @@ export const BASIC_DECK = [
 ]
 // export const BASIC_DECK = [
 //   { key: 'DOT', label: 'TILE' },
-//   { key: 'GUN_BASIC', label: 'GUN' },
-//   { key: 'GUN_BASIC', label: 'GUN' },
-//   { key: 'LINE', label: 'TILE' },
-//   { key: 'CORNER', label: 'TILE' },
-//   { key: 'ARMOR_2', label: 'TILE' },
-//   { key: 'GUN_SLOW', label: 'GUN' },
+//   { key: 'CROSS', label: 'TILE' },
+//   { key: 'GUN_SNIPE', label: 'GUN' },
+//   // { key: 'LINE', label: 'TILE' },
+//   // { key: 'CORNER', label: 'TILE' },
+//   // { key: 'ARMOR_2', label: 'TILE' },
+//   // { key: 'GUN_SLOW', label: 'GUN' },
+//   // { key: 'GUN_SNIPE', label: 'GUN' },
 // ]
 
 export const SHAPE_CARDS = [
@@ -37,9 +38,24 @@ export const CARD_TIERS = {
       { key: 'ARMOR_2', label: 'TILE' },
     ],
     [
-      { key: 'LINE', label: 'TILE' },
+      { key: 'ELL', label: 'TILE' },
       { key: 'GUN_SLOW', label: 'GUN' },
       { key: 'ARMOR_3', label: 'TILE' },
+    ],
+    [
+      { key: 'CROSS', label: 'TILE' },
+      { key: 'GUN_SNIPE', label: 'GUN' },
+      { key: 'ARMOR_5', label: 'TILE' },
+    ],
+    [
+      { key: 'JAY', label: 'TILE' },
+      { key: 'GUN_SLOW', label: 'GUN' },
+      { key: 'ARMOR_2', label: 'TILE' },
+    ],
+    [
+      { key: 'TEE', label: 'TILE' },
+      { key: 'GUN_SNIPE', label: 'GUN' },
+      { key: 'ARMOR_5', label: 'TILE' },
     ],
   ],
 }
