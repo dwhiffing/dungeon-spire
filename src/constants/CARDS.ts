@@ -5,12 +5,11 @@ export const BASIC_DECK = [
 // export const BASIC_DECK = [
 //   { key: 'DOT', label: 'TILE' },
 //   { key: 'CROSS', label: 'TILE' },
+//   { key: 'LINE', label: 'TILE' },
+//   { key: 'CORNER', label: 'TILE' },
+//   { key: 'ARMOR_2', label: 'TILE' },
+//   { key: 'GUN_SLOW', label: 'GUN' },
 //   { key: 'GUN_SNIPE', label: 'GUN' },
-//   // { key: 'LINE', label: 'TILE' },
-//   // { key: 'CORNER', label: 'TILE' },
-//   // { key: 'ARMOR_2', label: 'TILE' },
-//   // { key: 'GUN_SLOW', label: 'GUN' },
-//   // { key: 'GUN_SNIPE', label: 'GUN' },
 // ]
 
 export const SHAPE_CARDS = [

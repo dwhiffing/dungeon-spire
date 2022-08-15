@@ -221,7 +221,7 @@ export default class extends Phaser.Scene {
 
     this.data.set('energyCount', DEFAULT_ENERGY_COUNT)
     this.guns?.clear()
-    this.hud?.shuffleDeck()
+    if (this.data.get('mode') === 'play') this.hud?.shuffleDeck()
     this.level?.startLevel(this.levelData)
   }
 
